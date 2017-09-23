@@ -1,12 +1,12 @@
-from i_led_canvas import ILedCanvas
+from ..i_led_canvas import ILedCanvas
 
-class LedTestCanvasFilter(ILedCanvas):
+class LedCanvasFilter(ILedCanvas):
 
     def __init__(self, canvas):
         self.canvas = canvas
 
     def set_led(self, x, y, z, color):
-        self.canvas.set_led(x, y, z, 0xff0000)
+        self.canvas.set_led(x, y, z, color)
 
     def show(self, canvas=None):
         self.canvas.show(self)

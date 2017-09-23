@@ -1,5 +1,5 @@
 import time
-import sync
+from ..util import sync
 from abc import ABCMeta, abstractmethod
 
 class LedObject(object):

@@ -1,9 +1,8 @@
 import time
-import sync
+from .util import sync
 from abc import ABCMeta, abstractmethod
 
 class ILedCanvas(object):
-
 
     @abstractmethod
     def set_led(self, x, y, z, color):

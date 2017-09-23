@@ -3,6 +3,10 @@ from ctypes import *
 import sys
 import platform
 
+LED_HEIGHT = 32
+LED_WIDTH = 16
+LED_DEPTH = 8
+
 dirname = os.path.dirname(__file__)
 if sys.platform == 'darwin':
     ledlib = dirname + '/libledLib.dylib'
