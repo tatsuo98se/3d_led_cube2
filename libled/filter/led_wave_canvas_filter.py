@@ -14,12 +14,12 @@ class LedWaveCanvasFilter(LedCanvasFilter):
         ywavelength = 3 * math.pi
         ywavedepth = 1.5
         ydot = ywavelength / LED_HEIGHT
-        ystart = (offset * 20) * ydot
+        ystart = (offset * 10) * ydot
 
         xwavelength = 3 * math.pi
         xwavedepth = 1.5
         xdot = xwavelength / LED_WIDTH
-        xstart = (offset * 15) * xdot
+        xstart = (offset * 5) * xdot
 
         z = (xwavedepth + math.sin(xdot * x + xstart) * xwavedepth) + (ywavedepth + math.sin(ydot * y + ystart) * ywavedepth)
 

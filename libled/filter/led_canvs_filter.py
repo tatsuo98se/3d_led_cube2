@@ -9,11 +9,17 @@ class LedCanvasFilter(ILedCanvas):
         self.canvas.set_led(x, y, z, color)
 
     def show(self, canvas=None):
-        self.canvas.show(self)
+        if canvas == None:
+            self.canvas.show(self)
+        else:
+            self.canvas.show(canvas)
 
     def add_object(self, obj):
         self.canvas.add_object(obj)
 
+    def remove_object(self, obj):
+        self.canvas.remove_object(obj)
+        
     def clear_object(self):
         self.canvas.clear_object()
 

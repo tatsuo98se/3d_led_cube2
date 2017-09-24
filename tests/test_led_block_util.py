@@ -127,3 +127,13 @@ class TestLedBlockUtil(unittest.TestCase):
         self.assertEqual(
             ["test", "test", "test"],
             actual)
+
+
+    def test_create_block_1(self):
+        actual = create_block('object-1', None)
+        self.assertTrue(isinstance(actual, LedFillObject))
+
+
+    def test_create_block_1(self):
+        actual = create_block('filter-1', None)
+        self.assertTrue(isinstance(actual, LedHsvCanvasFilter))

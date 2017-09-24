@@ -17,6 +17,10 @@ class ILedCanvas(object):
         pass
 
     @abstractmethod
+    def remove_object(self, obj):
+        pass
+        
+    @abstractmethod
     def clear_object(self):
         pass
 

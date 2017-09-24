@@ -1,5 +1,6 @@
 import math
 import loop_util
+from ..util.color import Color
 
 class LedDirection(object):
     DIRECTION_FRONT = 1
@@ -14,7 +15,7 @@ def circle(canvas, x, y, z, color, r, direction = LedDirection.DIRECTION_FRONT):
 
         ambigous1 = abs(c1 - round(c1))
         ambigous2 = abs(c2 - round(c2))
-        ambigous = (ambigous1 + ambigous2) / 2
+        ambigous = (ambigous1 + ambigous2) # / 2
 
         xadd = yadd = zadd = 0
        
@@ -30,4 +31,5 @@ def circle(canvas, x, y, z, color, r, direction = LedDirection.DIRECTION_FRONT):
         else:
             pass
 
-        canvas.set_led(x + xadd, y + yadd, z + zadd, color - (color * ambigous))
+        canvas.set_led(x + xadd, y + yadd, z + zadd,
+                    Color(color.r, color.g, color.b, color.a * ambigous))

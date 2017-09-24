@@ -30,6 +30,9 @@ class LedCanvas(ILedCanvas):
     def add_object(self, obj):
         self.objects.append(obj)
 
+    def remove_object(self, obj):
+        self.objects.remove(obj)
+
     def clear_object(self):
         self.objects = []
 
