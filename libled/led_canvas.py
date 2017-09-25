@@ -17,10 +17,10 @@ class LedCanvas(ILedCanvas):
         led.Clear()
         for obj in self.objects[:]:
             obj.will_draw()
-            if obj.is_expired():
+            if obj.is_expired() or obj.is_abort:
                 self.objects.remove(obj)
             else:
-                if canvas == None:
+                if canvas is None:
                     obj.draw(self)
                 else:
                     obj.draw(canvas)

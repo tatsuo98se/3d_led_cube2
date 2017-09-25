@@ -1,5 +1,6 @@
 import unittest
 from libled.util.led_block_util import *
+import json
 
 class TestLedBlockUtil(unittest.TestCase):
 
@@ -137,3 +138,85 @@ class TestLedBlockUtil(unittest.TestCase):
     def test_create_block_1(self):
         actual = create_block('filter-1', None)
         self.assertTrue(isinstance(actual, LedHsvCanvasFilter))
+
+
+    def test_json_loads1(self):
+        data = "{abc:""}}"
+        self.assertRaises(ValueError, json.loads, data)
+
+
+    def test_json_loads2(self):
+        data = '{"abc":"def"}'
+        dic = json.loads(data)
+        self.assertEqual("def", dic["abc"])
+        self.assertRaises(KeyError, dic.__getitem__, "id")
+
+
+    def test_json_loads3(self):
+ #test_data1 = {"filter-2","object-2","object-1","object-2","object-1","filter-0","object-2","object-1"} # this line will be json
+        data = """
+        {
+            "orders":[
+                {
+                    "id":"filter-2",
+                    "lifetime":1,
+                    "param":{
+                        "offset":1
+                    }
+                },
+                {
+                    "id":"object-2",
+                    "lifetime":1,
+                    "param":{
+                        "offset":1
+                    }
+                },
+                {
+                    "id":"object-1",
+                    "lifetime":1,
+                    "param":{
+                        "offset":1
+                    }
+                },
+                {
+                    "id":"object-2",
+                    "lifetime":1,
+                    "param":{
+                        "offset":1
+                    }
+                },
+                {
+                    "id":"object-1",
+                    "lifetime":1,
+                    "param":{
+                        "offset":1
+                    }
+                },
+                {
+                    "id":"filter-0",
+                    "lifetime":1,
+                    "param":{
+                        "offset":1
+                    }
+                },
+                {
+                    "id":"object-1",
+                    "lifetime":1,
+                    "param":{
+                        "offset":1
+                    }
+                },
+                {
+                    "id":"object-2",
+                    "lifetime":1,
+                    "param":{
+                        "offset":1
+                    }
+                }
+            ]
+        }
+        """
+
+        actual = json.loads(data)
+        orders = actual['orders']
+        self.assertEqual(8, len(orders))
