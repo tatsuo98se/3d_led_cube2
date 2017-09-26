@@ -15,7 +15,7 @@ from libled.filter.led_hsv_canvas_filter import LedHsvCanvasFilter
 def get_blocks_in_loop(orders, start):
     blocks = []
     for i in range(start, len(orders)):
-        if str(orders[i]) == 'ctrl-1':
+        if str(orders[i]['id']) == 'ctrl-1':
             return blocks
 
         blocks.append(orders[i])
@@ -26,7 +26,7 @@ def flatten_blocks(orders):
     flatten = []
     i = 0
     while i<len(orders):
-        if orders[i] == 'ctrl-1':
+        if orders[i]['id'] == 'ctrl-1':
             loop = get_blocks_in_loop(orders, i+1) 
             flatten.extend(loop * 3)
             i += len(loop) + 2
@@ -39,24 +39,29 @@ def flatten_blocks(orders):
 
 DEFAULT_LIFETIME = 5
 
+def get_lifetime_from_block(block):
+    return DEFAULT_LIFETIME if block.get('lifetime') is None else block['lifetime']
+
 def create_object(block):
-    if block == 'object-1':
-        return LedFillObject(Color(1,0,0), DEFAULT_LIFETIME)
-    elif block == 'object-2':
-        return LedRandomRippleObject(DEFAULT_LIFETIME)
+    lifetime = get_lifetime_from_block(block)
+    if block['id'] == 'object-1':
+        return LedFillObject(Color(1,0,0), lifetime)
+    elif block['id'] == 'object-2':
+        return LedRandomRippleObject(lifetime)
 
 def create_filter(block, canvas):
-    if block == 'filter-0':
+    lifetime = get_lifetime_from_block(block)
+    if block['id'] == 'filter-0':
         return canvas
-    elif block == 'filter-1':
+    elif block['id'] == 'filter-1':
         return LedHsvCanvasFilter(canvas)
-    elif block == 'filter-2':
+    elif block['id'] == 'filter-2':
         return LedWaveCanvasFilter(canvas)
 
 def create_block(block, canvas):
-    if str(block).startswith('object'):
+    if str(block['id']).startswith('object'):
         return create_object(block)
-    elif str(block).startswith('filter'):
+    elif str(block['id']).startswith('filter'):
         return create_filter(block, canvas)
 
 

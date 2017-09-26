@@ -4,6 +4,7 @@ from i_led_canvas import ILedCanvas
 class LedCanvas(ILedCanvas):
 
     def __init__(self):
+        self.is_abort = False
         self.objects = []
 
     def set_led(self, x, y, z, color):
@@ -37,6 +38,7 @@ class LedCanvas(ILedCanvas):
         self.objects = []
 
     def abort(self):
+        self.is_abort = True
         for obj in self.objects[:]:
             obj.abort()
 
