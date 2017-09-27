@@ -7,13 +7,17 @@ from libled.util import sync
 class LedFramework(object):
 
     def __init__(self):
+        self.is_running = False
         self.is_abort = False
         self.base_canvas = LedCanvas()
 
     def abort(self):
+        if not self.is_running:
+            return
         self.is_abort = True
 
     def show(self, dic):
+        self.is_running = True
         led = dic['led']
         data = dic['orders']
 
@@ -26,7 +30,6 @@ class LedFramework(object):
             for data in flatten_data:
                 if self.is_abort:
                     canvas.abort()
-                    self.is_abort = False
                     return
 
                 current_block = create_block(data, self.base_canvas)
@@ -39,7 +42,6 @@ class LedFramework(object):
                 while(True):
                     if self.is_abort:
                         canvas.abort()
-                        self.is_abort = False
                         return
 
                     if not isinstance(current_block, LedObject):
@@ -53,6 +55,8 @@ class LedFramework(object):
         except KeyError:
             return
         finally:
+            self.is_abort = False
+            self.is_running = False
             led.Clear()
             led.Show()
 

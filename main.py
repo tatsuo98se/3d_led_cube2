@@ -72,7 +72,8 @@ def message_receive_loop(q):
                         except ValueError:
                             print('invalid order:' + str(orders))
                             continue
-
+                        
+                        led_framework.abort()
                         q.put([led_framework.show, {"led":led, "orders":dic_orders}])
 
                 sock.close()
