@@ -68,17 +68,19 @@ def create_object(order):
     elif oid == 'object-ripple':
         return LedRandomRippleObject(lifetime)
     elif oid == 'object-mario':
-        return LedBitmapObject(Image.open('contents/s_mario.png'), lifetime)
+        return LedBitmapObject(Image.open('contents/s_mario.png'), 0, lifetime)
     elif oid == 'object-mario-run1':
-        return LedBitmapObject(Image.open('contents/s_mario_run_1.png'), lifetime)
+        return LedBitmapObject(Image.open('contents/s_mario_run_1.png'), 0, lifetime)
     elif oid == 'object-mario-run2':
-        return LedBitmapObject(Image.open('contents/s_mario_run_2.png'), lifetime)
+        return LedBitmapObject(Image.open('contents/s_mario_run_2.png'), 0, lifetime)
     elif oid == 'object-bitmap':
         image = get_param_from_order(order, 'bitmap')
+        z = get_param_from_order(order, 'z')
         if image is None:
             raise KeyError
+        z = 0 if z is None else z
         try:
-            return LedBitmapObject(Image.open(cStringIO.StringIO(base64.b64decode(image))), lifetime)
+            return LedBitmapObject(Image.open(cStringIO.StringIO(base64.b64decode(image))), z, lifetime)
 
         except:
             print("image decode error")
