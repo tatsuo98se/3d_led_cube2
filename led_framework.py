@@ -58,7 +58,6 @@ class LedFramework(object):
         finally:
             self.is_abort = False
             self.is_running = False
-            led.Clear()
-            led.Show()
+            canvas.clear()
 
 
