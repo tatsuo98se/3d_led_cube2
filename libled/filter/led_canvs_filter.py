@@ -26,3 +26,5 @@ class LedCanvasFilter(ILedCanvas):
     def abort(self):
         self.canvas.abort()
 
+    def clear(self):
+        self.canvas.clear()

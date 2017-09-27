@@ -42,3 +42,6 @@ class LedCanvas(ILedCanvas):
         for obj in self.objects[:]:
             obj.abort()
 
+    def clear(self):
+        led.Clear()
+        led.Show()
