@@ -20,4 +20,6 @@ class LedBitmapObject(LedObject):
         for x in range(X):
             for y in range(Y):
                 r,g,b = self.image.getpixel((x,y))
-                canvas.set_led(x, y, z, (r<<16)+(g<<8)+b)
+                if r == 0 and g == 0 and b == 0:
+                    continue
+                canvas.set_led(x, y, self.z, (r<<16)+(g<<8)+b)
