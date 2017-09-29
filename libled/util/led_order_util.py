@@ -8,6 +8,7 @@ from ..object.led_fill_obj import LedFillObject
 from ..object.led_random_ripple_obj import LedRandomRippleObject
 from ..object.led_clear_obj import LedClearObject
 from ..object.led_bitmap_obj import LedBitmapObject
+from ..object.led_mario_run_obj import LedMarioRunObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -73,6 +74,8 @@ def create_object(order):
         return LedBitmapObject(Image.open('contents/s_mario_run_1.png'), 0, lifetime)
     elif oid == 'object-mario-run2':
         return LedBitmapObject(Image.open('contents/s_mario_run_2.png'), 0, lifetime)
+    elif oid == 'object-mario-run-anime':
+        return LedMarioRunObject(0, lifetime)
     elif oid == 'object-bitmap':
         image = get_param_from_order(order, 'bitmap')
         z = get_param_from_order(order, 'z')

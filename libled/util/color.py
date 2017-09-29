@@ -7,10 +7,23 @@ class Color:
         self.normalize()
 
     @staticmethod
+    def int_to_color(rgb):
+        return Color( ((rgb&0xff0000) >> 16 ) / 255.0,
+                      ((rgb&0x00ff00) >> 8 ) / 255.0,
+                      (rgb&0x0000ff) / 255.0)
+
+    @staticmethod
     def rgbtapple_to_color(rgb, a=1.0):
-        return Color(int(rgb[0]),
-                    int(rgb[1]),
-                    int(rgb[2]),
+        return Color(rgb[0],
+                    rgb[1],
+                    rgb[2],
+                    a)
+
+    @staticmethod
+    def rgbtapple255_to_color(rgb, a=1.0):
+        return Color(rgb[0] / 255.0,
+                    rgb[1] / 255.0,
+                    rgb[2] / 255.0,
                     a)
 
     def normalize(self):
@@ -41,3 +54,8 @@ class Color:
         return (int(round(self.r * self.a * 255)) << 16) + \
                (int(round(self.g * self.a * 255)) << 8) + \
                int(round(self.b * self.a * 255))
+
+    def is_black(self):
+        if self.a == 0:
+            return True
+        return self.r == 0.0 and self.g == 0.0 and self.b == 0.0
