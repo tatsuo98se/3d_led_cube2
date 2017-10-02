@@ -5,11 +5,7 @@ from ..util.color import Color
 # 回心するオブジェクト表示オブジェクト用ユーティリティ
 # オブジェクトが中心から外に向かいます
 
-# Nはなんだろう？
-N = 100
-
-
-def get_power(ix):
+def get_power(ix, N):
     fade = N / 5
     if ix < fade:
         return ix * 255 / fade
@@ -18,13 +14,16 @@ def get_power(ix):
     else:
         return (N - ix) * 256 / fade
 
+def max3(a, b, c):
+    ab = b if a < b else a
+    return c if ab < c else ab
 
-def concentric(canvas, ix, proc):
+def concentric(canvas, ix, N, proc):
     cx = LED_WIDTH / 2
     cy = LED_HEIGHT / 2
     cz = LED_DEPTH / 2
 
-    power = get_power(ix)
+    power = get_power(ix, N)
     for x in range(LED_WIDTH):
         for y in range(LED_HEIGHT):
             for z in range(LED_DEPTH):
@@ -38,11 +37,6 @@ def concentric(canvas, ix, proc):
                 # if rgb != 0:
                 canvas.set_led(x, y, z, Color(r, g, b))
 
-    return ++ix
 
-
-def max3(a, b, c):
-    ab = b if a < b else a
-    return c if ab < c else ab
 
 
