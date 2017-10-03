@@ -16,6 +16,7 @@ from ..filter.led_canvs_filter import LedCanvasFilter
 from ..filter.led_test_canvas_filter import LedTestCanvasFilter
 from ..filter.led_wave_canvas_filter import LedWaveCanvasFilter
 from ..filter.led_hsv_canvas_filter import LedHsvCanvasFilter
+from ..filter.led_skewed_canvas_filter import LedSkewedCanvasFilter
 
 from PIL import Image
 
@@ -63,6 +64,8 @@ DEFAULT_LIFETIME = 5
 def create_object(order):
     lifetime = get_lifetime_from_order(order)
     oid = order['id']
+    z = get_param_from_order(order, 'z')
+    z = 0 if z is None else z
     if oid == 'object-clear':
         return LedClearObject(lifetime)
     if oid== 'object-fill':
@@ -70,19 +73,17 @@ def create_object(order):
     elif oid == 'object-ripple':
         return LedRandomRippleObject(lifetime)
     elif oid == 'object-mario':
-        return LedBitmapObject(Image.open('contents/s_mario.png'), 0, lifetime)
+        return LedBitmapObject(Image.open('contents/s_mario.png'), z, lifetime)
     elif oid == 'object-mario-run1':
-        return LedBitmapObject(Image.open('contents/s_mario_run_1.png'), 0, lifetime)
+        return LedBitmapObject(Image.open('contents/s_mario_run_1.png'), z, lifetime)
     elif oid == 'object-mario-run2':
-        return LedBitmapObject(Image.open('contents/s_mario_run_2.png'), 0, lifetime)
+        return LedBitmapObject(Image.open('contents/s_mario_run_2.png'), z, lifetime)
     elif oid == 'object-mario-run-anime':
-        return LedMarioRunObject(0, lifetime)
+        return LedMarioRunObject(z, lifetime)
     elif oid == 'object-bitmap':
         image = get_param_from_order(order, 'bitmap')
-        z = get_param_from_order(order, 'z')
         if image is None:
             raise KeyError
-        z = 0 if z is None else z
         try:
             return LedBitmapObject(Image.open(cStringIO.StringIO(base64.b64decode(image))), z, lifetime)
 
@@ -102,6 +103,8 @@ def create_filter(order, canvas):
         return LedHsvCanvasFilter(canvas)
     elif oid == 'filter-wave':
         return LedWaveCanvasFilter(canvas)
+    elif oid == 'filter-skewed':
+        return LedSkewedCanvasFilter(canvas)
     else:
         raise KeyError
 

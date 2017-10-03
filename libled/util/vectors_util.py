@@ -26,7 +26,7 @@ def concentric(canvas, ix, N, proc):
     power = get_power(ix, N)
     for x in range(LED_WIDTH):
         for y in range(LED_HEIGHT):
-            for z in range(LED_DEPTH):
+            for z in range(LED_DEPTH*2):
                 d = proc(x - cx, y - cy, z - cz, ix * 1.0 / N)
                 col0 = int(round(ix - d) % 64)
                 col = (col0 % 7 + 1) if (col0 % 6) == 0 else 0
