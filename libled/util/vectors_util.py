@@ -1,9 +1,11 @@
 # coding: UTF-8
 from ..led_cube import *
 from ..util.color import Color
+import math
 
 # 回心するオブジェクト表示オブジェクト用ユーティリティ
 # オブジェクトが中心から外に向かいます
+
 
 def get_power(ix, N):
     fade = N / 5
@@ -14,9 +16,11 @@ def get_power(ix, N):
     else:
         return (N - ix) * 256 / fade
 
+
 def max3(a, b, c):
     ab = b if a < b else a
     return c if ab < c else ab
+
 
 def concentric(canvas, ix, N, proc):
     cx = LED_WIDTH / 2
@@ -26,7 +30,7 @@ def concentric(canvas, ix, N, proc):
     power = get_power(ix, N)
     for x in range(LED_WIDTH):
         for y in range(LED_HEIGHT):
-            for z in range(LED_DEPTH*2):
+            for z in range(LED_DEPTH):
                 d = proc(x - cx, y - cy, z - cz, ix * 1.0 / N)
                 col0 = int(round(ix - d) % 64)
                 col = (col0 % 7 + 1) if (col0 % 6) == 0 else 0
@@ -38,5 +42,28 @@ def concentric(canvas, ix, N, proc):
                 canvas.set_led(x, y, z, Color(r, g, b))
 
 
+def skewed(dx0, dy, dz0, t):
+    T = 4
+    s = math.sin(t * math.pi * T)
+    c = math.cos(t * math.pi * T)
+    dx = (dx0 * c + dz0 * s) * 0.5
+    dz = (-dx0 * s + dz0 * c) * 2
+    return dx, dz
 
 
+class Xyz_t:
+
+    def __init__(self):
+        self.x = 0.0
+        self.y = 0.0
+        self.z = 0.0
+
+    def len(self):
+        return math.sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
+
+
+class Xyzc_t:
+
+    def __init__(self):
+        self.p = Xyz_t()
+        self.color = 0

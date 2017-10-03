@@ -11,6 +11,9 @@ from ..object.led_bitmap_obj import LedBitmapObject
 from ..object.led_mario_run_obj import LedMarioRunObject
 from ..object.led_cube_obj import LedCubeObject
 from ..object.led_sphere_obj import LedSphereObject
+from ..object.led_repbang_obj import LedRepbangObject
+from ..object.led_skewed_sphere_obj import LedSkewedSphereObject
+from ..object.led_skewed_cube_obj import LedSkewedCubeObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -95,6 +98,12 @@ def create_object(order):
         return LedCubeObject(lifetime)
     elif oid == 'object-sphere':
         return LedSphereObject(lifetime)
+    elif oid == 'object-repbang':
+        return LedRepbangObject(lifetime)
+    elif oid == 'object-skewed-sphere':
+        return LedSkewedSphereObject(lifetime)
+    elif oid == 'object-skewed-cube':
+        return LedSkewedCubeObject(lifetime)
     else:
         raise KeyError
 
