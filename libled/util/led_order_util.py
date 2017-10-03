@@ -9,6 +9,7 @@ from ..object.led_random_ripple_obj import LedRandomRippleObject
 from ..object.led_clear_obj import LedClearObject
 from ..object.led_bitmap_obj import LedBitmapObject
 from ..object.led_mario_run_obj import LedMarioRunObject
+from ..object.led_cube_obj import LedCubeObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -88,6 +89,8 @@ def create_object(order):
         except:
             print("image decode error")
             raise KeyError
+    elif oid == 'object-cube':
+        return LedCubeObject(lifetime)
     else:
         raise KeyError
 
