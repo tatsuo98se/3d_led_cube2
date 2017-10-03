@@ -10,6 +10,7 @@ from ..object.led_clear_obj import LedClearObject
 from ..object.led_bitmap_obj import LedBitmapObject
 from ..object.led_mario_run_obj import LedMarioRunObject
 from ..object.led_cube_obj import LedCubeObject
+from ..object.led_sphere_obj import LedSphereObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -91,6 +92,8 @@ def create_object(order):
             raise KeyError
     elif oid == 'object-cube':
         return LedCubeObject(lifetime)
+    elif oid == 'object-sphere':
+        return LedSphereObject(lifetime)
     else:
         raise KeyError
 
