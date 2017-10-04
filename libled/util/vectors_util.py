@@ -60,25 +60,6 @@ def sphere_face():
             d = 0.5
             return Xyz_t(pos.x * d, pos.y * d+0.1, pos.z * d)
 
-def red(ix):
-    i = ix % 90
-    if i < 30:
-        return i * 255 / 30
-    elif i < 60:
-        return (60 - i) * 255 / 30
-    else:
-        return 0
-
-def rgb(ix):
-    n = math.floor(ix * 1 * 90)
-    return red(n) * 0x10000 + red(n+30) * 0x100 + red(n+60) * 0x1
-
-def darken(x):
-    r = ((int(x) & 0xff0000) * 49 / 50) & 0xff0000
-    g = ((int(x) & 0xff00) * 49 / 50) & 0xff00
-    b = ((int(x) & 0xff) * 49 / 50) & 0xff
-    return r + g + b
-
 def can_show(p):
     return 0 <= p.x and p.x < LED_WIDTH \
         and 0 <= p.y and p.y < LED_HEIGHT \
