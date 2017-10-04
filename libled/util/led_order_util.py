@@ -11,7 +11,7 @@ from ..object.led_bitmap_obj import LedBitmapObject
 from ..object.led_mario_run_obj import LedMarioRunObject
 from ..object.led_cube_obj import LedCubeObject
 from ..object.led_sphere_obj import LedSphereObject
-#from ..object.led_repbang_obj import LedRepbangObject
+from ..object.led_repbang_obj import LedRepbangObject
 from ..object.led_skewed_sphere_obj import LedSkewedSphereObject
 from ..object.led_skewed_cube_obj import LedSkewedCubeObject
 from ..object.led_fireworks_obj import LedFireworksObject
