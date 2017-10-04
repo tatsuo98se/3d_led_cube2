@@ -14,6 +14,8 @@ from ..object.led_sphere_obj import LedSphereObject
 #from ..object.led_repbang_obj import LedRepbangObject
 from ..object.led_skewed_sphere_obj import LedSkewedSphereObject
 from ..object.led_skewed_cube_obj import LedSkewedCubeObject
+from ..object.led_fireworks_obj import LedFireworksObject
+from ..object.led_balls_obj import LedBallsObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -99,6 +101,10 @@ def create_object(order):
         return LedSkewedSphereObject(lifetime)
     elif oid == 'object-skewed-cube':
         return LedSkewedCubeObject(lifetime)
+    elif oid == 'object-fireworks':
+        return LedFireworksObject(lifetime)
+    elif oid == 'object-balls':
+        return LedBallsObject(lifetime)
     else:
         raise KeyError
 

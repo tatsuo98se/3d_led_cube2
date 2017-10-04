@@ -68,9 +68,9 @@ def can_show(p):
 class Xyz_t:
 
     def __init__(self, x=0.0, y=0.0, z=0.0):
-        self.x = x
-        self.y = y
-        self.z = z
+        self.x = float(x)
+        self.y = float(y)
+        self.z = float(z)
 
     def len(self):
         return math.sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
@@ -81,6 +81,17 @@ class Xyz_t:
         else:
             return Xyz_t(self.x + other, self.y + other, self.z + other)
 
+    def __sub__(self, other):
+        if isinstance(other, Xyz_t):
+            return Xyz_t(self.x - other.x, self.y - other.y, self.z - other.z)
+        else:
+            return Xyz_t(self.x - other, self.y - other, self.z - other)
+
+    def __mul__(self, other):
+        if isinstance(other, Xyz_t):
+            return Xyz_t(self.x * other.x, self.y * other.y, self.z * other.z)
+        else:
+            return Xyz_t(self.x * other, self.y * other, self.z * other)
 
 class Xyzc_t:
 
