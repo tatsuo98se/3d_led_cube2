@@ -65,14 +65,13 @@ class LedCanvas(ILedCanvas):
         self.led_cube = self.get_new_canvas()
         for obj in self.objects[:]:
             obj.will_draw()
+            #print('obj.draw()' + str(type(obj)))
+            if canvas is None:
+                obj.draw(self)
+            else:
+                obj.draw(canvas)
             if obj.is_expired() or obj.is_abort:
                 self.objects.remove(obj)
-            else:
-                #print('obj.draw()' + str(type(obj)))
-                if canvas is None:
-                    obj.draw(self)
-                else:
-                    obj.draw(canvas)
 
         led.Show()
 
