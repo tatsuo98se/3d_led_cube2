@@ -2,6 +2,7 @@
 from ..led_cube import *
 from ..util.color import Color
 import math
+import random
 
 # 回心するオブジェクト表示オブジェクト用ユーティリティ
 # オブジェクトが中心から外に向かいます
@@ -50,20 +51,58 @@ def skewed(dx0, dy, dz0, t):
     dz = (-dx0 * s + dz0 * c) * 2
     return dx, dz
 
+def sphere_face():
+
+    while True:
+        pos = Xyz_t(random.uniform(-1,1), random.uniform(-1,1), random.uniform(-1,1))
+        d2 =  pos.x*pos.x + pos.y*pos.y + pos.z*pos.z
+        if 0.1<d2 and d2 < 1:
+            d = 0.5
+            return Xyz_t(pos.x * d, pos.y * d+0.1, pos.z * d)
+
+def red(ix):
+    i = ix % 90
+    if i < 30:
+        return i * 255 / 30
+    elif i < 60:
+        return (60 - i) * 255 / 30
+    else:
+        return 0
+
+def rgb(ix):
+    n = math.floor(ix * 1 * 90)
+    return red(n) * 0x10000 + red(n+30) * 0x100 + red(n+60) * 0x1
+
+def darken(x):
+    r = ((int(x) & 0xff0000) * 49 / 50) & 0xff0000
+    g = ((int(x) & 0xff00) * 49 / 50) & 0xff00
+    b = ((int(x) & 0xff) * 49 / 50) & 0xff
+    return r + g + b
+
+def can_show(p):
+    return 0 <= p.x and p.x < LED_WIDTH \
+        and 0 <= p.y and p.y < LED_HEIGHT \
+        and 0 <= p.z and p.z < LED_DEPTH
 
 class Xyz_t:
 
-    def __init__(self):
-        self.x = 0.0
-        self.y = 0.0
-        self.z = 0.0
+    def __init__(self, x=0.0, y=0.0, z=0.0):
+        self.x = x
+        self.y = y
+        self.z = z
 
     def len(self):
         return math.sqrt(self.x * self.x + self.y * self.y + self.z * self.z)
 
+    def __add__(self, other):
+        if isinstance(other, Xyz_t):
+            return Xyz_t(self.x + other.x, self.y + other.y, self.z + other.z)
+        else:
+            return Xyz_t(self.x + other, self.y + other, self.z + other)
+
 
 class Xyzc_t:
 
-    def __init__(self):
-        self.p = Xyz_t()
-        self.color = 0
+    def __init__(self, p = Xyz_t(), color = 0):
+        self.p = p
+        self.color = color

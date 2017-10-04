@@ -35,6 +35,7 @@ class LedCanvas(ILedCanvas):
         elif isinstance(color, tuple):
             src_color = Color.rgbtapple_to_color(color)
         else:
+            print("Unknown Type:" + str(type(color)))
             raise TypeError
 
         if src_color.a == 0.0:
