@@ -3,10 +3,10 @@ from ..led_cube import *
 import time
 import math
 
-class LedWaveCanvasFilter(LedCanvasFilter):
+class LedFlatWaveCanvasFilter(LedCanvasFilter):
 
     def __init__(self, canvas):
-        super(LedWaveCanvasFilter, self).__init__(canvas)
+        super(LedFlatWaveCanvasFilter, self).__init__(canvas)
         self.born_at = time.time()
 
     def set_led(self, x, y, z, color):
@@ -21,7 +21,7 @@ class LedWaveCanvasFilter(LedCanvasFilter):
         xdot = xwavelength / LED_WIDTH
         xstart = (offset * 5) * xdot
 
-        z = z + (xwavedepth + math.sin(xdot * x + xstart) * xwavedepth) + (ywavedepth + math.sin(ydot * y + ystart) * ywavedepth)
+        z = (xwavedepth + math.sin(xdot * x + xstart) * xwavedepth) + (ywavedepth + math.sin(ydot * y + ystart) * ywavedepth)
 
         self.canvas.set_led(x, y, z, color)
 

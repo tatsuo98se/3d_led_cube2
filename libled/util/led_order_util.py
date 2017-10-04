@@ -21,6 +21,7 @@ from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
 from ..filter.led_test_canvas_filter import LedTestCanvasFilter
 from ..filter.led_wave_canvas_filter import LedWaveCanvasFilter
+from ..filter.led_flat_wave_canvas_filter import LedFlatWaveCanvasFilter
 from ..filter.led_hsv_canvas_filter import LedHsvCanvasFilter
 from ..filter.led_skewed_canvas_filter import LedSkewedCanvasFilter
 
@@ -116,6 +117,8 @@ def create_filter(order, canvas):
         return LedHsvCanvasFilter(canvas)
     elif oid == 'filter-wave':
         return LedWaveCanvasFilter(canvas)
+    elif oid == 'filter-flat-wave':
+        return LedFlatWaveCanvasFilter(canvas)
     elif oid == 'filter-skewed':
         return LedSkewedCanvasFilter(canvas)
     else:
