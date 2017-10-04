@@ -11,7 +11,7 @@ from ..object.led_bitmap_obj import LedBitmapObject
 from ..object.led_mario_run_obj import LedMarioRunObject
 from ..object.led_cube_obj import LedCubeObject
 from ..object.led_sphere_obj import LedSphereObject
-from ..object.led_repbang_obj import LedRepbangObject
+#from ..object.led_repbang_obj import LedRepbangObject
 from ..object.led_skewed_sphere_obj import LedSkewedSphereObject
 from ..object.led_skewed_cube_obj import LedSkewedCubeObject
 
@@ -38,20 +38,16 @@ def get_orders_in_loop(orders, start):
 def get_lifetime_from_order(order):
     return DEFAULT_LIFETIME if order.get('lifetime') is None else order['lifetime']
 
-def get_param_from_order(order, key):
-    param = order.get('param')
-    if param is None:
-        return None
-
-    return param.get(key)
+def get_param(order, key, default = None):
+    param = order.get(key)
+    return default if param is None else param
 
 def flatten_orders(orders):
     flatten = []
     i = 0
     while i<len(orders):
         if orders[i]['id'] == 'ctrl-loop':
-            count = get_param_from_order(orders[i], 'count')
-            count = 3 if count is None else count
+            count = get_param(orders[i], 'count', 3)
             loop = get_orders_in_loop(orders, i+1) 
             flatten.extend(loop * count)
             i += len(loop) + 2
@@ -68,8 +64,7 @@ DEFAULT_LIFETIME = 5
 def create_object(order):
     lifetime = get_lifetime_from_order(order)
     oid = order['id']
-    z = get_param_from_order(order, 'z')
-    z = 0 if z is None else z
+    z = get_param(order, 'z', 0)
     if oid == 'object-clear':
         return LedClearObject(lifetime)
     if oid== 'object-fill':
@@ -85,7 +80,7 @@ def create_object(order):
     elif oid == 'object-mario-run-anime':
         return LedMarioRunObject(z, lifetime)
     elif oid == 'object-bitmap':
-        image = get_param_from_order(order, 'bitmap')
+        image = get_param(order, 'bitmap')
         if image is None:
             raise KeyError
         try:

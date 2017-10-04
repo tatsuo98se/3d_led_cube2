@@ -11,58 +11,42 @@ class TestLedOrderUtil(unittest.TestCase):
             {
                 "id":"filter-wave",
                 "lifetime":1,
-                "param":{
-                    "offset":1
-                }
+                "offset":1
             },
             {
                 "id":"object-ripple",
                 "lifetime":1,
-                "param":{
-                    "offset":1
-                }
+                "offset":1
             },
             {
                 "id":"object-fill",
                 "lifetime":1,
-                "param":{
-                    "offset":1
-                }
+                "offset":1
             },
             {
                 "id":"object-ripple",
                 "lifetime":1,
-                "param":{
-                    "offset":1
-                }
+                "offset":1
             },
             {
                 "id":"object-fill",
                 "lifetime":1,
-                "param":{
-                    "offset":1
-                }
+                "offset":1
             },
             {
                 "id":"filter-clear",
                 "lifetime":1,
-                "param":{
-                    "offset":1
-                }
+                "offset":1
             },
             {
                 "id":"object-fill",
                 "lifetime":1,
-                "param":{
-                    "offset":1
-                }
+                "offset":1
             },
             {
                 "id":"object-ripple",
                 "lifetime":1,
-                "param":{
-                    "offset":1
-                }
+                 "offset":1
             }
         ]
     }
@@ -203,7 +187,7 @@ class TestLedOrderUtil(unittest.TestCase):
 
 
     def test_create_order_3(self):
-        actual = create_order({"id":"object-bitmap", "param":{"z":1, "bitmap":"iVBORw0KGgoAAAANSUhEUgAAABAAAAAgCAYAAAAbifjMAAAEDWlDQ1BJQ0MgUHJvZmlsZQAAOI2NVV1oHFUUPrtzZyMkzlNsNIV0qD8NJQ2TVjShtLp/3d02bpZJNtoi6GT27s6Yyc44M7v9oU9FUHwx6psUxL+3gCAo9Q/bPrQvlQol2tQgKD60+INQ6Ium65k7M5lpurHeZe58853vnnvuuWfvBei5qliWkRQBFpquLRcy4nOHj4g9K5CEh6AXBqFXUR0rXalMAjZPC3e1W99Dwntf2dXd/p+tt0YdFSBxH2Kz5qgLiI8B8KdVy3YBevqRHz/qWh72Yui3MUDEL3q44WPXw3M+fo1pZuQs4tOIBVVTaoiXEI/MxfhGDPsxsNZfoE1q66ro5aJim3XdoLFw72H+n23BaIXzbcOnz5mfPoTvYVz7KzUl5+FRxEuqkp9G/Ajia219thzg25abkRE/BpDc3pqvphHvRFys2weqvp+krbWKIX7nhDbzLOItiM8358pTwdirqpPFnMF2xLc1WvLyOwTAibpbmvHHcvttU57y5+XqNZrLe3lE/Pq8eUj2fXKfOe3pfOjzhJYtB/yll5SDFcSDiH+hRkH25+L+sdxKEAMZahrlSX8ukqMOWy/jXW2m6M9LDBc31B9LFuv6gVKg/0Szi3KAr1kGq1GMjU/aLbnq6/lRxc4XfJ98hTargX++DbMJBSiYMIe9Ck1YAxFkKEAG3xbYaKmDDgYyFK0UGYpfoWYXG+fAPPI6tJnNwb7ClP7IyF+D+bjOtCpkhz6CFrIa/I6sFtNl8auFXGMTP34sNwI/JhkgEtmDz14ySfaRcTIBInmKPE32kxyyE2Tv+thKbEVePDfW/byMM1Kmm0XdObS7oGD/MypMXFPXrCwOtoYjyyn7BV29/MZfsVzpLDdRtuIZnbpXzvlf+ev8MvYr/Gqk4H/kV/G3csdazLuyTMPsbFhzd1UabQbjFvDRmcWJxR3zcfHkVw9GfpbJmeev9F08WW8uDkaslwX6avlWGU6NRKz0g/SHtCy9J30o/ca9zX3Kfc19zn3BXQKRO8ud477hLnAfc1/G9mrzGlrfexZ5GLdn6ZZrrEohI2wVHhZywjbhUWEy8icMCGNCUdiBlq3r+xafL549HQ5jH+an+1y+LlYBifuxAvRN/lVVVOlwlCkdVm9NOL5BE4wkQ2SMlDZU97hX86EilU/lUmkQUztTE6mx1EEPh7OmdqBtAvv8HdWpbrJS6tJj3n0CWdM6busNzRV3S9KTYhqvNiqWmuroiKgYhshMjmhTh9ptWhsF7970j/SbMrsPE1suR5z7DMC+P/Hs+y7ijrQAlhyAgccjbhjPygfeBTjzhNqy28EdkUh8C+DU9+z2v/oyeH791OncxHOs5y2AtTc7nb/f73TWPkD/qwBnjX8BoJ98VVBg/m8AAAEVSURBVEgN7VXBDcIwDHQqRmKATsME/Gn/TMA0HYCdis/tpY6VVqC8QFhynNi5i7kmIs1q0mBdA9agzQQndpBS4vSjCNSXa9As4p9A5Ac0yG+BD6B2r49eSfEWamASM0ayQsSxF6HL8yJwrBEBjGBNbV9h6EVudwWpMdpiHWYlgUcrOmBxvD44NTK/jiRZA3QAi6d7MOrDhHGzTMBUPIF5xHTeOmO+IMhdTIuY3BRPZR4x3wOCfRHz26RDr75aJOuQr4EBNPAKZKjtnfV3m2sR/zLLGtHNrbbuUzLcOXPToBCuIpSd7u6AF7Njaxb3wCju1IqvgJ5oKMBquaWyjJnAixOVPqrZT/AbPHttHvfmDmqb38m9APu7aLyM3S4UAAAAAElFTkSuQmCC"}}, None)
+        actual = create_order({"id":"object-bitmap", "z":1, "bitmap":"iVBORw0KGgoAAAANSUhEUgAAABAAAAAgCAYAAAAbifjMAAAEDWlDQ1BJQ0MgUHJvZmlsZQAAOI2NVV1oHFUUPrtzZyMkzlNsNIV0qD8NJQ2TVjShtLp/3d02bpZJNtoi6GT27s6Yyc44M7v9oU9FUHwx6psUxL+3gCAo9Q/bPrQvlQol2tQgKD60+INQ6Ium65k7M5lpurHeZe58853vnnvuuWfvBei5qliWkRQBFpquLRcy4nOHj4g9K5CEh6AXBqFXUR0rXalMAjZPC3e1W99Dwntf2dXd/p+tt0YdFSBxH2Kz5qgLiI8B8KdVy3YBevqRHz/qWh72Yui3MUDEL3q44WPXw3M+fo1pZuQs4tOIBVVTaoiXEI/MxfhGDPsxsNZfoE1q66ro5aJim3XdoLFw72H+n23BaIXzbcOnz5mfPoTvYVz7KzUl5+FRxEuqkp9G/Ajia219thzg25abkRE/BpDc3pqvphHvRFys2weqvp+krbWKIX7nhDbzLOItiM8358pTwdirqpPFnMF2xLc1WvLyOwTAibpbmvHHcvttU57y5+XqNZrLe3lE/Pq8eUj2fXKfOe3pfOjzhJYtB/yll5SDFcSDiH+hRkH25+L+sdxKEAMZahrlSX8ukqMOWy/jXW2m6M9LDBc31B9LFuv6gVKg/0Szi3KAr1kGq1GMjU/aLbnq6/lRxc4XfJ98hTargX++DbMJBSiYMIe9Ck1YAxFkKEAG3xbYaKmDDgYyFK0UGYpfoWYXG+fAPPI6tJnNwb7ClP7IyF+D+bjOtCpkhz6CFrIa/I6sFtNl8auFXGMTP34sNwI/JhkgEtmDz14ySfaRcTIBInmKPE32kxyyE2Tv+thKbEVePDfW/byMM1Kmm0XdObS7oGD/MypMXFPXrCwOtoYjyyn7BV29/MZfsVzpLDdRtuIZnbpXzvlf+ev8MvYr/Gqk4H/kV/G3csdazLuyTMPsbFhzd1UabQbjFvDRmcWJxR3zcfHkVw9GfpbJmeev9F08WW8uDkaslwX6avlWGU6NRKz0g/SHtCy9J30o/ca9zX3Kfc19zn3BXQKRO8ud477hLnAfc1/G9mrzGlrfexZ5GLdn6ZZrrEohI2wVHhZywjbhUWEy8icMCGNCUdiBlq3r+xafL549HQ5jH+an+1y+LlYBifuxAvRN/lVVVOlwlCkdVm9NOL5BE4wkQ2SMlDZU97hX86EilU/lUmkQUztTE6mx1EEPh7OmdqBtAvv8HdWpbrJS6tJj3n0CWdM6busNzRV3S9KTYhqvNiqWmuroiKgYhshMjmhTh9ptWhsF7970j/SbMrsPE1suR5z7DMC+P/Hs+y7ijrQAlhyAgccjbhjPygfeBTjzhNqy28EdkUh8C+DU9+z2v/oyeH791OncxHOs5y2AtTc7nb/f73TWPkD/qwBnjX8BoJ98VVBg/m8AAAEVSURBVEgN7VXBDcIwDHQqRmKATsME/Gn/TMA0HYCdis/tpY6VVqC8QFhynNi5i7kmIs1q0mBdA9agzQQndpBS4vSjCNSXa9As4p9A5Ac0yG+BD6B2r49eSfEWamASM0ayQsSxF6HL8yJwrBEBjGBNbV9h6EVudwWpMdpiHWYlgUcrOmBxvD44NTK/jiRZA3QAi6d7MOrDhHGzTMBUPIF5xHTeOmO+IMhdTIuY3BRPZR4x3wOCfRHz26RDr75aJOuQr4EBNPAKZKjtnfV3m2sR/zLLGtHNrbbuUzLcOXPToBCuIpSd7u6AF7Njaxb3wCju1IqvgJ5oKMBquaWyjJnAixOVPqrZT/AbPHttHvfmDmqb38m9APu7aLyM3S4UAAAAAElFTkSuQmCC"}, None)
         self.assertTrue(isinstance(actual, LedBitmapObject))
 
 
@@ -234,11 +218,16 @@ class TestLedOrderUtil(unittest.TestCase):
         self.assertEqual(5, get_lifetime_from_order(data))
 
 
-    def test_get_param_from_order_1(self):
-        data = {"id":"test", "param":{"count":1}}
-        self.assertEqual(1, get_param_from_order(data, 'count'))
+    def test_get_param_1(self):
+        data = {"id":"test", "count":1}
+        self.assertEqual(1, get_param(data, 'count'))
 
-    def test_get_param_from_order_2(self):
+    def test_get_param_2(self):
         data = {"id":"test"}
-        self.assertEqual(None, get_param_from_order(data, 'count'))
+        self.assertEqual(None, get_param(data, 'count'))
+
+    def test_get_param_2(self):
+        data = {"id":"test"}
+        self.assertEqual(100, get_param(data, 'count', 100))
+
 
