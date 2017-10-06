@@ -1,3 +1,5 @@
+import json
+from datetime import datetime
 from libled.led_canvas import LedCanvas
 from libled.util.led_order_util import *
 from libled.i_led_canvas import ILedCanvas
@@ -23,13 +25,20 @@ class LedFramework(object):
         led = dic['led']
         data = dic['orders']
 
+        canvas = self.base_canvas
+        current_order = None
+
         try:
             flatten_data = Queue(flatten_orders(data['orders']))
             overlap_time = get_overlap_time(data['orders'])
             inout_effect = True if not get_inout_effect(data['orders']) is None else False
 
-            canvas = self.base_canvas
-            current_order = None
+            # save order
+            logorder = datetime.now().strftime('%Y%m%d-%H-%M-%S-%f')[:-3]
+            f = open('log/order_history/' + logorder + '.log', 'w')
+            f.write('show:' + json.dumps(data))
+            f.close()
+
 
             while(True):
                 if self.is_abort:
