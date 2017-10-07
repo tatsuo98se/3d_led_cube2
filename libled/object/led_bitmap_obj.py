@@ -9,6 +9,7 @@ class LedBitmapObject(LedObject):
         super(LedBitmapObject, self).__init__(lifetime)
         self.image = image.convert('RGB')
         self.z = z
+        self.start_y = 0
 
     def draw(self, canvas):
 
@@ -22,4 +23,5 @@ class LedBitmapObject(LedObject):
                 r,g,b = self.image.getpixel((x,y))
                 if r == 0 and g == 0 and b == 0:
                     continue
-                canvas.set_led(x, y, self.z, (r<<16)+(g<<8)+b)
+                newy = y - self.start_y
+                canvas.set_led(x, newy, self.z, (r<<16)+(g<<8)+b)
