@@ -16,6 +16,8 @@ from ..object.led_skewed_sphere_obj import LedSkewedSphereObject
 from ..object.led_skewed_cube_obj import LedSkewedCubeObject
 from ..object.led_fireworks_obj import LedFireworksObject
 from ..object.led_balls_obj import LedBallsObject
+from ..object.led_mario_jump_obj import LedMarioJumpObject
+from ..object.led_mario_runjump_obj import LedMarioRunJumpObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -68,6 +70,7 @@ def create_object(order):
     lifetime = get_lifetime_from_order(order)
     oid = order['id']
     z = get_param(order, 'z', 0)
+    y = get_param(order, 'y', 0)
     if oid == 'object-clear':
         return LedClearObject(lifetime)
     if oid== 'object-fill':
@@ -106,6 +109,10 @@ def create_object(order):
         return LedFireworksObject(lifetime)
     elif oid == 'object-balls':
         return LedBallsObject(lifetime)
+    elif oid == 'object-mario-jump-anime':
+        return LedMarioJumpObject(z, y, lifetime)
+    elif oid == 'object-mario-runandjump-anime':
+        return LedMarioRunJumpObject(z, y, lifetime)
     else:
         raise KeyError
 
