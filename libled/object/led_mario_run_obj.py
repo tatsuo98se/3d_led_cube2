@@ -8,20 +8,15 @@ class LedMarioRunObject(LedObject):
 
     def __init__(self, z, lifetime = 0 ):
         super(LedMarioRunObject, self).__init__(lifetime)
-        self.mario1 = LedBitmapObject(Image.open('asset/image/s_mario_run_1.png'), z, lifetime)
-        self.mario2 =  LedBitmapObject(Image.open('asset/image/s_mario_run_2.png'), z, lifetime)
-        self.last_update = 0.0
+        self.mario1 = LedBitmapObject(Image.open('asset/image/s_mario_run_1.png'), 0, 0, z, lifetime)
+        self.mario2 =  LedBitmapObject(Image.open('asset/image/s_mario_run_2.png'), 0, 0, z, lifetime)
+        self.set_timer(0.1)
         self.mario = False
 
+    def on_timer(self):
+        self.mario = not self.mario
+
     def draw(self, canvas):
-
-        if self.last_update == 0:
-            self.last_update = self.elapsed()
-            
-        if self.elapsed() - self.last_update > 0.1:
-            self.last_update = self.elapsed()
-            self.mario = not self.mario
-
 
         if self.mario:
             self.mario1.draw(canvas)

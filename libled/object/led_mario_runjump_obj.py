@@ -8,10 +8,10 @@ JUMP_TIME = 6 * SEC
 
 class LedMarioRunJumpObject(LedObject):
 
-    def __init__(self, z, y, lifetime=0):
+    def __init__(self, y, z, lifetime=0):
         super(LedMarioRunJumpObject, self).__init__(lifetime)
         self.run = LedMarioRunObject(z)
-        self.jump = LedMarioJumpObject(z, y)
+        self.jump = LedMarioJumpObject(y, z)
         self.running = True
         self.time = 0
 

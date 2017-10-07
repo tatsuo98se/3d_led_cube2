@@ -10,6 +10,8 @@ class LedObject(object):
         self.born_at = 0
         self.lifetime = lifetime
         self.is_abort = False
+        self.last_update = 0.0
+        self.timer = 0
 
     def elapsed(self):
         return time.time() - self.born_at
@@ -38,5 +40,19 @@ class LedObject(object):
     def will_draw(self):
         if self.born_at == 0:
             self.born_at = time.time()
+        if self.timer != 0:
+            if self.last_update == 0:
+                self.last_update = self.elapsed()
+                
+            if self.elapsed() - self.last_update > self.timer:
+                self.last_update = self.elapsed()
+                self.on_timer()
 
+    def set_timer(self, timer):
+        self.timer = timer
 
+    def rest_timer(self):
+        self.timer = 0
+
+    def on_timer(self):
+        pass

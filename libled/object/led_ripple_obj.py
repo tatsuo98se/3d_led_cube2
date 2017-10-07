@@ -14,19 +14,17 @@ class LedRippleObject(LedObject):
         self.color = color
         self.produced = 0
         self.ripples = [LedRippleObject.FIRST_R]
-        self.last_update = 0.0
+        self.is_need_update = False
+        self.set_timer(0.1)
 
-    def is_expired(self):
+
+    def is_expired(self, offset=0):
         return (self.produced != 0 and len(self.ripples) == 0)
 
+    def on_timer(self):
+        self.is_need_update = True
+
     def draw(self, canvas):
-        is_need_update = False
-        if self.last_update == 0:
-            self.last_update = self.elapsed()
-            
-        if self.elapsed() - self.last_update > 0.1:
-            self.last_update = self.elapsed()
-            is_need_update = True
 
         if min(self.ripples) - 3 >= LedRippleObject.FIRST_R and self.produced < LedRippleObject.SIZE:
             self.ripples.append(LedRippleObject.FIRST_R)
@@ -40,9 +38,10 @@ class LedRippleObject(LedObject):
                 led_draw_util.circle(canvas, self.x, self.y, 0,
                     Color(self.color.r, self.color.g, self.color.b), r)
 
-            if is_need_update:
+            if self.is_need_update:
                 new_ripples.append(r+1)
             else:
                 new_ripples.append(r)
         
         self.ripples = new_ripples
+        self.is_need_update = False

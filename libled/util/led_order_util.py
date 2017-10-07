@@ -18,6 +18,7 @@ from ..object.led_fireworks_obj import LedFireworksObject
 from ..object.led_balls_obj import LedBallsObject
 from ..object.led_mario_jump_obj import LedMarioJumpObject
 from ..object.led_mario_runjump_obj import LedMarioRunJumpObject
+from ..object.led_drop_mushroom_obj import LedDropMushroomObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -78,11 +79,11 @@ def create_object(order):
     elif oid == 'object-ripple':
         return LedRandomRippleObject(lifetime)
     elif oid == 'object-mario':
-        return LedBitmapObject(Image.open('asset/image/s_mario.png'), z, lifetime)
+        return LedBitmapObject(Image.open('asset/image/s_mario.png'), 0, 0, z, lifetime)
     elif oid == 'object-mario-run1':
-        return LedBitmapObject(Image.open('asset/image/s_mario_run_1.png'), z, lifetime)
+        return LedBitmapObject(Image.open('asset/image/s_mario_run_1.png'), 0, 0, z, lifetime)
     elif oid == 'object-mario-run2':
-        return LedBitmapObject(Image.open('asset/image/s_mario_run_2.png'), z, lifetime)
+        return LedBitmapObject(Image.open('asset/image/s_mario_run_2.png'), 0, 0, z, lifetime)
     elif oid == 'object-mario-run-anime':
         return LedMarioRunObject(z, lifetime)
     elif oid == 'object-bitmap':
@@ -90,7 +91,7 @@ def create_object(order):
         if image is None:
             raise KeyError
         try:
-            return LedBitmapObject(Image.open(cStringIO.StringIO(base64.b64decode(image))), z, lifetime)
+            return LedBitmapObject(Image.open(cStringIO.StringIO(base64.b64decode(image))), 0, 0, z, lifetime)
 
         except:
             print("image decode error")
@@ -110,9 +111,11 @@ def create_object(order):
     elif oid == 'object-balls':
         return LedBallsObject(lifetime)
     elif oid == 'object-mario-jump-anime':
-        return LedMarioJumpObject(z, y, lifetime)
+        return LedMarioJumpObject(y, z, lifetime)
     elif oid == 'object-mario-runandjump-anime':
-        return LedMarioRunJumpObject(z, y, lifetime)
+        return LedMarioRunJumpObject(y, z, lifetime)
+    elif oid == 'object-drop-mushroom':
+        return LedDropMushroomObject(z, lifetime)
     else:
         raise KeyError
 

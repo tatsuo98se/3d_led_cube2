@@ -13,3 +13,5 @@ show:{"orders":[{"id":"object-fireworks"},{"id":"object-balls"}]}
 show:{"orders":[{"id":"filter-flat-wave"},{"id":"object-fireworks"},{"id":"object-balls"},{"id":"object-cube"},{"id":"object-skewed-sphere"}]}
 
 show:{"orders":[{"id":"ctrl-overlap"},{"id":"ctrl-inout-effect"},{"id":"object-fireworks"},{"id":"object-balls"},{"id":"object-cube"},{"id":"object-skewed-sphere"}]}
+
+show:{"orders":[{"id":"object-drop-mushroom"},{"id":"object-mario-run-anime"}]}

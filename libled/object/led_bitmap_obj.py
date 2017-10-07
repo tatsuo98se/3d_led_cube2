@@ -5,11 +5,12 @@ from ..led_cube import *
 
 class LedBitmapObject(LedObject):
 
-    def __init__(self, image, z, lifetime = 0 ):
+    def __init__(self, image, x = 0, y = 0, z= 0, lifetime = 0 ):
         super(LedBitmapObject, self).__init__(lifetime)
         self.image = image.convert('RGB')
+        self.x = x
+        self.y = y
         self.z = z
-        self.start_y = 0
 
     def draw(self, canvas):
 
@@ -23,5 +24,4 @@ class LedBitmapObject(LedObject):
                 r,g,b = self.image.getpixel((x,y))
                 if r == 0 and g == 0 and b == 0:
                     continue
-                newy = y - self.start_y
-                canvas.set_led(x, newy, self.z, (r<<16)+(g<<8)+b)
+                canvas.set_led(x + self.x, y + self.y, self.z, (r<<16)+(g<<8)+b)

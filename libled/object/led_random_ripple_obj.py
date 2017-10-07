@@ -12,18 +12,18 @@ class LedRandomRippleObject(LedObject):
 
     def __init__(self, lifetime = 0 ):
         super(LedRandomRippleObject, self).__init__(lifetime)
-        self.last_update = 0
+        self.set_timer(LedRandomRippleObject.DISTANCE)
+        self.is_need_update = False
+    
+    def on_timer(self):
+        self.is_need_update = True
 
     def draw(self, canvas):
 
-        is_need_update = False
-        if self.last_update == 0:
-            self.last_update = self.elapsed()
-
-        if self.elapsed() - self.last_update > LedRandomRippleObject.DISTANCE:
-            self.last_update = self.elapsed()
+        if self.is_need_update:
             ripple = LedRippleObject(random.randint(0, LED_WIDTH-1), 
                                 random.randint(0, LED_HEIGHT-1), 
                                 Color.rgbtapple_to_color( colorsys.hsv_to_rgb(random.random(), 1, 1)))
             canvas.add_object(ripple)
+            self.is_need_update = False
 
