@@ -26,6 +26,18 @@ class Color:
                     rgb[2] / 255.0,
                     a)
 
+    @staticmethod
+    def object_to_color(color):
+        if  isinstance(color, Color):
+            return color
+        elif  isinstance(color, int):
+            return Color.int_to_color(color)
+        elif isinstance(color, tuple):
+            return Color.rgbtapple_to_color(color)
+        else:
+            print("Unknown Type:" + str(type(color)))
+            raise TypeError
+
     def normalize(self):
         self.r = max(0.0, min(self.r, 1.0))
         self.g = max(0.0, min(self.g, 1.0))

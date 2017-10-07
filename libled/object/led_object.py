@@ -14,11 +14,11 @@ class LedObject(object):
     def elapsed(self):
         return time.time() - self.born_at
 
-    def is_expired(self):
+    def is_expired(self, offset = 0):
         if self.lifetime == 0 or self.born_at == 0:
             return False
 
-        if self.lifetime < time.time() - self.born_at:
+        if self.lifetime - offset < time.time() - self.born_at:
             return True
 
         return False

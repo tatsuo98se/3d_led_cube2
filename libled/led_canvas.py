@@ -26,17 +26,7 @@ class LedCanvas(ILedCanvas):
         if iz < 0 or iz >= LED_DEPTH:
             return
 
-
-        src_color = None
-        if  isinstance(color, Color):
-            src_color = color
-        elif  isinstance(color, int):
-            src_color = Color.int_to_color(color)
-        elif isinstance(color, tuple):
-            src_color = Color.rgbtapple_to_color(color)
-        else:
-            print("Unknown Type:" + str(type(color)))
-            raise TypeError
+        src_color = Color.object_to_color(color)
 
         if src_color.a == 0.0:
             return
@@ -70,7 +60,7 @@ class LedCanvas(ILedCanvas):
                 obj.draw(self)
             else:
                 obj.draw(canvas)
-            if obj.is_expired() or obj.is_abort:
+            if obj.is_expired() or obj.is_cancel():
                 self.objects.remove(obj)
 
         led.Show()

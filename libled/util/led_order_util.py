@@ -75,11 +75,11 @@ def create_object(order):
     elif oid == 'object-ripple':
         return LedRandomRippleObject(lifetime)
     elif oid == 'object-mario':
-        return LedBitmapObject(Image.open('contents/s_mario.png'), z, lifetime)
+        return LedBitmapObject(Image.open('asset/image/s_mario.png'), z, lifetime)
     elif oid == 'object-mario-run1':
-        return LedBitmapObject(Image.open('contents/s_mario_run_1.png'), z, lifetime)
+        return LedBitmapObject(Image.open('asset/image/s_mario_run_1.png'), z, lifetime)
     elif oid == 'object-mario-run2':
-        return LedBitmapObject(Image.open('contents/s_mario_run_2.png'), z, lifetime)
+        return LedBitmapObject(Image.open('asset/image/s_mario_run_2.png'), z, lifetime)
     elif oid == 'object-mario-run-anime':
         return LedMarioRunObject(z, lifetime)
     elif oid == 'object-bitmap':
@@ -130,8 +130,26 @@ def create_order(order, canvas):
         return create_object(order)
     elif oid.startswith('filter'):
         return create_filter(order, canvas)
+    elif oid.startswith('ctrl'):
+        return None
     else:
         raise KeyError
 
+def get_ctrl(orders, ctrl_id):
+    for order in orders:
+        if order['id'].startswith(ctrl_id):
+            return order
 
+    return None
 
+def get_overlap_time(orders):
+    ctrl = get_ctrl(orders, 'ctrl-overlap')
+    if ctrl is None:
+        return 0
+    return get_param(ctrl, 'time', 2)
+
+def get_inout_effect(orders):
+    ctrl = get_ctrl(orders, 'ctrl-inout-effect')
+    if ctrl is None:
+        return None
+    return 1

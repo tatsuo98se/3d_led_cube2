@@ -16,9 +16,9 @@ from libled.filter.led_wave_canvas_filter import LedWaveCanvasFilter
 from libled.filter.led_hsv_canvas_filter import LedHsvCanvasFilter
 from PIL import Image
 
-mario0 = LedBitmapObject(Image.open('contents/s_mario.png'), 0, 10)
-mario1 = LedBitmapObject(Image.open('contents/s_mario_run_1.png'), 0, 10)
-mario3 = LedBitmapObject(Image.open('contents/s_mario_run_2.png'), 0, 10)
+mario0 = LedBitmapObject(Image.open('asset/image/s_mario.png'), 0, 10)
+mario1 = LedBitmapObject(Image.open('asset/image/s_mario_run_1.png'), 0, 10)
+mario3 = LedBitmapObject(Image.open('asset/image/s_mario_run_2.png'), 0, 10)
 ripples =  LedRandomRippleObject(10)
 
 canvas = LedCanvas()
