@@ -1,7 +1,6 @@
 # coding: UTF-8
 from led_object import LedObject
 from ..led_cube import *
-import numpy as Np
 from ..util import vectors_util as Vectors
 import numpy as np
 import math
