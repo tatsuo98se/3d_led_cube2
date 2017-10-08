@@ -15,3 +15,5 @@ show:{"orders":[{"id":"filter-flat-wave"},{"id":"object-fireworks"},{"id":"objec
 show:{"orders":[{"id":"ctrl-overlap"},{"id":"ctrl-inout-effect"},{"id":"object-fireworks"},{"id":"object-balls"},{"id":"object-cube"},{"id":"object-skewed-sphere"}]}
 
 show:{"orders":[{"id":"object-drop-mushroom"},{"id":"object-mario-run-anime"}]}
+
+show:{"orders":[{"id":"ctrl-loop","count":10}, {"id":"object-mario-run-anime", "lifetime":1}, {"id":"object-mario-jump-anime", "lifetime":0.8}, {"id":"ctrl-loop"}]}
