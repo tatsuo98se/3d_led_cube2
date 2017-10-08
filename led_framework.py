@@ -48,27 +48,27 @@ class LedFramework(object):
                 if current_order is None:
                     data = flatten_data.dequeue()
                     if data is None:
-                        return
-                    current_order = create_order(data, self.base_canvas)
+                        if canvas.get_object_count() <= 0:
+                            return
+                        else:
+                            pass
+                    else:
+                        current_order = create_order(data, self.base_canvas)
 
                     if isinstance(current_order, ILedCanvas):
                         canvas = current_order
                         current_order = None
-                        continue
                     elif isinstance(current_order, LedObject):
                         if inout_effect:
                             current_order = LedFadeinoutOjbectFilter(current_order)
 
                         canvas.add_object(current_order)
-
                     else:
                         current_order = None
-                        continue
-
-                if current_order.is_expired(overlap_time):
-                    current_order = None
 
                 canvas.show()
+                if current_order is not None and current_order.is_expired(overlap_time):
+                    current_order = None
                 led.Wait(20)
 
         except KeyError:

@@ -28,3 +28,6 @@ class LedCanvasFilter(ILedCanvas):
 
     def clear(self):
         self.canvas.clear()
+
+    def get_object_count(self):
+        self.canvas.get_object_count()

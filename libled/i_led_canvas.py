@@ -32,3 +32,7 @@ class ILedCanvas(object):
     def clear(self):
         pass
 
+    @abstractmethod
+    def get_object_count(self):
+        pass
+
