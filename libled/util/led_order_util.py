@@ -2,6 +2,7 @@ from color import Color
 import base64
 import cStringIO
 from ..led_canvas import LedCanvas
+from ..object.led_overlapped_object import LedOverloappedObject
 from ..object.led_dot_obj import LedDotObject
 from ..object.led_ripple_obj import LedRippleObject
 from ..object.led_fill_obj import LedFillObject
@@ -115,7 +116,7 @@ def create_object(order):
     elif oid == 'object-mario-runandjump-anime':
         return LedMarioRunJumpObject(y, z, lifetime)
     elif oid == 'object-drop-mushroom':
-        return LedDropMushroomObject(z, lifetime)
+        return LedOverloappedObject(LedDropMushroomObject(z, lifetime))
     else:
         raise KeyError
 

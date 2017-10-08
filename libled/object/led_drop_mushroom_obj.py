@@ -8,11 +8,11 @@ START_Y = -16
 STATUS_BLINK = 0
 STATUS_DROP = 1
 
-class InnerLedDropMushroomObject(LedObject):
+class LedDropMushroomObject(LedObject):
 
 
     def __init__(self, z, lifetime = 0 ):
-        super(InnerLedDropMushroomObject, self).__init__(lifetime)
+        super(LedDropMushroomObject, self).__init__(lifetime)
         self.mushroom = LedBitmapObject(Image.open('asset/image/mushroom.png'), 0, START_Y, z, lifetime)
         self.status = STATUS_BLINK
         self.show = True
@@ -40,23 +40,3 @@ class InnerLedDropMushroomObject(LedObject):
             self.mushroom.draw(canvas)
         else:
             raise ValueError
-
-
-class LedDropMushroomObject(LedObject):
-
-    def __init__(self, z, lifetime = 0 ):
-        super(LedDropMushroomObject, self).__init__(lifetime)
-        self.mushroom = InnerLedDropMushroomObject(z, lifetime)
-        self.mushroom_added = False
-
-    def is_expired(self, offset = 0):
-        return self.mushroom_added
-
-
-    def draw(self, canvas):
-        if self.mushroom_added:
-            return
-
-        self.mushroom_added = True
-        canvas.add_object(self.mushroom)
-
