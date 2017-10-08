@@ -29,3 +29,18 @@ class LedMarioRunJumpObject(LedObject):
             self.jump.draw(canvas)
 
         self.time += 1
+
+    def will_draw(self):
+        self.run.will_draw()
+
+    def set_timer(self, timer):
+        self.run.set_timer()
+
+    def rest_timer(self):
+        self.run.rest_timer()
+
+    def on_timer(self):
+        self.run.on_timer()
+
+    def abort(self):
+        self.run.abort()
