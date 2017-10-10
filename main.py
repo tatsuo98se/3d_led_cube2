@@ -74,7 +74,7 @@ def message_receive_loop(q):
                             continue
                         
                         led_framework.abort()
-                        q.put([led_framework.show, {"led":led, "orders":dic_orders}])
+                        q.put([led_framework.show, dic_orders])
 
                 sock.close()
                 print('disconnected.')

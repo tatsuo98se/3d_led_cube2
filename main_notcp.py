@@ -1,5 +1,4 @@
 # coding: UTF-8
-from libled.led_cube import *
 from led_framework import LedFramework
 import threading
 from Queue import Queue
@@ -38,8 +37,7 @@ def message_receive_loop(q):
                     continue
 
                 led_framework.abort()
-                q.put([led_framework.show, {
-                      'led': led, 'orders': dic_orders}])
+                q.put([led_framework.show, dic_orders])
     except:
         pass
     finally:

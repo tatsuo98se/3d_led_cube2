@@ -1,4 +1,5 @@
 import json
+from libled.led_cube import *
 from datetime import datetime
 from libled.led_canvas import LedCanvas
 from libled.util.led_order_util import *
@@ -20,10 +21,8 @@ class LedFramework(object):
             return
         self.is_abort = True
 
-    def show(self, dic):
+    def show(self, data):
         self.is_running = True
-        led = dic['led']
-        data = dic['orders']
 
         canvas = self.base_canvas
         current_order = None
@@ -78,5 +77,6 @@ class LedFramework(object):
             self.is_abort = False
             self.is_running = False
             canvas.clear()
+            led.Show()
 
 
