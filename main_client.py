@@ -1,5 +1,4 @@
 # coding: UTF-8
-from libled.led_cube import *
 from led_framework import LedFramework
 import threading
 from Queue import Queue
@@ -7,6 +6,7 @@ import time
 import traceback
 import json
 import urllib2
+import sys
 
 
 message = Queue()
@@ -20,7 +20,7 @@ def message_receive_loop(q):
             print('Please input order...')
             input_word = raw_input('>>> ')
 
-            line = urllib2.urlopen("http://172.27.175.176:4567/api/content/1").read()
+            line = urllib2.urlopen("http://172.27.175.176:5000/api/content/2").read()
 
             if not line:
                 continue
@@ -41,10 +41,11 @@ def message_receive_loop(q):
                     continue
 
                 led_framework.abort()
-                q.put([led_framework.show, {
-                      'led': led, 'orders': dic_orders}])
+                q.put([led_framework.show, dic_orders])
     except:
-        pass
+        print('Unexpected error: ', sys.exc_info()[0])
+        print(traceback.format_exc())
+        raise
     finally:
         print('finished.')
 
