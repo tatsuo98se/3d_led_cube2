@@ -35,3 +35,16 @@ Enterキーの入力で、再度Jsonの表示命令の取得を行う
 
 受け取った命令をLED CUBEとシミュレータに表示する。
 表示に成功した命令は、./log/order_history以下にログとして保存する
+
+### led_framework.py - pythonプログラム用、Json表示命令受信クラス
+
+実装例
+
+``` example.py
+from led_framework import LedFramework
+
+LedFramework().show({"orders":[{"id":"object-fill"},{"id":"object-cube"}]})
+
+```
+
+
