@@ -2,7 +2,7 @@ from color import Color
 import base64
 import cStringIO
 from ..led_canvas import LedCanvas
-from ..object.led_overlapped_object import LedOverloappedObject
+from ..object.led_overlapped_object import LedOverlappedObject
 from ..object.led_dot_obj import LedDotObject
 from ..object.led_ripple_obj import LedRippleObject
 from ..object.led_fill_obj import LedFillObject
@@ -73,52 +73,61 @@ def create_object(order):
     oid = order['id']
     z = get_param(order, 'z', 0)
     y = get_param(order, 'y', 0)
+    overlap = get_param(order, 'overlap', False)
+    obj = None
+
     if oid == 'object-clear':
-        return LedClearObject(lifetime)
+        obj = LedClearObject(lifetime)
     if oid== 'object-fill':
-        return LedFillObject(Color(1,0,0), lifetime)
+        obj = LedFillObject(Color(1,0,0), lifetime)
     elif oid == 'object-ripple':
-        return LedRandomRippleObject(lifetime)
+        obj = LedRandomRippleObject(lifetime)
     elif oid == 'object-mario':
-        return LedBitmapObject(Image.open('asset/image/s_mario.png'), 0, 0, z, lifetime)
+        obj = LedBitmapObject(Image.open('asset/image/s_mario.png'), 0, 0, z, lifetime)
     elif oid == 'object-mario-run1':
-        return LedBitmapObject(Image.open('asset/image/s_mario_run_1.png'), 0, 0, z, lifetime)
+        obj = LedBitmapObject(Image.open('asset/image/s_mario_run_1.png'), 0, 0, z, lifetime)
     elif oid == 'object-mario-run2':
-        return LedBitmapObject(Image.open('asset/image/s_mario_run_2.png'), 0, 0, z, lifetime)
+        obj = LedBitmapObject(Image.open('asset/image/s_mario_run_2.png'), 0, 0, z, lifetime)
     elif oid == 'object-mario-run-anime':
-        return LedMarioRunObject(z, lifetime)
+        obj = LedMarioRunObject(z, lifetime)
     elif oid == 'object-bitmap':
         image = get_param(order, 'bitmap')
         if image is None:
             raise KeyError
         try:
-            return LedBitmapObject(Image.open(cStringIO.StringIO(base64.b64decode(image))), 0, 0, z, lifetime)
+            obj = LedBitmapObject(Image.open(cStringIO.StringIO(base64.b64decode(image))), 0, 0, z, lifetime)
 
         except:
             print("image decode error")
             raise KeyError
     elif oid == 'object-cube':
-        return LedCubeObject(lifetime)
+        obj = LedCubeObject(lifetime)
     elif oid == 'object-sphere':
-        return LedSphereObject(lifetime)
+        obj = LedSphereObject(lifetime)
     elif oid == 'object-repbang':
-        return LedRepbangObject(lifetime)
+        obj = LedRepbangObject(lifetime)
     elif oid == 'object-skewed-sphere':
-        return LedSkewedSphereObject(lifetime)
+        obj = LedSkewedSphereObject(lifetime)
     elif oid == 'object-skewed-cube':
-        return LedSkewedCubeObject(lifetime)
+        obj = LedSkewedCubeObject(lifetime)
     elif oid == 'object-fireworks':
-        return LedFireworksObject(lifetime)
+        obj = LedFireworksObject(lifetime)
     elif oid == 'object-balls':
-        return LedBallsObject(lifetime)
+        obj = LedBallsObject(lifetime)
     elif oid == 'object-mario-jump-anime':
-        return LedMarioJumpObject(y, z, lifetime)
+        obj = LedMarioJumpObject(y, z, lifetime)
     elif oid == 'object-mario-runandjump-anime':
-        return LedMarioRunJumpObject(y, z, lifetime)
+        obj = LedMarioRunJumpObject(y, z, lifetime)
     elif oid == 'object-drop-mushroom':
-        return LedOverloappedObject(LedDropMushroomObject(z, lifetime))
+        obj = LedDropMushroomObject(z, lifetime)
     else:
         raise KeyError
+
+    if overlap:
+        return LedOverlappedObject(obj)
+    else:
+        return obj
+
 
 def create_filter(order, canvas):
     oid = order['id']

@@ -1,10 +1,10 @@
 from led_object import LedObject
 from ..led_cube import *
 
-class LedOverloappedObject(LedObject):
+class LedOverlappedObject(LedObject):
 
     def __init__(self, obj):
-        super(LedOverloappedObject, self).__init__()
+        super(LedOverlappedObject, self).__init__()
         self.obj = obj
         self.obj_added = False
 
