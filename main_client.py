@@ -1,77 +1,31 @@
 # coding: UTF-8
-from led_framework import LedFramework
-import threading
-from Queue import Queue
-import time
-import traceback
-import json
+from libled.led_run_loop import LedRunLoop
 import urllib2
-import sys
 
+class LedHttpClient(LedRunLoop):
 
-message = Queue()
+    def __init__(self):
+        super(LedHttpClient, self).__init__()
 
+    def on_finish(self):
+        pass
 
-def message_receive_loop(q):
-    led_framework = LedFramework()
+    def on_keyboard_interrupt(self):
+        pass
 
-    try:
-        while True:
-            print('Please input order...')
-            input_word = raw_input('>>> ')
+    def on_exception_at_runloop(self, exception):
+        return LedRunLoop.EXIT
 
-            line = urllib2.urlopen("http://172.27.175.176:5000/api/content/2").read()
+    def read_data(self):
+        print('Press Enter...')
+        input_word = raw_input('>>> ')
 
-            if not line:
-                continue
+        return urllib2.urlopen("http://172.27.175.176:5000/api/content/2").read()
 
-            if line.startswith('abort'):
-                print('abort canvas')
-                led_framework.abort()
+    def on_pre_exec_runloop(self):
+        pass
 
-            elif line.startswith('show:'):
-                print('show by orders')
-                orders = line[len('show:'):].strip()
+    def on_post_exec_runloop(self):
+        pass
 
-                dic_orders = None
-                try:
-                    dic_orders = json.loads(orders)
-                except ValueError:
-                    print('invalid order: ' + str(orders))
-                    continue
-
-                led_framework.abort()
-                q.put([led_framework.show, dic_orders])
-    except:
-        print('Unexpected error: ', sys.exc_info()[0])
-        print(traceback.format_exc())
-        raise
-    finally:
-        print('finished.')
-
-
-th = threading.Thread(name="message_receive_loop",
-                      target=message_receive_loop,
-                      args=(message, ))
-th.setDaemon(True)
-th.start()
-
-try:
-    while True:
-        if message.empty():
-            time.sleep(0.1)
-        else:
-            msg = message.get()
-            msg[0](msg[1])
-
-except KeyboardInterrupt:
-    print('keybord Ctrl+C')
-
-except:
-    print('Unexpected error: ', sys.exc_info()[0])
-    print(traceback.format_exc())
-    raise
-
-finally:
-    th.join()
-    print('finished.')
+LedHttpClient().run()
