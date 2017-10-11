@@ -19,3 +19,6 @@ show:{"orders":[{"id":"object-drop-mushroom", "overlap":true},{"id":"object-mari
 show:{"orders":[{"id":"object-balls", "overlap":true},{"id":"object-mario-run-anime"}]}
 
 show:{"orders":[{"id":"ctrl-loop","count":10}, {"id":"object-mario-run-anime", "lifetime":1}, {"id":"object-mario-jump-anime", "lifetime":0.8}, {"id":"ctrl-loop"}]}
+
+# 森さんコンテンツメドレー
+show:{"orders":[{"id":"ctrl-overlap"},{"id":"ctrl-inout-effect"},{"id":"ctrl-loop","count":10},{"id":"object-cube", "lifetime":13},{"id":"object-sphere", "lifetime":13},{"id":"object-fireworks", "lifetime":13},{"id":"object-skewed-cube", "lifetime":13},{"id":"object-balls", "lifetime":13},{"id":"object-cube", "lifetime":13},{"id":"object-skewed-sphere", "lifetime":13},{"id":"object-repbang", "lifetime":13}]}
