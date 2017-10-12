@@ -8,7 +8,7 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((host, port)) 
 
 while True:
-    print ('何か文字を入力してください。')
+    print ('Please input orders to show led contents.')
     input_word = raw_input('>>>  ')
     print (input_word)
     client.send(input_word + "\n") 

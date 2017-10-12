@@ -7,7 +7,7 @@ class LedTcpServer(LedRunLoop):
     def __init__(self):
         super(LedTcpServer, self).__init__()
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(("0.0.0.0", 80))
+        s.connect(("localhost", 80))
         hostname = s.getsockname()[0]
         s.close()
         print(hostname)
