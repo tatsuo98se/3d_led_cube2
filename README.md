@@ -40,7 +40,13 @@ Enterキーの入力で、再度Jsonの表示命令の取得を行う
 
 ### main_notcp.py - 標準入力から命令を受信して表示するスクリプト
 
-ローカル環境確認用
+ローカル環境確認用  
+コンソールへの以下の入力で、HTTP経由での命令と等価の動作となる
+
+| HTTPでの表示命令 | main_notcp.pyでのコンソールへの表示命令入力 |
+| ---------------- | ----------------------- |
+| HTTP POST<br/>http://(サーバーのIP)/api/show<br/>コンテンツ: (JSON表示命令) | show:{(JSON表示命令)} |
+| HTTP POST<br/>http://(サーバーのIP)/api/abort | abort |
 
 
 ### led_framework.py - pythonプログラム用、Json表示命令受信クラス
