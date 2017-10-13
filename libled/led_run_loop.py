@@ -15,17 +15,17 @@ class LedRunLoop(object):
     CONTINUE = 1
     EXIT = 2
 
-    def __init__(self):
+    def __init__(self, parser = OptionParser()):
         self.message = Queue()
         self.aborted = False
+        self.opt_parser = parser
  
     def run(self):
-        parser = OptionParser()
-        parser.add_option("-d", "--dest",
+        self.opt_parser.add_option("-d", "--dest",
                         action="store", type="string", dest="dest", 
                         help="(optional) ip address of destination device which connect to real 3d cube.")
 
-        (options, args) = parser.parse_args()
+        options, _ = self.opt_parser.parse_args()
 
         if options.dest != None:
             print("External Connect To: " + (options.dest))
@@ -103,6 +103,8 @@ class LedRunLoop(object):
                         print("continue runloop")
                         continue
                     else:
+                        print("Unexpected error:", sys.exc_info()[0])
+                        print(traceback.format_exc())
                         print("exit runloop by exception")
                         return
 
