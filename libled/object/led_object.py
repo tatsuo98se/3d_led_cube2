@@ -51,7 +51,7 @@ class LedObject(object):
     def set_timer(self, timer):
         self.timer = timer
 
-    def rest_timer(self):
+    def reset_timer(self):
         self.timer = 0
 
     def on_timer(self):

@@ -31,16 +31,21 @@ class LedMarioRunJumpObject(LedObject):
         self.time += 1
 
     def will_draw(self):
+        super(LedMarioRunJumpObject, self).will_draw()
         self.run.will_draw()
 
     def set_timer(self, timer):
-        self.run.set_timer()
+        super(LedMarioRunJumpObject, self).set_timer(timer)
+        self.run.set_timer(timer)
 
-    def rest_timer(self):
-        self.run.rest_timer()
+    def reset_timer(self):
+        super(LedMarioRunJumpObject, self).reset_timer()
+        self.run.reset_timer()
 
     def on_timer(self):
+        super(LedMarioRunJumpObject, self).on_timer()
         self.run.on_timer()
 
     def abort(self):
+        super(LedMarioRunJumpObject, self).abort()
         self.run.abort()
