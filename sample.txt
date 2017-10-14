@@ -22,3 +22,5 @@ show:{"orders":[{"id":"ctrl-loop","count":10}, {"id":"object-mario-run-anime", "
 
 # 森さんコンテンツメドレー
 show:{"orders":[{"id":"ctrl-overlap"},{"id":"ctrl-inout-effect"},{"id":"ctrl-loop","count":10},{"id":"object-cube", "lifetime":13},{"id":"object-sphere", "lifetime":13},{"id":"object-fireworks", "lifetime":13},{"id":"object-skewed-cube", "lifetime":13},{"id":"object-balls", "lifetime":13},{"id":"object-cube", "lifetime":13},{"id":"object-skewed-sphere", "lifetime":13},{"id":"object-repbang", "lifetime":13}]}
+
+show:{"orders":[{"id":"object-bk-mountain", "lifetime":30, "z":6, "overlap":true}, {"id":"object-bk-cloud", "lifetime":30, "z":7, "overlap":true},  {"id":"object-bk-grass", "lifetime":30, "z":4, "overlap":true}, {"id":"object-mario-run-anime", "lifetime":30}]}

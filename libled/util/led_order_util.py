@@ -20,6 +20,7 @@ from ..object.led_balls_obj import LedBallsObject
 from ..object.led_mario_jump_obj import LedMarioJumpObject
 from ..object.led_mario_runjump_obj import LedMarioRunJumpObject
 from ..object.led_drop_mushroom_obj import LedDropMushroomObject
+from ..object.led_scrolled_bitmap_obj import LedScrolledBitmapObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -73,6 +74,7 @@ def create_object(order):
     oid = order['id']
     z = get_param(order, 'z', 0)
     y = get_param(order, 'y', 0)
+    cycle = get_param(order, 'cycle')
     overlap = get_param(order, 'overlap', False)
     obj = None
 
@@ -120,6 +122,12 @@ def create_object(order):
         obj = LedMarioRunJumpObject(y, z, lifetime)
     elif oid == 'object-drop-mushroom':
         obj = LedDropMushroomObject(z, lifetime)
+    elif oid == 'object-bk-mountain':
+        obj = LedScrolledBitmapObject(Image.open('asset/image/background_mountain.png'), 0, y, z, cycle,lifetime)
+    elif oid == 'object-bk-grass':
+        obj = LedScrolledBitmapObject(Image.open('asset/image/background_grass.png'), 0, y, z, cycle,lifetime)
+    elif oid == 'object-bk-cloud':
+        obj = LedScrolledBitmapObject(Image.open('asset/image/background_cloud.png'), 0, y, z, cycle,lifetime)
     else:
         raise KeyError
 
