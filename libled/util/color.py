@@ -20,12 +20,24 @@ class Color:
                     a)
 
     @staticmethod
+    def rgbatapple_to_color(rgba):
+        return Color(rgba[0],
+                    rgba[1],
+                    rgba[2],
+                    rgba[3])
+    @staticmethod
     def rgbtapple255_to_color(rgb, a=1.0):
         return Color(rgb[0] / 255.0,
                     rgb[1] / 255.0,
                     rgb[2] / 255.0,
                     a)
 
+    @staticmethod
+    def rgbatapple255_to_color(rgba):
+        return Color(rgba[0] / 255.0,
+                    rgba[1] / 255.0,
+                    rgba[2] / 255.0,
+                    rgba[3])
     @staticmethod
     def object_to_color(color):
         if  isinstance(color, Color):
@@ -71,3 +83,9 @@ class Color:
         if self.a == 0:
             return True
         return self.r == 0.0 and self.g == 0.0 and self.b == 0.0
+
+    def to_rgba255(self):
+        return (int(round(self.r * 255)),
+                int(round(self.g * 255)),
+                int(round(self.b * 255)),
+                int(round(self.a * 255)))

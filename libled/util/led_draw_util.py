@@ -1,6 +1,8 @@
 import math
 import loop_util
+from ..led_cube import *
 from ..util.color import Color
+from PIL import Image, ImageDraw
 
 class LedDirection(object):
     DIRECTION_FRONT = 1
@@ -33,3 +35,14 @@ def circle(canvas, x, y, z, color, r, direction = LedDirection.DIRECTION_FRONT):
 
         canvas.set_led(x + xadd, y + yadd, z + zadd,
                     Color(color.r, color.g, color.b, color.a * ambigous))
+
+def circle2(canvas, x, y, z, color, r, direction = LedDirection.DIRECTION_FRONT):
+    image = Image.new('RGBA', (LED_WIDTH, LED_HEIGHT))
+    draw = ImageDraw.Draw(image)
+    draw.ellipse((int(x-r), int(y-r), int(x+r), int(y+r)), outline=(color.to_rgba255()))
+
+    for x in range(LED_WIDTH):
+        for y in range(LED_HEIGHT):
+            rgba = image.getpixel((x,y))
+
+            canvas.set_led(x, y, z, Color.rgbatapple255_to_color(rgba))

@@ -21,6 +21,7 @@ from ..object.led_mario_jump_obj import LedMarioJumpObject
 from ..object.led_mario_runjump_obj import LedMarioRunJumpObject
 from ..object.led_drop_mushroom_obj import LedDropMushroomObject
 from ..object.led_scrolled_bitmap_obj import LedScrolledBitmapObject
+from ..object.led_mario_get_mushroom_obj import LedMarioGetMushroomObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -120,6 +121,8 @@ def create_object(order):
         obj = LedMarioJumpObject(y, z, lifetime)
     elif oid == 'object-mario-runandjump-anime':
         obj = LedMarioRunJumpObject(y, z, lifetime)
+    elif oid == 'object-mario-get-mushroom':
+        obj = LedMarioGetMushroomObject(z)
     elif oid == 'object-drop-mushroom':
         obj = LedDropMushroomObject(z, lifetime)
     elif oid == 'object-bk-mountain':
