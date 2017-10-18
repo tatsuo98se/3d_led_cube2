@@ -20,11 +20,10 @@ from libled.filter.led_canvs_filter import LedCanvasFilter
 from libled.filter.led_test_canvas_filter import LedTestCanvasFilter
 from libled.filter.led_wave_canvas_filter import LedWaveCanvasFilter
 from libled.filter.led_hsv_canvas_filter import LedHsvCanvasFilter
-from PIL import Image
 
-mario0 = LedBitmapObject('asset/image/s_mario.png', 0, 0, 0, 10)
-mario1 = LedBitmapObject('asset/image/s_mario_run_1.png', 0, 0, 0, 10)
-mario3 = LedBitmapObject('asset/image/s_mario_run_2.png', 0, 0, 0, 10)
+mario0 = LedBitmapObject('asset/image/mario.png', 0, 0, 0, 10)
+mario1 = LedBitmapObject('asset/image/mario_run_1.png', 0, 0, 0, 10)
+mario3 = LedBitmapObject('asset/image/mario_run_2.png', 0, 0, 0, 10)
 marioj = LedMarioJumpObject(0, 0, 10)
 mariorj = LedMarioRunJumpObject(0, 0, 10)
 mashroom = LedDropMushroomObject(0)

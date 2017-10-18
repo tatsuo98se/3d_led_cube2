@@ -84,11 +84,11 @@ def create_object(order):
     elif oid == 'object-ripple':
         obj = LedRandomRippleObject(lifetime)
     elif oid == 'object-mario':
-        obj = LedBitmapObject('asset/image/s_mario.png', 0, 0, z, lifetime)
+        obj = LedBitmapObject('asset/image/mario.png', 0, 0, z, lifetime)
     elif oid == 'object-mario-run1':
-        obj = LedBitmapObject('asset/image/s_mario_run_1.png', 0, 0, z, lifetime)
+        obj = LedBitmapObject('asset/image/mario_run_1.png', 0, 0, z, lifetime)
     elif oid == 'object-mario-run2':
-        obj = LedBitmapObject('asset/image/s_mario_run_2.png', 0, 0, z, lifetime)
+        obj = LedBitmapObject('asset/image/mario_run_2.png', 0, 0, z, lifetime)
     elif oid == 'object-mario-run-anime':
         obj = LedMarioRunObject(z, lifetime)
     elif oid == 'object-bitmap':

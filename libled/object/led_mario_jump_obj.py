@@ -10,7 +10,7 @@ class LedMarioJumpObject(LedObject):
 
     def __init__(self, y, z, lifetime=0):
         super(LedMarioJumpObject, self).__init__(lifetime)
-        self.marioj = LedBitmapObject('asset/image/s_mario_jump.png', 0, 0, z, lifetime)
+        self.marioj = LedBitmapObject('asset/image/mario_jump.png', 0, 0, z, lifetime)
         self.direction = UP
 
     def draw(self, canvas):
