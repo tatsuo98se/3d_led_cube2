@@ -1,5 +1,4 @@
 from led_object import LedObject
-from PIL import Image
 from ..led_cube import *
 from led_bitmap_obj import LedBitmapObject
 
@@ -8,9 +7,9 @@ class LedMarioGetMushroomObject(LedObject):
 
     def __init__(self, z):
         super(LedMarioGetMushroomObject, self).__init__(0)
-        mario = LedBitmapObject(Image.open('asset/image/s_mario.png'), 0, 0, z)
-        m_mario=  LedBitmapObject(Image.open('asset/image/m_mario.png'), 0, 0, z)
-        s_mario=  LedBitmapObject(Image.open('asset/image/super_mario.png'), 0, 0, z)
+        mario = LedBitmapObject('asset/image/s_mario.png', 0, 0, z)
+        m_mario=  LedBitmapObject('asset/image/m_mario.png', 0, 0, z)
+        s_mario=  LedBitmapObject('asset/image/super_mario.png', 0, 0, z)
         self.set_timer(0.05)
         self.anime = [mario, m_mario, mario, m_mario, mario, m_mario, s_mario, mario, m_mario, s_mario, mario, s_mario, s_mario, s_mario, s_mario]
         self.index = 0

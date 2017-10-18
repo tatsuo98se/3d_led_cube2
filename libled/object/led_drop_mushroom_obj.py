@@ -1,5 +1,4 @@
 from led_object import LedObject
-from PIL import Image
 from ..led_cube import *
 from led_bitmap_obj import LedBitmapObject
 
@@ -13,7 +12,7 @@ class LedDropMushroomObject(LedObject):
 
     def __init__(self, z, lifetime = 0 ):
         super(LedDropMushroomObject, self).__init__(lifetime)
-        self.mushroom = LedBitmapObject(Image.open('asset/image/mushroom.png'), 0, START_Y, z, lifetime)
+        self.mushroom = LedBitmapObject('asset/image/mushroom.png', 0, START_Y, z, lifetime)
         self.status = STATUS_BLINK
         self.show = True
         self.set_timer(0.05)

@@ -61,7 +61,7 @@ class LedCanvas(ILedCanvas):
             else:
                 obj.draw(canvas)
             if obj.is_expired() or obj.is_cancel():
-                self.objects.remove(obj)
+                self.remove_object(obj)
 
         led.Show()
 
@@ -70,6 +70,7 @@ class LedCanvas(ILedCanvas):
 
     def remove_object(self, obj):
         self.objects.remove(obj)
+        obj.did_detach()
 
     def clear_object(self):
         self.objects = []

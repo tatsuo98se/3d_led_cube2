@@ -31,8 +31,6 @@ from ..filter.led_flat_wave_canvas_filter import LedFlatWaveCanvasFilter
 from ..filter.led_hsv_canvas_filter import LedHsvCanvasFilter
 from ..filter.led_skewed_canvas_filter import LedSkewedCanvasFilter
 
-from PIL import Image
-
 
 def get_orders_in_loop(orders, start):
     orders_in_loop = []
@@ -86,11 +84,11 @@ def create_object(order):
     elif oid == 'object-ripple':
         obj = LedRandomRippleObject(lifetime)
     elif oid == 'object-mario':
-        obj = LedBitmapObject(Image.open('asset/image/s_mario.png'), 0, 0, z, lifetime)
+        obj = LedBitmapObject('asset/image/s_mario.png', 0, 0, z, lifetime)
     elif oid == 'object-mario-run1':
-        obj = LedBitmapObject(Image.open('asset/image/s_mario_run_1.png'), 0, 0, z, lifetime)
+        obj = LedBitmapObject('asset/image/s_mario_run_1.png', 0, 0, z, lifetime)
     elif oid == 'object-mario-run2':
-        obj = LedBitmapObject(Image.open('asset/image/s_mario_run_2.png'), 0, 0, z, lifetime)
+        obj = LedBitmapObject('asset/image/s_mario_run_2.png', 0, 0, z, lifetime)
     elif oid == 'object-mario-run-anime':
         obj = LedMarioRunObject(z, lifetime)
     elif oid == 'object-bitmap':
@@ -98,7 +96,7 @@ def create_object(order):
         if image is None:
             raise KeyError
         try:
-            obj = LedBitmapObject(Image.open(cStringIO.StringIO(base64.b64decode(image))), 0, 0, z, lifetime)
+            obj = LedBitmapObject(cStringIO.StringIO(base64.b64decode(image)), 0, 0, z, lifetime)
 
         except:
             print("image decode error")
@@ -126,11 +124,11 @@ def create_object(order):
     elif oid == 'object-drop-mushroom':
         obj = LedDropMushroomObject(z, lifetime)
     elif oid == 'object-bk-mountain':
-        obj = LedScrolledBitmapObject(Image.open('asset/image/background_mountain.png'), 0, y, z, cycle,lifetime)
+        obj = LedScrolledBitmapObject('asset/image/background_mountain.png', 0, y, z, cycle,lifetime)
     elif oid == 'object-bk-grass':
-        obj = LedScrolledBitmapObject(Image.open('asset/image/background_grass.png'), 0, y, z, cycle,lifetime)
+        obj = LedScrolledBitmapObject('asset/image/background_grass.png', 0, y, z, cycle,lifetime)
     elif oid == 'object-bk-cloud':
-        obj = LedScrolledBitmapObject(Image.open('asset/image/background_cloud.png'), 0, y, z, cycle,lifetime)
+        obj = LedScrolledBitmapObject('asset/image/background_cloud.png', 0, y, z, cycle,lifetime)
     else:
         raise KeyError
 

@@ -25,4 +25,7 @@ class LedObjectFilter(LedObject):
     def will_draw(self):
         return self.obj.will_draw()
 
+    def did_detach(self):
+        return self.obj.did_detach()
+
 

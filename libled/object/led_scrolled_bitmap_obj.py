@@ -5,9 +5,10 @@ from ..led_cube import *
 
 class LedScrolledBitmapObject(LedObject):
 
-    def __init__(self, image, x = 0, y = 0, z= 0, cycle = 5.0, lifetime = 0 ):
+    def __init__(self, image_data, x = 0, y = 0, z= 0, cycle = 5.0, lifetime = 0 ):
         super(LedScrolledBitmapObject, self).__init__(lifetime)
-        self.image = image.convert('RGB')
+        with Image.open(image_data) as image_raw:
+            self.image = image_raw.convert('RGB')
         self.x = x
         self.y = y
         self.z = z

@@ -1,5 +1,4 @@
 from led_object import LedObject
-from PIL import Image
 from led_bitmap_obj import LedBitmapObject
 
 MARGIN_Y = -15
@@ -11,8 +10,7 @@ class LedMarioJumpObject(LedObject):
 
     def __init__(self, y, z, lifetime=0):
         super(LedMarioJumpObject, self).__init__(lifetime)
-        self.marioj = LedBitmapObject(Image.open(
-            'asset/image/s_mario_jump.png'), 0, 0, z, lifetime)
+        self.marioj = LedBitmapObject('asset/image/s_mario_jump.png', 0, 0, z, lifetime)
         self.direction = UP
 
     def draw(self, canvas):

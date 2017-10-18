@@ -47,6 +47,9 @@ class LedObject(object):
             if self.elapsed() - self.last_update > self.timer:
                 self.last_update = self.elapsed()
                 self.on_timer()
+    
+    def did_detach(self):
+        pass
 
     def set_timer(self, timer):
         self.timer = timer
