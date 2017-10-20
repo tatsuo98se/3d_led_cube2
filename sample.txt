@@ -26,3 +26,5 @@ show:{"orders":[{"id":"ctrl-overlap"},{"id":"ctrl-inout-effect"},{"id":"ctrl-loo
 show:{"orders":[{"id":"object-bk-mountain", "lifetime":30, "z":6, "overlap":true, "cycle":7}, {"id":"object-bk-cloud", "lifetime":30, "z":7, "overlap":true, "cycle":20},  {"id":"object-bk-grass", "lifetime":30, "z":4, "overlap":true, "cycle":4}, {"id":"object-mario-run-anime", "lifetime":30}]}
 
 show:{"orders":[{"id":"object-drop-mushroom", "overlap":true},{"id":"object-mario-run-anime", "lifetime": 1.8}, {"id":"object-mario-get-mushroom"},{"id":"object-mario-run-anime"}]}
+
+show:{"orders":[{"id":"ctrl-loop","count":10},{"id":"object-s-mario-run1", "lifetime":0.1},{"id":"object-s-mario-run2","lifetime":0.1},{"id":"ctrl-loop"},{"id":"object-s-mario"}]}

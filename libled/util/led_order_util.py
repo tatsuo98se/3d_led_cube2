@@ -42,9 +42,6 @@ def get_orders_in_loop(orders, start):
     
     return orders_in_loop
 
-def get_lifetime_from_order(order):
-    return DEFAULT_LIFETIME if order.get('lifetime') is None else order['lifetime']
-
 def get_param(order, key, default = None):
     param = order.get(key)
     return default if param is None else param
@@ -67,10 +64,9 @@ def flatten_orders(orders):
 
 DEFAULT_LIFETIME = 5
 
-
 def create_object(order):
-    lifetime = get_lifetime_from_order(order)
     oid = order['id']
+    lifetime = get_param(order, 'lifetime', DEFAULT_LIFETIME)
     z = get_param(order, 'z', 0)
     y = get_param(order, 'y', 0)
     cycle = get_param(order, 'cycle')
@@ -89,18 +85,24 @@ def create_object(order):
         obj = LedBitmapObject('asset/image/mario_run_1.png', 0, 0, z, lifetime)
     elif oid == 'object-mario-run2':
         obj = LedBitmapObject('asset/image/mario_run_2.png', 0, 0, z, lifetime)
+    elif oid == 'object-s-mario':
+        obj = LedBitmapObject('asset/image/s_mario.png', 0, 0, z, lifetime)
+    elif oid == 'object-s-mario-run1':
+        obj = LedBitmapObject('asset/image/s_mario_run_1.png', 0, 0, z, lifetime)
+    elif oid == 'object-s-mario-run2':
+        obj = LedBitmapObject('asset/image/s_mario_run_2.png', 0, 0, z, lifetime)
     elif oid == 'object-mario-run-anime':
         obj = LedMarioRunObject(z, lifetime)
     elif oid == 'object-bitmap':
         image = get_param(order, 'bitmap')
         if image is None:
-            raise KeyError
+            raise KeyError('id:{0} bitmap key was not specified.'.format(oid))
         try:
             obj = LedBitmapObject(cStringIO.StringIO(base64.b64decode(image)), 0, 0, z, lifetime)
 
         except:
-            print("image decode error")
-            raise KeyError
+            raise KeyError('id:{0} image decode error.'.format(oid))
+
     elif oid == 'object-cube':
         obj = LedCubeObject(lifetime)
     elif oid == 'object-sphere':
@@ -124,13 +126,13 @@ def create_object(order):
     elif oid == 'object-drop-mushroom':
         obj = LedDropMushroomObject(z, lifetime)
     elif oid == 'object-bk-mountain':
-        obj = LedScrolledBitmapObject('asset/image/background_mountain.png', 0, y, z, cycle,lifetime)
+        obj = LedScrolledBitmapObject('asset/image/background_mountain.png', 0, y, z, cycle, lifetime)
     elif oid == 'object-bk-grass':
-        obj = LedScrolledBitmapObject('asset/image/background_grass.png', 0, y, z, cycle,lifetime)
+        obj = LedScrolledBitmapObject('asset/image/background_grass.png', 0, y, z, cycle, lifetime)
     elif oid == 'object-bk-cloud':
-        obj = LedScrolledBitmapObject('asset/image/background_cloud.png', 0, y, z, cycle,lifetime)
+        obj = LedScrolledBitmapObject('asset/image/background_cloud.png', 0, y, z, cycle, lifetime)
     else:
-        raise KeyError
+        raise KeyError('unknown object id:{0}'.format(oid))
 
     if overlap:
         return LedOverlappedObject(obj)
@@ -151,7 +153,7 @@ def create_filter(order, canvas):
     elif oid == 'filter-skewed':
         return LedSkewedCanvasFilter(canvas)
     else:
-        raise KeyError
+        raise KeyError('unknown filter id:{0} i'.format(oid))
 
 def create_order(order, canvas):
     oid = order['id']
@@ -162,7 +164,7 @@ def create_order(order, canvas):
     elif oid.startswith('ctrl'):
         return None
     else:
-        raise KeyError
+        raise KeyError('unknown id prefix:{0} i'.format(oid))
 
 def get_ctrl(orders, ctrl_id):
     for order in orders:

@@ -70,8 +70,8 @@ class LedFramework(object):
                     current_order = None
                 led.Wait(20)
 
-        except KeyError:
-            print("error unexpected json")
+        except KeyError as err:
+            print("error unexpected json : {0}".format(err))
             return
         finally:
             self.is_abort = False
