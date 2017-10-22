@@ -1,10 +1,13 @@
 # coding: UTF-8
 from libled.led_run_loop import LedRunLoop
+import codecs
+import sys
 
 class LedRawTextClient(LedRunLoop):
 
     def __init__(self):
         super(LedRawTextClient, self).__init__()
+        sys.stdin = codecs.getreader('shift_jis')(sys.stdin) # set input codec
 
     def on_finish(self):
         pass

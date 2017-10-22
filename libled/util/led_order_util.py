@@ -1,3 +1,4 @@
+# coding:utf-8
 from color import Color
 import base64
 import cStringIO
@@ -22,6 +23,7 @@ from ..object.led_mario_runjump_obj import LedMarioRunJumpObject
 from ..object.led_drop_mushroom_obj import LedDropMushroomObject
 from ..object.led_scrolled_bitmap_obj import LedScrolledBitmapObject
 from ..object.led_mario_get_mushroom_obj import LedMarioGetMushroomObject
+from ..object.led_text_obj import LedTextObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -69,6 +71,7 @@ def create_object(order):
     lifetime = get_param(order, 'lifetime', DEFAULT_LIFETIME)
     z = get_param(order, 'z', 0)
     y = get_param(order, 'y', 0)
+    x = get_param(order, 'x', 0)
     cycle = get_param(order, 'cycle')
     overlap = get_param(order, 'overlap', False)
     obj = None
@@ -131,6 +134,9 @@ def create_object(order):
         obj = LedScrolledBitmapObject('asset/image/background_grass.png', 0, y, z, cycle, lifetime)
     elif oid == 'object-bk-cloud':
         obj = LedScrolledBitmapObject('asset/image/background_cloud.png', 0, y, z, cycle, lifetime)
+    elif oid == 'object-text':
+        string = get_param(order, 'text', u'日本語サンプル')
+        obj = LedTextObject(text=string, lifetime=lifetime)
     else:
         raise KeyError('unknown object id:{0}'.format(oid))
 
