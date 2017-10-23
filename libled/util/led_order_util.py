@@ -136,7 +136,9 @@ def create_object(order):
         obj = LedScrolledBitmapObject('asset/image/background_cloud.png', 0, y, z, cycle, lifetime)
     elif oid == 'object-text':
         string = get_param(order, 'text', u'日本語サンプル')
-        obj = LedTextObject(text=string, lifetime=lifetime)
+        size = get_param(order, 'size', 26)
+        color = get_param(order, 'color', '#ff0000')
+        obj = LedTextObject(text=string, fontsize=size, color=color, lifetime=lifetime)
     else:
         raise KeyError('unknown object id:{0}'.format(oid))
 
