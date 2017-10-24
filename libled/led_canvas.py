@@ -57,13 +57,23 @@ class LedCanvas(ILedCanvas):
             obj.will_draw()
             #print('obj.draw()' + str(type(obj)))
             if canvas is None:
+                self.pre_draw()
                 obj.draw(self)
+                self.post_draw()
             else:
+                canvas.pre_draw()
                 obj.draw(canvas)
+                canvas.post_draw()
             if obj.is_expired() or obj.is_cancel():
                 self.remove_object(obj)
 
         led.Show()
+
+    def pre_draw(self):
+        pass
+    
+    def post_draw(self):
+        pass
 
     def add_object(self, obj):
         self.objects.append(obj)

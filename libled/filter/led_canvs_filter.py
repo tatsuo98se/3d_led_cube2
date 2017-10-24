@@ -14,6 +14,12 @@ class LedCanvasFilter(ILedCanvas):
         else:
             self.canvas.show(canvas)
 
+    def pre_draw(self):
+        self.canvas.pre_draw()
+    
+    def post_draw(self):
+        self.canvas.post_draw()
+
     def add_object(self, obj):
         self.canvas.add_object(obj)
 

@@ -28,4 +28,12 @@ class LedObjectFilter(LedObject):
     def did_detach(self):
         return self.obj.did_detach()
 
+    def set_timer(self, timer):
+        return self.obj.set_timer(timer)
+
+    def reset_timer(self):
+        return self.obj.reset_timer()
+
+    def on_timer(self):
+        return self.obj.on_timer()
 
