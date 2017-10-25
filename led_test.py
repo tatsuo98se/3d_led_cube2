@@ -16,6 +16,9 @@ from libled.object.led_drop_mushroom_obj import LedDropMushroomObject
 from libled.object.led_text_obj import LedTextObject
 from libled.object.led_heart_obj import LedHeartObject
 from libled.object.led_skewed_sphere_obj import LedSkewedSphereObject
+from libled.object.led_snow_obj import LedSnowObject
+from libled.object.led_snows_obj import LedSnowsObject
+from libled.object.led_wave_obj import LedWaveObject
 
 from libled.led_canvas import LedCanvas
 from libled.filter.led_canvs_filter import LedCanvasFilter
@@ -37,12 +40,17 @@ mashroom = LedDropMushroomObject(0)
 ripples =  LedRandomRippleObject(10)
 mario_run = LedMarioRunObject(0, 10)
 heart = LedHeartObject(10)
+snow = LedSnowObject(10)
+snows = LedSnowsObject(10)
+cloud = LedWaveObject(range(-5, 4), int(0xffffff) ,10)
+wave = LedWaveObject(range(28, 36), int(0x0000ff) ,10)
 
 canvas = LedCanvas()
-canvas = LedJumpCanvasFilter(canvas)
+#canvas = LedJumpCanvasFilter(canvas)
 #canvas = LedSkewedCanvasFilter(canvas)
 
-canvas.add_object(mario_run)
+canvas.add_object(cloud)
+canvas.add_object(wave)
 #canvas.add_object(mario_run)
 
 while True:
