@@ -24,6 +24,8 @@ from ..object.led_drop_mushroom_obj import LedDropMushroomObject
 from ..object.led_scrolled_bitmap_obj import LedScrolledBitmapObject
 from ..object.led_mario_get_mushroom_obj import LedMarioGetMushroomObject
 from ..object.led_text_obj import LedTextObject
+from ..object.led_heart_obj import LedHeartObject
+from ..object.led_snow_obj import LedSnowObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -32,6 +34,7 @@ from ..filter.led_wave_canvas_filter import LedWaveCanvasFilter
 from ..filter.led_flat_wave_canvas_filter import LedFlatWaveCanvasFilter
 from ..filter.led_hsv_canvas_filter import LedHsvCanvasFilter
 from ..filter.led_skewed_canvas_filter import LedSkewedCanvasFilter
+from ..filter.led_jump_canvas_filter import LedJumpCanvasFilter
 
 
 def get_orders_in_loop(orders, start):
@@ -94,6 +97,10 @@ def create_object(order):
         obj = LedBitmapObject('asset/image/s_mario_run_1.png', 0, 0, z, lifetime)
     elif oid == 'object-s-mario-run2':
         obj = LedBitmapObject('asset/image/s_mario_run_2.png', 0, 0, z, lifetime)
+    elif oid == 'object-star':
+        obj = LedBitmapObject('asset/image/star.png', 0, 0, z, lifetime)
+    elif oid == 'object-heart':
+        obj = LedHeartObject(lifetime)
     elif oid == 'object-mario-run-anime':
         obj = LedMarioRunObject(z, lifetime)
     elif oid == 'object-bitmap':
@@ -158,6 +165,8 @@ def create_filter(order, canvas):
         return LedFlatWaveCanvasFilter(canvas)
     elif oid == 'filter-skewed':
         return LedSkewedCanvasFilter(canvas)
+    elif oid == 'filter-jump':
+        return LedJumpCanvasFilter(canvas)
     else:
         raise KeyError('unknown filter id:{0} i'.format(oid))
 
