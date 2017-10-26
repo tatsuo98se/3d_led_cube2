@@ -5,7 +5,7 @@ import time
 import random
 
 GRAVITY = 0.8
-UPDATE_FREQ = 0.5
+UPDATE_FREQ = 0.08
 
 class LedJumpCanvasFilter(LedCanvasFilter):
 
