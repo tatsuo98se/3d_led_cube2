@@ -31,4 +31,4 @@ show:{"orders":[{"id":"ctrl-loop","count":10},{"id":"object-s-mario-run1", "life
 
 show:{"orders":[ {"id":"filter-bk-cloud", "z":7}, {"id":"filter-bk-wave"}, {"id":"filter-skewed"},{"id":"filter-jump"},{"id":"filter-rainbow"}, {"id":"object-star","lifetime":10},{"id":"object-heart"},{"id":"object-fireworks"}]}
 
-show:{"orders":[ {"id":"filter-bk-cloud", "z":7}, {"id":"filter-bk-wave"}, {"id":"filter-skewed"},{"id":"filter-jump"},{"id":"filter-rainbow"}, {"id":"object-star","lifetime":10},{"id":"ctrl-filter-clear"},{"id":"object-heart"},{"id":"object-fireworks"}]}
+show:{"orders":[ {"id":"filter-bk-snows" },{"id":"filter-bk-cloud", "z":7}, {"id":"filter-bk-wave"}, {"id":"filter-skewed"},{"id":"filter-jump"},{"id":"filter-rainbow"}, {"id":"object-star","lifetime":10},{"id":"ctrl-filter-clear"},{"id":"object-heart"},{"id":"object-fireworks"}]}

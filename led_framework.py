@@ -67,7 +67,6 @@ class LedFramework(object):
                         canvas.add_object(current_order)
                     else:
                         current_order = None
-                        continue
 
                 canvas.show()
                 if current_order is not None and current_order.is_expired(overlap_time):

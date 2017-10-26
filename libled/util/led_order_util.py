@@ -25,7 +25,7 @@ from ..object.led_scrolled_bitmap_obj import LedScrolledBitmapObject
 from ..object.led_mario_get_mushroom_obj import LedMarioGetMushroomObject
 from ..object.led_text_obj import LedTextObject
 from ..object.led_heart_obj import LedHeartObject
-from ..object.led_snow_obj import LedSnowObject
+from ..object.led_snows_obj import LedSnowsObject
 from ..object.led_star_obj import LedStarObject
 from ..object.led_wave_obj import LedWaveObject
 
@@ -182,6 +182,8 @@ def create_filter(order, canvas):
                 LedScrolledBitmapObject('asset/image/background_cloud.png', 0, y, z, cycle))
     elif oid == 'filter-bk-wave':
         return LedObjectCanvasFilter(canvas, LedWaveObject(range(28, 36), int(0x0000ff)))
+    elif oid == 'filter-bk-snows':
+        return LedObjectCanvasFilter(canvas, LedSnowsObject())
     else:
         raise KeyError('unknown filter id:{0} i'.format(oid))
 

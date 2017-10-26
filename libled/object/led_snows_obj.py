@@ -16,4 +16,5 @@ class LedSnowsObject(LedObject):
     def draw(self, canvas):
         if self.is_need_update:
             canvas.add_object(LedSnowObject())
+            self.is_need_update = False
 
