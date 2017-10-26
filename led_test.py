@@ -2,6 +2,7 @@
 import base64
 import cStringIO
 from libled.led_cube import *
+from libled.util.color import Color
 from libled.led_canvas import LedCanvas
 from libled.object.led_dot_obj import LedDotObject
 from libled.object.led_ripple_obj import LedRippleObject
@@ -27,6 +28,8 @@ from libled.filter.led_wave_canvas_filter import LedWaveCanvasFilter
 from libled.filter.led_hsv_canvas_filter import LedHsvCanvasFilter
 from libled.filter.led_jump_canvas_filter import LedJumpCanvasFilter
 from libled.filter.led_skewed_canvas_filter import LedSkewedCanvasFilter
+from libled.filter.led_rainbow_canvas_filter import LedRainbowCanvasFilter
+
 
 mario0 = LedBitmapObject('asset/image/mario.png', 0, 0, 0, 10)
 mario1 = LedBitmapObject('asset/image/mario_run_1.png', 0, 0, 0, 10)
@@ -42,15 +45,16 @@ mario_run = LedMarioRunObject(0, 10)
 heart = LedHeartObject(10)
 snow = LedSnowObject(10)
 snows = LedSnowsObject(10)
-cloud = LedWaveObject(range(-5, 4), int(0xffffff) ,10)
-wave = LedWaveObject(range(28, 36), int(0x0000ff) ,10)
+cloud = LedWaveObject(range(-5, 4), Color.int_to_color(0xffffff),10)
+wave = LedWaveObject(range(28, 36), Color.int_to_color(0x0000ff) ,10)
 
 canvas = LedCanvas()
-#canvas = LedJumpCanvasFilter(canvas)
+canvas = LedJumpCanvasFilter(canvas)
 #canvas = LedSkewedCanvasFilter(canvas)
+canvas = LedRainbowCanvasFilter(canvas)
 
-canvas.add_object(cloud)
-canvas.add_object(wave)
+#canvas.add_object(cloud)
+canvas.add_object(heart)
 #canvas.add_object(mario_run)
 
 while True:

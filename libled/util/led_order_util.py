@@ -35,6 +35,7 @@ from ..filter.led_flat_wave_canvas_filter import LedFlatWaveCanvasFilter
 from ..filter.led_hsv_canvas_filter import LedHsvCanvasFilter
 from ..filter.led_skewed_canvas_filter import LedSkewedCanvasFilter
 from ..filter.led_jump_canvas_filter import LedJumpCanvasFilter
+from ..filter.led_rainbow_canvas_filter import LedRainbowCanvasFilter
 
 
 def get_orders_in_loop(orders, start):
@@ -167,6 +168,8 @@ def create_filter(order, canvas):
         return LedSkewedCanvasFilter(canvas)
     elif oid == 'filter-jump':
         return LedJumpCanvasFilter(canvas)
+    elif oid == 'filter-rainbow':
+        return LedRainbowCanvasFilter(canvas)
     else:
         raise KeyError('unknown filter id:{0} i'.format(oid))
 
