@@ -9,7 +9,7 @@ class LedSnowObject(LedObject):
         self.x = random.randrange(0, LED_WIDTH)
         self.z = random.randrange(0, LED_DEPTH)
         self.y = 0
-        self.gravity = random.uniform(0.5, 2)
+        self.gravity = random.uniform(0.3, 0.5)
         self.set_timer(0.1)
 
     def is_expired(self, offset=0):
