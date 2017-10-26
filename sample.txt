@@ -30,3 +30,5 @@ show:{"orders":[{"id":"object-drop-mushroom", "overlap":true},{"id":"object-mari
 show:{"orders":[{"id":"ctrl-loop","count":10},{"id":"object-s-mario-run1", "lifetime":0.1},{"id":"object-s-mario-run2","lifetime":0.1},{"id":"ctrl-loop"},{"id":"object-s-mario"}]}
 
 show:{"orders":[{"id":"filter-jump"},{"id":"object-star","lifetime":10},{"id":"object-heart"},{"id":"object-mario-run-anime"},{"id":"object-bk-mountain"},{"id":"object-fireworks"}]}
+
+show:{"orders":[{"id":"object-text","text":"3D LED CUBE プログラミング教室"},{"id":"object-text","text":"LEGOでロジカルシンキング","color":"#0000ff"},{"id":"object-text","text":"塗り絵でアニメーション","color":"#00ff00"}]}
