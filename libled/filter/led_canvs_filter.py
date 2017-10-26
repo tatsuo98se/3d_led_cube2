@@ -9,7 +9,7 @@ class LedCanvasFilter(ILedCanvas):
         self.canvas.set_led(x, y, z, color)
 
     def show(self, canvas=None):
-        if canvas == None:
+        if canvas is None:
             self.canvas.show(self)
         else:
             self.canvas.show(canvas)

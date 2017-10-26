@@ -52,10 +52,13 @@ class LedFramework(object):
                         else:
                             pass
                     else:
-                        current_order = create_order(data, self.base_canvas)
+                        current_order = create_order(data, canvas)
 
                     if isinstance(current_order, ILedCanvas):
                         canvas = current_order
+                        current_order = None
+                    elif isinstance(current_order, LedFilterClearCtrl):
+                        canvas = self.base_canvas
                         current_order = None
                     elif isinstance(current_order, LedObject):
                         if inout_effect:
@@ -64,6 +67,7 @@ class LedFramework(object):
                         canvas.add_object(current_order)
                     else:
                         current_order = None
+                        continue
 
                 canvas.show()
                 if current_order is not None and current_order.is_expired(overlap_time):

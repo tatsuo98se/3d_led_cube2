@@ -26,6 +26,8 @@ from ..object.led_mario_get_mushroom_obj import LedMarioGetMushroomObject
 from ..object.led_text_obj import LedTextObject
 from ..object.led_heart_obj import LedHeartObject
 from ..object.led_snow_obj import LedSnowObject
+from ..object.led_star_obj import LedStarObject
+from ..object.led_wave_obj import LedWaveObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -36,7 +38,9 @@ from ..filter.led_hsv_canvas_filter import LedHsvCanvasFilter
 from ..filter.led_skewed_canvas_filter import LedSkewedCanvasFilter
 from ..filter.led_jump_canvas_filter import LedJumpCanvasFilter
 from ..filter.led_rainbow_canvas_filter import LedRainbowCanvasFilter
+from ..filter.led_object_canvas_filter import LedObjectCanvasFilter
 
+from ..ctrl.led_filter_clear_ctrl import LedFilterClearCtrl
 
 def get_orders_in_loop(orders, start):
     orders_in_loop = []
@@ -99,7 +103,7 @@ def create_object(order):
     elif oid == 'object-s-mario-run2':
         obj = LedBitmapObject('asset/image/s_mario_run_2.png', 0, 0, z, lifetime)
     elif oid == 'object-star':
-        obj = LedBitmapObject('asset/image/star.png', 0, 0, z, lifetime)
+        obj = LedStarObject(lifetime)
     elif oid == 'object-heart':
         obj = LedHeartObject(lifetime)
     elif oid == 'object-mario-run-anime':
@@ -136,12 +140,6 @@ def create_object(order):
         obj = LedMarioGetMushroomObject(z)
     elif oid == 'object-drop-mushroom':
         obj = LedDropMushroomObject(z, lifetime)
-    elif oid == 'object-bk-mountain':
-        obj = LedScrolledBitmapObject('asset/image/background_mountain.png', 0, y, z, cycle, lifetime)
-    elif oid == 'object-bk-grass':
-        obj = LedScrolledBitmapObject('asset/image/background_grass.png', 0, y, z, cycle, lifetime)
-    elif oid == 'object-bk-cloud':
-        obj = LedScrolledBitmapObject('asset/image/background_cloud.png', 0, y, z, cycle, lifetime)
     elif oid == 'object-text':
         string = get_param(order, 'text', u'日本語サンプル')
         obj = LedTextObject(text=string, lifetime=lifetime)
@@ -156,9 +154,12 @@ def create_object(order):
 
 def create_filter(order, canvas):
     oid = order['id']
-    if oid == 'filter-clear':
-        return canvas
-    elif oid == 'filter-hsv':
+    z = get_param(order, 'z', 0)
+    y = get_param(order, 'y', 0)
+    x = get_param(order, 'x', 0)
+    cycle = get_param(order, 'cycle')
+
+    if oid == 'filter-hsv':
         return LedHsvCanvasFilter(canvas)
     elif oid == 'filter-wave':
         return LedWaveCanvasFilter(canvas)
@@ -170,8 +171,26 @@ def create_filter(order, canvas):
         return LedJumpCanvasFilter(canvas)
     elif oid == 'filter-rainbow':
         return LedRainbowCanvasFilter(canvas)
+    elif oid == 'filter-bk-mountain':
+        return LedObjectCanvasFilter(canvas, \
+                LedScrolledBitmapObject('asset/image/background_mountain.png', 0, y, z, cycle))
+    elif oid == 'filter-bk-grass':
+        return LedObjectCanvasFilter(canvas, \
+                LedScrolledBitmapObject('asset/image/background_grass.png', 0, y, z, cycle))
+    elif oid == 'filter-bk-cloud':
+        return LedObjectCanvasFilter(canvas, \
+                LedScrolledBitmapObject('asset/image/background_cloud.png', 0, y, z, cycle))
+    elif oid == 'filter-bk-wave':
+        return LedObjectCanvasFilter(canvas, LedWaveObject(range(28, 36), int(0x0000ff)))
     else:
         raise KeyError('unknown filter id:{0} i'.format(oid))
+
+def create_ctrl(order):
+    oid = order['id']
+    if oid == 'ctrl-filter-clear':
+        return LedFilterClearCtrl()
+    else:
+        return None
 
 def create_order(order, canvas):
     oid = order['id']
@@ -180,7 +199,7 @@ def create_order(order, canvas):
     elif oid.startswith('filter'):
         return create_filter(order, canvas)
     elif oid.startswith('ctrl'):
-        return None
+        return create_ctrl(order)
     else:
         raise KeyError('unknown id prefix:{0} i'.format(oid))
 
