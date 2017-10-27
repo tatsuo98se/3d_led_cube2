@@ -15,7 +15,7 @@ class LedRainbowCanvasFilter(LedCanvasFilter):
 
     def set_led(self, x, y, z, color):
         src_color = Color.object_to_color(color)
-        c = ((self.born_at - time.time()) * SPEED + x + z) / GRAD
+        c = ((self.born_at - time.time()) * SPEED + x + z + y/2) / GRAD
         h = (math.sin(c) + 1) /2
         self.canvas.set_led(x, y, z,
                             Color.rgbtapple_to_color(colorsys.hsv_to_rgb(h, 1.0, 1.0), src_color.a))
