@@ -96,6 +96,8 @@ def create_object(order):
         obj = LedBitmapObject('asset/image/mario_run_1.png', 0, 0, z, lifetime)
     elif oid == 'object-mario-run2':
         obj = LedBitmapObject('asset/image/mario_run_2.png', 0, 0, z, lifetime)
+    elif oid == 'object-mario-jump':
+        obj = LedBitmapObject('asset/image/mario_jump.png', 0, 0, z, lifetime)
     elif oid == 'object-s-mario':
         obj = LedBitmapObject('asset/image/s_mario.png', 0, 0, z, lifetime)
     elif oid == 'object-s-mario-run1':
