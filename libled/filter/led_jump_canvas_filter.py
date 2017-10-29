@@ -17,6 +17,7 @@ class LedJumpCanvasFilter(LedCanvasFilter):
         self.power = self.update_initial_power() #テキトーな上昇する力の値
 
     def pre_draw(self):
+        super(LedJumpCanvasFilter, self).pre_draw()
         if time.time() - self.last_update < UPDATE_FREQ:
             return
 

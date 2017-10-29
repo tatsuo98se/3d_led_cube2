@@ -52,10 +52,13 @@ class LedFramework(object):
                         else:
                             pass
                     else:
-                        current_order = create_order(data, self.base_canvas)
+                        current_order = create_order(data, canvas)
 
                     if isinstance(current_order, ILedCanvas):
                         canvas = current_order
+                        current_order = None
+                    elif isinstance(current_order, LedFilterClearCtrl):
+                        canvas = self.base_canvas
                         current_order = None
                     elif isinstance(current_order, LedObject):
                         if inout_effect:
