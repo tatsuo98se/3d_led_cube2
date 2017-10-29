@@ -1,6 +1,7 @@
 from led_cube import *
 from i_led_canvas import ILedCanvas
 from util.color import Color
+from util.cube_util import *
 
 class LedCanvas(ILedCanvas):
 
@@ -13,17 +14,9 @@ class LedCanvas(ILedCanvas):
         return [[[Color(0,0,0,0) for depth in range(LED_DEPTH)] for height in range(LED_HEIGHT)] for width in range(LED_WIDTH)]
 
     def set_led(self, x, y, z, color):
-        ix = int(round(x))
-        iy = int(round(y))
-        iz = int(round(z))
 
-        if ix < 0 or ix >= LED_WIDTH:
-            return
-
-        if iy < 0 or iy >= LED_HEIGHT:
-            return
-
-        if iz < 0 or iz >= LED_DEPTH:
+        ix, iy, iz = rounds(x, y, z)
+        if not is_in_cube(ix, iy, iz):
             return
 
         src_color = Color.object_to_color(color)
