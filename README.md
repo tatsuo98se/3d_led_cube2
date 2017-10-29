@@ -59,3 +59,39 @@ from led_framework import LedFramework
 LedFramework().show({"orders":[{"id":"object-fill"},{"id":"object-cube"}]})
 
 ```
+
+# for led_coloring
+
+## Requirements
+
+pip install watchdog
+pip install opencv
+
+ImageMagick-7.0.7-8-portable
+https://www.imagemagick.org/script/download.php
+パスを設定する。Windowsのパス設定は「コントロールパネル→システム→システムの詳細設定→環境変数(N)
+
+## 各ファイルの役割
+
+### for led_coloring - スキャン文書から塗り絵を読み込み表示するアプリケーション
++ 対象フォーマット
+ .jpg, .jpeg .png, .tif(single) .tif(multi)
++ スキャン解像度
+ 200dpi
++ スキャン入稿フォルダ
+./asset/coloring/scan_in/
++ 塗り絵フォーム
+./asset/coloring/3dledcube_form.xlsx
+
+
+#### 基本的なつかい方
+塗り絵フォームを印刷して塗り絵をする.
+スキャンしてファイルを保存する.
+スキャン文書をスキャン入稿フォルダに格納する
+
+#### 複合機連携
+塗り絵フォームを印刷して塗り絵をする.
+スキャン入稿フォルダを共有フォルダ(SMB|FTP)設定する.
+複合機のスキャン文書の転送先で上記共有フォルダを設定する.
+塗り絵をスキャンする.
+
