@@ -74,6 +74,12 @@ class Color:
             self.g * other,
             self.b * other)
 
+    def __div__(self, other):
+        return Color(
+            self.r / other,
+            self.g / other,
+            self.b / other)
+
     def __sub__(self, other):
         if(isinstance(other, Color)):
             return Color(
