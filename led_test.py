@@ -22,6 +22,7 @@ from libled.object.led_snow_obj import LedSnowObject
 from libled.object.led_snows_obj import LedSnowsObject
 from libled.object.led_wave_obj import LedWaveObject
 from libled.object.led_scrolled_bitmap_obj import LedScrolledBitmapObject
+from libled.object.led_star_obj import LedStarObject
 
 from libled.led_canvas import LedCanvas
 from libled.filter.led_canvs_filter import LedCanvasFilter
@@ -33,6 +34,7 @@ from libled.filter.led_skewed_canvas_filter import LedSkewedCanvasFilter
 from libled.filter.led_color_canvas_filter import LedColorCanvasFilter
 from libled.filter.led_rainbow_canvas_filter import LedRainbowCanvasFilter
 from libled.filter.led_random_color_canvas_filter import LedRandomColorCanvasFilter
+from libled.filter.led_heartbeats_canvas_filter import LedHeartsBeatsCanvasFilter
 
 mario0 = LedBitmapObject('asset/image/mario.png', 0, 0, 0, 10)
 mario1 = LedBitmapObject('asset/image/mario_run_1.png', 0, 0, 0, 10)
@@ -53,18 +55,21 @@ wave = LedWaveObject(range(28, 36), int(0x0000ff) ,10)
 bkgrass = LedScrolledBitmapObject('asset/image/background_grass.png', 0, 0, 7, 20)
 bkmountain = LedScrolledBitmapObject('asset/image/background_mountain.png', 0, 0, 6, 20)
 bkcloud = LedScrolledBitmapObject('asset/image/background_cloud.png', 0, 0, 7, 20)
+mario_scr = LedScrolledBitmapObject('asset/image/mario.png', 0, 0, 0, 10)
+star_3d = LedStarObject(10)
 
 canvas = LedCanvas()
 #canvas = LedJumpCanvasFilter(canvas)
 #canvas = LedSkewedCanvasFilter(canvas)
 #canvas = LedColorCanvasFilter(canvas, int(0xff3333))
 #canvas = LedRainbowCanvasFilter(canvas)
+canvas = LedHeartsBeatsCanvasFilter(canvas)
 #canvas = LedRandomColorCanvasFilter(canvas)
 
 #canvas.add_object(snows)
-canvas.add_object(bkmountain)
-canvas.add_object(bkcloud)
-canvas.add_object(bkgrass)
+canvas.add_object(heart)
+#canvas.add_object(bkcloud)
+#canvas.add_object(bkgrass)
 
 parser = OptionParser()
 parser.add_option("-d", "--dest",
