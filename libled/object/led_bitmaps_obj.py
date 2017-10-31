@@ -11,7 +11,7 @@ class LedBitmapsObject(LedObject):
             if filenames[i] is None:
                 self.bitmaps.append(None)
             else:
-                self.bitmaps.append(LedBitmapObject(filenames[i], 0, 0, i, lifetime))
+                self.bitmaps.append(LedBitmapObject(filenames[i], 0, 0, i, 1, lifetime))
 
     def draw(self, canvas):
         for bitmap in self.bitmaps:

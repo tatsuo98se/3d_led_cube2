@@ -80,6 +80,7 @@ def create_object(order):
     z = get_param(order, 'z', 0)
     y = get_param(order, 'y', 0)
     x = get_param(order, 'x', 0)
+    thick = get_param(order, 'thick', 1)
     cycle = get_param(order, 'cycle')
     overlap = get_param(order, 'overlap', False)
     obj = None
@@ -91,19 +92,19 @@ def create_object(order):
     elif oid == 'object-ripple':
         obj = LedRandomRippleObject(lifetime)
     elif oid == 'object-mario':
-        obj = LedBitmapObject('asset/image/mario.png', 0, 0, z, lifetime)
+        obj = LedBitmapObject('asset/image/mario.png', 0, 0, z, thick, lifetime)
     elif oid == 'object-mario-run1':
-        obj = LedBitmapObject('asset/image/mario_run_1.png', 0, 0, z, lifetime)
+        obj = LedBitmapObject('asset/image/mario_run_1.png', 0, 0, z, thick, lifetime)
     elif oid == 'object-mario-run2':
-        obj = LedBitmapObject('asset/image/mario_run_2.png', 0, 0, z, lifetime)
+        obj = LedBitmapObject('asset/image/mario_run_2.png', 0, 0, z, thick, lifetime)
     elif oid == 'object-mario-jump':
-        obj = LedBitmapObject('asset/image/mario_jump.png', 0, 0, z, lifetime)
+        obj = LedBitmapObject('asset/image/mario_jump.png', 0, 0, z, thick, lifetime)
     elif oid == 'object-s-mario':
-        obj = LedBitmapObject('asset/image/s_mario.png', 0, 0, z, lifetime)
+        obj = LedBitmapObject('asset/image/s_mario.png', 0, 0, z, thick, lifetime)
     elif oid == 'object-s-mario-run1':
-        obj = LedBitmapObject('asset/image/s_mario_run_1.png', 0, 0, z, lifetime)
+        obj = LedBitmapObject('asset/image/s_mario_run_1.png', 0, 0, z, thick, lifetime)
     elif oid == 'object-s-mario-run2':
-        obj = LedBitmapObject('asset/image/s_mario_run_2.png', 0, 0, z, lifetime)
+        obj = LedBitmapObject('asset/image/s_mario_run_2.png', 0, 0, z, thick, lifetime)
     elif oid == 'object-star':
         obj = LedStarObject(lifetime)
     elif oid == 'object-heart':
@@ -115,7 +116,7 @@ def create_object(order):
         if image is None:
             raise KeyError('id:{0} bitmap key was not specified.'.format(oid))
         try:
-            obj = LedBitmapObject(cStringIO.StringIO(base64.b64decode(image)), 0, 0, z, lifetime)
+            obj = LedBitmapObject(cStringIO.StringIO(base64.b64decode(image)), 0, 0, z, thick, lifetime)
 
         except:
             raise KeyError('id:{0} image decode error.'.format(oid))
@@ -162,6 +163,7 @@ def create_filter(order, canvas):
     z = get_param(order, 'z', 0)
     y = get_param(order, 'y', 0)
     x = get_param(order, 'x', 0)
+    thick = get_param(order, 'thick', 1)
     cycle = get_param(order, 'cycle')
 
     if oid == 'filter-hsv':
@@ -186,7 +188,7 @@ def create_filter(order, canvas):
         return LedObjectCanvasFilter(canvas, \
                 LedScrolledBitmapObject('asset/image/background_cloud.png', 0, y, z, cycle))
     elif oid == 'filter-bk-wave':
-        return LedObjectCanvasFilter(canvas, LedWaveObject(range(28, 36), int(0x0000ff)))
+        return LedObjectCanvasFilter(canvas, LedWaveObject(range(28, 50), int(0x0000ff)))
     elif oid == 'filter-bk-snows':
         return LedObjectCanvasFilter(canvas, LedSnowsObject())
     else:
