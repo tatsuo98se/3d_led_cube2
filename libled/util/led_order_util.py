@@ -159,7 +159,6 @@ def create_object(order):
 
 def create_filter(order, canvas):
     oid = order['id']
-    z = get_param(order, 'z', 0)
     y = get_param(order, 'y', 0)
     x = get_param(order, 'x', 0)
     cycle = get_param(order, 'cycle')
@@ -177,12 +176,15 @@ def create_filter(order, canvas):
     elif oid == 'filter-rainbow':
         return LedRainbowCanvasFilter(canvas)
     elif oid == 'filter-bk-mountain':
+        z = get_param(order, 'z', 7)
         return LedObjectCanvasFilter(canvas, \
                 LedScrolledBitmapObject('asset/image/background_mountain.png', 0, y, z, cycle))
     elif oid == 'filter-bk-grass':
+        z = get_param(order, 'z', 5)
         return LedObjectCanvasFilter(canvas, \
                 LedScrolledBitmapObject('asset/image/background_grass.png', 0, y, z, cycle))
     elif oid == 'filter-bk-cloud':
+        z = get_param(order, 'z', 7)
         return LedObjectCanvasFilter(canvas, \
                 LedScrolledBitmapObject('asset/image/background_cloud.png', 0, y, z, cycle))
     elif oid == 'filter-bk-wave':
