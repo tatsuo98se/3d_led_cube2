@@ -4,14 +4,16 @@ import codecs
 import json
 import os
 import os.path
+import shutil
+import subprocess
 import sys
 import time
 import traceback
 from datetime import datetime as dt
+from multiprocessing import Process
 from optparse import OptionParser
 
 import numpy as np
-from matplotlib import pyplot as plt
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
@@ -97,7 +99,7 @@ def normalize_scan_image(form_path, scan_path):
 
     # 画面に収まるようにリサイズして表示
     resized_scan = cv2.resize(scan, (scan.shape[1]/4, scan.shape[0]/4))
-    cv2.imshow("scan", resized_scan)
+#    cv2.imshow("scan", resized_scan)
 
     # アフィン変換
     height, width, ch = src.shape
@@ -105,7 +107,7 @@ def normalize_scan_image(form_path, scan_path):
     dst = cv2.warpAffine(scan, M, (width, height))
 
     resized_dst = cv2.resize(dst, (dst.shape[1]/4, dst.shape[0]/4))
-    cv2.imshow("affine", resized_dst)
+#    cv2.imshow("affine", resized_dst)
 
     return dst
 
@@ -178,42 +180,9 @@ def getColoringImage(scan, form, rects_file):
     return bgr_img
 
 
-SCAN_IN = 'asset/coloring/scan_in/'
-SCAN_OUT = 'asset/coloring/scan_out/'
-BASEDIR = SCAN_IN
-
-
-def getext(filename):
-    return os.path.splitext(filename)[-1].lower()
-
-
-class ChangeHandler(FileSystemEventHandler):
-
-    def on_created(self, event):
-        if event.is_directory:
-            return
-        if getext(event.src_path) in ('.jpg','.png','.tif'):
-            print('%s has been created.' % event.src_path)
-            try :
-                create_coloring(event.src_path)
-            except Exception:
-                print("Unexpected error:", sys.exc_info()[0])
-                traceback.print_exc()
-    def on_modified(self, event):
-        if event.is_directory:
-            return
-        if getext(event.src_path) in ('.jpg','.png','.tif'):
-            print('%s has been modified.' % event.src_path)
-
-    def on_deleted(self, event):
-        if event.is_directory:
-            return
-        if getext(event.src_path) in ('.jpg','.png','.tif'):
-            print('%s has been deleted.' % event.src_path)
-
-
 def create_coloring(src_path):
     print "*** start coloring...", src_path
+
     start = time.time()
     bgr_img = getColoringImage(src_path,
                                'asset/coloring/3dledcube_form.jpg',
@@ -222,12 +191,13 @@ def create_coloring(src_path):
     dst_path = SCAN_OUT + dt.now().strftime('%Y%m%d_%H%M%S_%f') + '.png'
     cv2.imwrite(dst_path, bgr_img)
     elapsed_time = time.time() - start
-    print ("*** end coloring. elapsed_time:{0}".format(elapsed_time) + "[sec]")    
-    
+    print ("*** end coloring. elapsed_time:{0}".format(elapsed_time) + "[sec]")
+
     # matplotlibの色空間はRGB
 #    plt.imshow(cv2.cvtColor(bgr_img, cv2.COLOR_BGR2RGB))
 #    plt.show()
 
+def show_led():
     dic = None
     dic = {"orders":
         [
@@ -243,8 +213,79 @@ def create_coloring(src_path):
         with open(SCAN_OUT + coloring, "rb") as f:
             dic["orders"].append({"id": "object-bitmap", "lifetime": 0.5, "bitmap": base64.b64encode(f.read())})
 
+    print(dic)
     led = LedFramework()
     led.show(dic)
+
+
+SCAN_IN = 'asset/coloring/scan_in/'
+SCAN_OUT = 'asset/coloring/scan_out/'
+SCAN_TMP = 'asset/coloring/scan_tmp'
+BASEDIR = SCAN_IN
+
+
+class ChangeHandler(FileSystemEventHandler):
+    ''' watchdog handler '''
+    def __init__(self):
+        self.led_process = None
+
+    def getext(self, filename):
+        return os.path.splitext(filename)[-1].lower()
+    
+    def on_created(self, event):
+
+        if event.is_directory:
+            return
+        if self.led_process is not None and self.led_process.is_alive():
+            pass
+        else:
+            if os.path.exists(SCAN_OUT):
+                shutil.rmtree(SCAN_OUT)
+                os.mkdir(SCAN_OUT)
+
+        if self.getext(event.src_path) in ('.jpg', '.jpeg', '.png'):
+            print('%s has been created.' % event.src_path)
+            try:
+                create_coloring(event.src_path)
+                p = Process(target=show_led, name='show_led')
+                if self.led_process is not None and self.led_process.is_alive():
+                    self.led_process.terminate()
+                    self.led_process.join()
+                self.led_process = p
+                self.led_process.start()
+            except Exception:
+                print("Unexpected error:", sys.exc_info()[0])
+                traceback.print_exc()
+        elif self.getext(event.src_path) in ('.tif'):
+            # マルチページTIFFをImageMagickでJpegに分解して画像生成
+            try:
+                if os.path.exists(SCAN_TMP):
+                    shutil.rmtree(SCAN_TMP)
+                os.mkdir(SCAN_TMP)
+                args = ['mogrify.exe', '-path', os.path.abspath(SCAN_TMP), '-format', 'jpeg', os.path.abspath(event.src_path)]
+                res = subprocess.check_output(args)
+                print "convert tiff2jpg succeeded.", res
+                splitted_imgs = os.listdir(SCAN_TMP)
+                for img in sorted(splitted_imgs):
+                    create_coloring(os.path.join(SCAN_TMP, img))
+                    p = Process(target=show_led, name='show_led')
+                    if self.led_process is not None and self.led_process.is_alive():
+                        self.led_process.terminate()
+                        self.led_process.join()
+                    self.led_process = p
+                    self.led_process.start()
+            except Exception:
+                traceback.print_exc()
+
+    def on_modified(self, event):
+        if event.is_directory:
+            return
+        print('%s has been modified.' % event.src_path)
+
+    def on_deleted(self, event):
+        if event.is_directory:
+            return
+        print('%s has been deleted.' % event.src_path)
 
 
 if __name__ == "__main__":
