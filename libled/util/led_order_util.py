@@ -28,6 +28,7 @@ from ..object.led_heart_obj import LedHeartObject
 from ..object.led_snows_obj import LedSnowsObject
 from ..object.led_star_obj import LedStarObject
 from ..object.led_wave_obj import LedWaveObject
+from ..object.led_tree_obj import LedTreeObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -109,6 +110,8 @@ def create_object(order):
         obj = LedStarObject(lifetime)
     elif oid == 'object-heart':
         obj = LedHeartObject(lifetime)
+    elif oid == 'object-tree':
+        obj = LedTreeObject(lifetime)
     elif oid == 'object-mario-run-anime':
         obj = LedMarioRunObject(z, lifetime)
     elif oid == 'object-bitmap':
