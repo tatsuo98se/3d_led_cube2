@@ -111,7 +111,8 @@ def create_object(order):
     elif oid == 'object-heart':
         obj = LedHeartObject(lifetime)
     elif oid == 'object-tree':
-        obj = LedTreeObject(lifetime)
+        s = get_param(order, 's', 0) is 1
+        obj = LedTreeObject(s, lifetime)
     elif oid == 'object-mario-run-anime':
         obj = LedMarioRunObject(z, lifetime)
     elif oid == 'object-bitmap':
