@@ -1,3 +1,5 @@
+import numpy as np
+
 class Color:
     def __init__(self, r, g, b, a=1.0):
         self.r = float(r)
@@ -44,8 +46,18 @@ class Color:
             return color
         elif  isinstance(color, int):
             return Color.int_to_color(color)
+        elif  isinstance(color, float):
+            return Color.int_to_color(int(color))
         elif isinstance(color, tuple):
-            return Color.rgbtapple_to_color(color)
+            if len(color) == 3:
+                return Color.rgbtapple_to_color(color)
+            else:
+                return Color.rgbatapple_to_color(color)
+        elif isinstance(color, np.ndarray):
+            if len(color) == 3:
+                return Color.rgbtapple255_to_color(color)
+            else:
+                return Color.rgbatapple255_to_color(color)
         else:
             print("Unknown Type:" + str(type(color)))
             raise TypeError
@@ -61,6 +73,12 @@ class Color:
             self.r * other,
             self.g * other,
             self.b * other)
+
+    def __div__(self, other):
+        return Color(
+            self.r / other,
+            self.g / other,
+            self.b / other)
 
     def __sub__(self, other):
         if(isinstance(other, Color)):
