@@ -40,6 +40,7 @@ from ..filter.led_skewed_canvas_filter import LedSkewedCanvasFilter
 from ..filter.led_jump_canvas_filter import LedJumpCanvasFilter
 from ..filter.led_rainbow_canvas_filter import LedRainbowCanvasFilter
 from ..filter.led_object_canvas_filter import LedObjectCanvasFilter
+from ..filter.led_bk_snows_object_canvas_filter import LedSnowsObjectCanvasFilter
 
 from ..ctrl.led_filter_clear_ctrl import LedFilterClearCtrl
 
@@ -111,7 +112,8 @@ def create_object(order):
     elif oid == 'object-heart':
         obj = LedHeartObject(lifetime)
     elif oid == 'object-tree':
-        obj = LedTreeObject(lifetime)
+        s = get_param(order, 's', 0) is 1
+        obj = LedTreeObject(s, lifetime)
     elif oid == 'object-mario-run-anime':
         obj = LedMarioRunObject(z, lifetime)
     elif oid == 'object-bitmap':
@@ -195,7 +197,7 @@ def create_filter(order, canvas):
     elif oid == 'filter-bk-wave':
         return LedObjectCanvasFilter(canvas, LedWaveObject(range(28, 50), int(0x0000ff)))
     elif oid == 'filter-bk-snows':
-        return LedObjectCanvasFilter(canvas, LedSnowsObject())
+        return LedSnowsObjectCanvasFilter(canvas)
     else:
         raise KeyError('unknown filter id:{0} i'.format(oid))
 

@@ -36,3 +36,6 @@ class ILedCanvas(object):
     def get_object_count(self):
         pass
 
+    def has(self, target_filter):
+        return False
+
