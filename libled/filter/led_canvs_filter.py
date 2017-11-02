@@ -37,3 +37,19 @@ class LedCanvasFilter(ILedCanvas):
 
     def get_object_count(self):
         self.canvas.get_object_count()
+
+    def has(self, target_filter):
+        
+        canvas = self
+        
+        while True:
+            if not isinstance(canvas, LedCanvasFilter):
+                return False
+
+            if type(canvas) == target_filter:
+                return True
+
+            canvas = canvas.canvas
+
+        
+            

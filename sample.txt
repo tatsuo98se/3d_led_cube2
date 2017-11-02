@@ -39,4 +39,5 @@ show:{"orders":[ {"id":"filter-bk-cloud", "z":7}, {"id":"filter-bk-wave"}, {"id"
 show:{"orders":[ {"id":"filter-bk-snows" },{"id":"filter-bk-cloud", "z":7}, {"id":"filter-bk-wave"}, {"id":"filter-skewed"},{"id":"filter-jump"},{"id":"filter-rainbow"}, {"id":"object-star","lifetime":10},{"id":"ctrl-filter-clear"},{"id":"object-heart"},{"id":"object-fireworks"}]}
 
 show:{"orders":[{"id":"object-tree", "lifetime":10}]}
-show:{"orders":[{"id":"filter-skewed"},{"id":"object-tree", "lifetime":10, "s":1}]}
+
+show:{"orders":[{"id":"filter-jump"},{"id":"filter-bk-snows"},{"id":"object-tree", "lifetime":10}]}
