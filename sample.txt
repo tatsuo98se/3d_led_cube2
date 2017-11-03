@@ -41,3 +41,7 @@ show:{"orders":[ {"id":"filter-bk-snows" },{"id":"filter-bk-cloud", "z":7}, {"id
 show:{"orders":[{"id":"object-tree", "lifetime":10}]}
 
 show:{"orders":[{"id":"filter-jump"},{"id":"filter-bk-snows"},{"id":"object-tree", "lifetime":10}]}
+
+show:{"orders":[{"id":"filter-zoom"},{"id":"filter-jump"},{"id":"object-star", "lifetime":10}]}
+
+show:{"orders":[{"id":"filter-zoom"},{"id":"filter-rainbow"},{"id":"filter-jump"},{"id":"object-heart", "lifetime":10}]}

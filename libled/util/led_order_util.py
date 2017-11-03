@@ -41,6 +41,7 @@ from ..filter.led_jump_canvas_filter import LedJumpCanvasFilter
 from ..filter.led_rainbow_canvas_filter import LedRainbowCanvasFilter
 from ..filter.led_object_canvas_filter import LedObjectCanvasFilter
 from ..filter.led_bk_snows_object_canvas_filter import LedSnowsObjectCanvasFilter
+from ..filter.led_zoom_in_out_canvas_filter import LedZoomInOutCanvasFilter
 
 from ..ctrl.led_filter_clear_ctrl import LedFilterClearCtrl
 
@@ -182,6 +183,8 @@ def create_filter(order, canvas):
         return LedJumpCanvasFilter(canvas)
     elif oid == 'filter-rainbow':
         return LedRainbowCanvasFilter(canvas)
+    elif oid == 'filter-zoom':
+        return LedZoomInOutCanvasFilter(canvas)
     elif oid == 'filter-bk-mountain':
         z = get_param(order, 'z', 7)
         return LedObjectCanvasFilter(canvas, \
