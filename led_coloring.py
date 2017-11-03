@@ -4,6 +4,7 @@ import codecs
 import json
 import os
 import os.path
+import random
 import shutil
 import subprocess
 import sys
@@ -112,7 +113,9 @@ def normalize_scan_image(form_path, scan_path):
     return dst
 
 
-def getColoringImage(scan, form, rects_file):
+def getColoringImage(scan, form, rects_file,
+                     saturation_max=False,
+                     brightness_max=False):
     ''' get 'very small' coloring from scan img'''
 
     # アフィン変換後のスキャン画像を取得
@@ -165,6 +168,10 @@ def getColoringImage(scan, form, rects_file):
             average_h = (sum([sum(line) for line in valid_h_list]) / pixel_count)
             average_s = (sum([sum(line) for line in valid_s_list]) / pixel_count)
             average_v = (sum([sum(line) for line in valid_v_list]) / pixel_count)
+            if saturation_max:
+                average_s = 255
+            if brightness_max:
+                average_v = 255
 
         # HSV to RGB
         bgr_pixel = cv2.cvtColor(np.array([[[average_h, average_s, average_v]]],
@@ -180,13 +187,15 @@ def getColoringImage(scan, form, rects_file):
     return bgr_img
 
 
-def create_coloring(src_path):
+def create_coloring(src_path, saturation_max=False, brightness_max=False):
     print "*** start coloring...", src_path
 
     start = time.time()
     bgr_img = getColoringImage(src_path,
                                'asset/coloring/3dledcube_form.jpg',
-                               'asset/coloring/rects.json')
+                               'asset/coloring/rects.json',
+                               saturation_max,
+                               brightness_max)
 
     dst_path = SCAN_OUT + dt.now().strftime('%Y%m%d_%H%M%S_%f') + '.png'
     cv2.imwrite(dst_path, bgr_img)
@@ -196,26 +205,6 @@ def create_coloring(src_path):
     # matplotlibの色空間はRGB
 #    plt.imshow(cv2.cvtColor(bgr_img, cv2.COLOR_BGR2RGB))
 #    plt.show()
-
-def show_led():
-    dic = None
-    dic = {"orders":
-        [
-#            {"id": "filter-rainbow", "lifetime": 30, "z": 4},
-            {"id": "filter-bk-mountain", "lifetime": 30, "z": 6},
-            {"id": "filter-bk-cloud", "lifetime": 30, "z": 7},
-            {"id": "filter-bk-grass", "lifetime": 30, "z": 4},
-            {"id": "ctrl-loop", "count": 20},
-        ]
-    }
-    colorings = os.listdir(SCAN_OUT)
-    for coloring in colorings:
-        with open(SCAN_OUT + coloring, "rb") as f:
-            dic["orders"].append({"id": "object-bitmap", "lifetime": 0.5, "bitmap": base64.b64encode(f.read())})
-
-    print(dic)
-    led = LedFramework()
-    led.show(dic)
 
 
 SCAN_IN = 'asset/coloring/scan_in/'
@@ -246,7 +235,13 @@ class ChangeHandler(FileSystemEventHandler):
         if self.getext(event.src_path) in ('.jpg', '.jpeg', '.png'):
             print('%s has been created.' % event.src_path)
             try:
-                create_coloring(event.src_path)
+                # create_coloring(event.src_path, False, False)
+                # create_coloring(event.src_path, True)
+                # create_coloring(event.src_path, False, True)
+                # create_coloring(event.src_path, True, True)
+                create_coloring(event.src_path,
+                                option_saturation_max,
+                                option_brightness_max)
                 p = Process(target=show_led, name='show_led')
                 if self.led_process is not None and self.led_process.is_alive():
                     self.led_process.terminate()
@@ -288,17 +283,78 @@ class ChangeHandler(FileSystemEventHandler):
         print('%s has been deleted.' % event.src_path)
 
 
+def show_led():
+
+    filters = [
+                    {"id": "filter-rainbow"},
+                    {"id": "filter-jump"},
+                    {"id": "filter-wave"},
+                    {"id": "filter-skewed"},
+                    {"id": "filter-flat-wave"}
+                ]
+    bks = [
+            {},
+            {"id": "filter-bk-snows", "lifetime": 30, "z": 7},
+            {"id": "filter-bk-mountain", "lifetime": 30, "z": 6},
+            {"id": "filter-bk-cloud", "lifetime": 30, "z": 7},
+            {"id": "filter-bk-grass", "lifetime": 30, "z": 4},
+        ]
+    
+    dic = {"orders": []}
+    colorings = os.listdir(SCAN_OUT)
+    dic["orders"].append({"id": "ctrl-loop", "count": 15/len(colorings)})
+    for coloring in colorings:
+        with open(SCAN_OUT + coloring, "rb") as f:
+            dic["orders"].append({"id": "object-bitmap", "lifetime": 1, "z": 3, "thick": 3, "bitmap": base64.b64encode(f.read())})
+
+    led = LedFramework()
+    led.show(dic)
+
+    bk = random.choice(bks)
+    if bk != {}:
+        dic["orders"].append(bk)
+    bk = random.choice(bks)
+    if bk != {}:
+        dic["orders"].append(bk)
+    filter = random.choice(filters)
+    if filter != {}:
+        dic["orders"].append(filter)
+
+    dic["orders"].append({"id": "ctrl-loop", "count": 15/len(colorings)})
+    colorings = os.listdir(SCAN_OUT)
+    for coloring in colorings:
+        with open(SCAN_OUT + coloring, "rb") as f:
+            dic["orders"].append({"id": "object-bitmap", "lifetime": 1, "z": 3, "thick": 3, "bitmap": base64.b64encode(f.read())})
+
+    print(dic)
+    led = LedFramework()
+    led.show(dic)
+
+
+option_saturation_max = False
+option_brightness_max = False
+
 if __name__ == "__main__":
 
     parser = OptionParser()
-    parser.add_option("-D", "--device",
+    parser.add_option("-d", "--device",
                       action="store", type="string", dest="device", 
                       help="(optional) device ip adddres.")
+    parser.add_option("-s", "--saturation",
+                      action="store", type="string", dest="saturation", 
+                      help="(optional) set the saturation to the maximum .")
+    parser.add_option("-v", "--brightness",
+                      action="store", type="string", dest="brightness", 
+                      help="(optional) set the brightness to the maximum .")
 
     options, _ = parser.parse_args()
 
     if options.device is not None:
         led.SetUrl(options.device)
+        if options.saturation is not None:
+            option_saturation_max = True
+    if options.brightness is not None:
+        option_brightness_max = True
 
     while 1:
         event_handler = ChangeHandler()
