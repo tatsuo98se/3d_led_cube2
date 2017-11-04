@@ -35,7 +35,8 @@ class LedShootingStarObject(LedObject):
             if self.x-i < 0:
                 break
 
-            canvas.set_led(self.x + i, self.y - i, self.z, self.color/(i+1))
+            canvas.set_led(self.x + i, self.y - i, self.z, 
+                Color(self.color.r, self.color.g, self.color.b, self.color.a/(i+1)))
 
 
 

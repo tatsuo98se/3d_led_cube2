@@ -17,6 +17,7 @@ class LedTwinkleStarObject(LedObject):
         self.color = self.get_star_color()
         self.offset = random.randrange(1,4)
         self.zerocount = 0
+        self.first_0 = False
 
     def is_expired(self):
         return self.zerocount > 4
@@ -29,16 +30,24 @@ class LedTwinkleStarObject(LedObject):
 
         style = int(round((math.cos(self.elapsed() + self.offset * 4) + 1) * self.size))
 
+        if not self.first_0:
+            if style == 0:
+                self.first_0 = True
+            else:
+                return
+
         if style == 0:
             self.zerocount += 1
+            self.draw_star1(canvas, 
+                Color(self.color.r, self.color.g, self.color.b, self.color.a/2))
         elif style == 1:
-            self.draw_star1(canvas, self.color/2)
+            self.draw_star1(canvas, 
+                Color(self.color.r, self.color.g, self.color.b, self.color.a/2))
         elif style == 2:
             self.draw_star1(canvas, self.color)
-        elif style == 3:
-            self.draw_star1(canvas, self.color)
-            self.draw_star2(canvas, self.color/2)
-        elif style == 4:
+            self.draw_star2(canvas, 
+                Color(self.color.r, self.color.g, self.color.b, self.color.a/2))
+        else:
             self.draw_star1(canvas, self.color)
             self.draw_star2(canvas, self.color)
 

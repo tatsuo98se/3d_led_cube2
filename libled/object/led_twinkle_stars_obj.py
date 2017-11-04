@@ -7,7 +7,7 @@ from led_twinkle_star_obj import LedTwinkleStarObject
 from led_shooting_star_obj import LedShootingStarObject
 from ..util.color import Color
 
-STAR_COUNT = 15
+STAR_COUNT = 10
 
 class LedTwinkleStartsObject(LedObject):
 
@@ -28,7 +28,7 @@ class LedTwinkleStartsObject(LedObject):
                             random.randint(0, LED_WIDTH-1), 
                             random.randint(0, LED_HEIGHT/2), 
                             random.randint(LED_DEPTH/2, LED_DEPTH-1),
-                            random.randrange(0,3))
+                            random.choice([1,1,1,1,1,3]))
 
             self.stars.append(star)
             canvas.add_object(star)
