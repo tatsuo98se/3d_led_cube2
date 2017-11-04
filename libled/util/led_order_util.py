@@ -29,6 +29,7 @@ from ..object.led_snows_obj import LedSnowsObject
 from ..object.led_star_obj import LedStarObject
 from ..object.led_wave_obj import LedWaveObject
 from ..object.led_tree_obj import LedTreeObject
+from ..object.led_twinkle_stars_obj import LedTwinkleStartsObject
 from ..object.led_snowman_obj import LedSnowmanObject
 from ..object.led_ghost_obj import LedGhostObject
 
@@ -43,6 +44,7 @@ from ..filter.led_jump_canvas_filter import LedJumpCanvasFilter
 from ..filter.led_rainbow_canvas_filter import LedRainbowCanvasFilter
 from ..filter.led_object_canvas_filter import LedObjectCanvasFilter
 from ..filter.led_bk_snows_object_canvas_filter import LedSnowsObjectCanvasFilter
+from ..filter.led_zoom_in_out_canvas_filter import LedZoomInOutCanvasFilter
 
 from ..ctrl.led_filter_clear_ctrl import LedFilterClearCtrl
 
@@ -189,6 +191,8 @@ def create_filter(order, canvas):
         return LedJumpCanvasFilter(canvas)
     elif oid == 'filter-rainbow':
         return LedRainbowCanvasFilter(canvas)
+    elif oid == 'filter-zoom':
+        return LedZoomInOutCanvasFilter(canvas)
     elif oid == 'filter-bk-mountain':
         z = get_param(order, 'z', 7)
         return LedObjectCanvasFilter(canvas, \
@@ -205,6 +209,9 @@ def create_filter(order, canvas):
         return LedObjectCanvasFilter(canvas, LedWaveObject(range(28, 50), int(0x0000ff)))
     elif oid == 'filter-bk-snows':
         return LedSnowsObjectCanvasFilter(canvas)
+    elif oid == 'filter-bk-stars':
+        return LedObjectCanvasFilter(canvas, \
+                LedTwinkleStartsObject())
     else:
         raise KeyError('unknown filter id:{0} i'.format(oid))
 
