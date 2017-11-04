@@ -396,8 +396,8 @@ option_brightness_max = True
 if __name__ == "__main__":
 
     parser = OptionParser()
-    parser.add_option("-d", "--device",
-                      action="store", type="string", dest="device", 
+    parser.add_option("-d", "--dest",
+                      action="store", type="string", dest="dest", 
                       help="(optional) device ip adddres.")
     parser.add_option("-s", "--saturation",
                       action="store", type="string", dest="saturation", 
@@ -408,8 +408,8 @@ if __name__ == "__main__":
 
     options, _ = parser.parse_args()
 
-    if options.device is not None:
-        led.SetUrl(options.device)
+    if options.dest is not None:
+        led.SetUrl(options.dest)
         if options.saturation is not None:
             option_saturation_max = True
     if options.brightness is not None:
