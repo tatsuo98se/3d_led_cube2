@@ -29,6 +29,7 @@ from ..object.led_snows_obj import LedSnowsObject
 from ..object.led_star_obj import LedStarObject
 from ..object.led_wave_obj import LedWaveObject
 from ..object.led_tree_obj import LedTreeObject
+from ..object.led_twinkle_stars_obj import LedTwinkleStartsObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -201,6 +202,9 @@ def create_filter(order, canvas):
         return LedObjectCanvasFilter(canvas, LedWaveObject(range(28, 50), int(0x0000ff)))
     elif oid == 'filter-bk-snows':
         return LedSnowsObjectCanvasFilter(canvas)
+    elif oid == 'filter-bk-stars':
+        return LedObjectCanvasFilter(canvas, \
+                LedTwinkleStartsObject())
     else:
         raise KeyError('unknown filter id:{0} i'.format(oid))
 

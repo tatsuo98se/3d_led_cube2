@@ -51,7 +51,7 @@ class LedZoomInOutCanvasFilter(LedCanvasFilter):
         for x in range(LED_WIDTH):
             src = self.dst[0, x, :, :]
             np_scaled = get_scled_image(src.astype('uint8'), scale, 1)
-            pos = (src.shape[0] - np_scaled.shape[0], int(round((src.shape[1] - np_scaled.shape[1])/2.0)))
+            pos = (src.shape[0] - np_scaled.shape[0], src.shape[1] - np_scaled.shape[1])
             dx, dy, sx, sy, w, h = get_copy_positions(np_scaled.shape, src.shape, pos)
             new_src = resize2(np_scaled, (LED_HEIGHT, LED_DEPTH), pos, [[0]*4])
             self.dst[0, x, :, :] = new_src
