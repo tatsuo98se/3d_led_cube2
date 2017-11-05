@@ -4,6 +4,7 @@ import codecs
 import json
 import os
 import os.path
+import random
 import shutil
 import subprocess
 import sys
@@ -11,6 +12,7 @@ import time
 import traceback
 from datetime import datetime as dt
 from multiprocessing import Process
+from optparse import OptionParser
 
 import numpy as np
 from watchdog.events import FileSystemEventHandler
@@ -18,6 +20,7 @@ from watchdog.observers import Observer
 
 import cv2
 from led_framework import LedFramework
+from libled.led_cube import led
 
 GRID_COLUMNS = 16
 GRID_ROWS = 32
@@ -83,7 +86,7 @@ def search_registration_marks(img):
     return pts2
 
 
-def normalize_scan_image(form_path, scan_path):
+def normalize_scan_image(scan_path, form_path):
     ''' normalize scan image'''
     # 比較元画像の読み込み
     src = cv2.imread(form_path)
@@ -96,7 +99,7 @@ def normalize_scan_image(form_path, scan_path):
 #    print 'scan = ', pts1
 
     # 画面に収まるようにリサイズして表示
-    resized_scan = cv2.resize(scan, (scan.shape[1]/4, scan.shape[0]/4))
+#    resized_scan = cv2.resize(scan, (scan.shape[1]/4, scan.shape[0]/4))
 #    cv2.imshow("scan", resized_scan)
 
     # アフィン変換
@@ -104,17 +107,16 @@ def normalize_scan_image(form_path, scan_path):
     M = cv2.getAffineTransform(pts1, pts2)
     dst = cv2.warpAffine(scan, M, (width, height))
 
-    resized_dst = cv2.resize(dst, (dst.shape[1]/4, dst.shape[0]/4))
+#    resized_dst = cv2.resize(dst, (dst.shape[1]/4, dst.shape[0]/4))
 #    cv2.imshow("affine", resized_dst)
 
     return dst
 
 
-def getColoringImage(scan, form, rects_file):
+def get_coloring_image(scan, rects_file,
+                     saturation_max=False,
+                     brightness_max=False):
     ''' get 'very small' coloring from scan img'''
-
-    # アフィン変換後のスキャン画像を取得
-    scan = normalize_scan_image(form, scan)
 
     # 格子矩形情報をRead
     obj_text = codecs.open(rects_file, 'r', encoding='utf-8').read()
@@ -126,7 +128,6 @@ def getColoringImage(scan, form, rects_file):
     bgr_img = np.zeros(size, dtype=np.uint8)
 
     # 黒と白を除いた色の平均を求めるため、HSVで色の有無を確認する
-    # http://yu-write.blogspot.jp/2013/12/opencv-pythonopencv_12.html
     hsv_img = cv2.cvtColor(scan, cv2.COLOR_BGR2HSV)
 
     # 格子矩形のオフセット 10,10,0.2
@@ -159,10 +160,16 @@ def getColoringImage(scan, form, rects_file):
 
         average_h, average_s, average_v = 0, 0, 0
         # 色ついたのピクセル数がcolor_pixel_ratioの割合以上であれば採用
-        if pixel_count > len(cropped) * len(cropped) * color_pixel_ratio:
+        height, width, channels = cropped.shape[:3]
+#        if pixel_count > len(cropped) * len(cropped) * color_pixel_ratio:
+        if pixel_count > height * width * color_pixel_ratio:
             average_h = (sum([sum(line) for line in valid_h_list]) / pixel_count)
             average_s = (sum([sum(line) for line in valid_s_list]) / pixel_count)
             average_v = (sum([sum(line) for line in valid_v_list]) / pixel_count)
+            if saturation_max:
+                average_s = 255
+            if brightness_max:
+                average_v = 255
 
         # HSV to RGB
         bgr_pixel = cv2.cvtColor(np.array([[[average_h, average_s, average_v]]],
@@ -177,42 +184,71 @@ def getColoringImage(scan, form, rects_file):
 
     return bgr_img
 
+def get_checkbox_index(scan, rects_file):
+    ''' get chacked box index from scan img'''
 
-def create_coloring(src_path):
+    # チェックボックス格子矩形情報をRead
+    obj_text = codecs.open(rects_file, 'r', encoding='utf-8').read()
+    tmp = json.loads(obj_text)
+    rects = np.array(tmp)
+
+    # 黒と白を除いた色の平均を求めるため、HSVで色の有無を確認する
+    hsv_img = cv2.cvtColor(scan, cv2.COLOR_BGR2HSV)
+
+    # 格子矩形のオフセット 10,10,0.2
+    offset = 5
+    # 彩度の閾値　彩度が低いものは無視する
+    saturation_threshold = 10
+    # 格子内で最低限必要なピクセルの割合。この数字以下ははみ出た線として無視する
+    color_pixel_ratio = 0.25
+
+    checked = [False, False, False, False, False, False]
+    idx = 0
+    for rect in enumerate(rects):
+        r = rect[1]  # r = x, y, w, h
+
+        # 格子矩形でクリップ
+        cropped = hsv_img[r[1]+offset:r[1]+r[3]-offset, r[0] + offset: r[0]+r[2]-offset]
+
+        # 彩度Sがしきい値よりも大きいピクセルのみを採用
+        valid_h_list = [[hsv[0] for hsv in img_line if hsv[1] > saturation_threshold] for img_line in cropped]
+        pixel_count = sum([len(line) for line in valid_h_list])
+
+        # 色ついたのピクセル数がcolor_pixel_ratioの割合以上であれば採用
+        height, width, channels = cropped.shape[:3]
+        if pixel_count > height * width * color_pixel_ratio:
+            checked[idx] = True
+
+        idx = idx + 1
+
+    return checked
+
+
+def create_coloring(src_path, saturation_max=False, brightness_max=False):
     print "*** start coloring...", src_path
 
     start = time.time()
-    bgr_img = getColoringImage(src_path,
-                               'asset/coloring/3dledcube_form.jpg',
-                               'asset/coloring/rects.json')
+
+    # アフィン変換後のスキャン画像を取得
+    scan = normalize_scan_image(src_path, 'asset/coloring/3dledcube_form.jpg')
+
+    # 塗り絵画像を取得
+    bgr_img = get_coloring_image(scan,
+                               'asset/coloring/rects.json',
+                               saturation_max,
+                               brightness_max)
 
     dst_path = SCAN_OUT + dt.now().strftime('%Y%m%d_%H%M%S_%f') + '.png'
     cv2.imwrite(dst_path, bgr_img)
     elapsed_time = time.time() - start
     print ("*** end coloring. elapsed_time:{0}".format(elapsed_time) + "[sec]")
 
+    # チェックボックスを取得
+    checked = get_checkbox_index(scan, 'asset/coloring/rects_checkbox.json')
     # matplotlibの色空間はRGB
 #    plt.imshow(cv2.cvtColor(bgr_img, cv2.COLOR_BGR2RGB))
 #    plt.show()
-
-def show_led():
-    dic = None
-    dic = {"orders":
-        [
-            {"id": "object-bk-mountain", "lifetime": 30, "z": 6, "overlap": True, "cycle": 7},
-            {"id": "object-bk-cloud", "lifetime": 30, "z": 7, "overlap": True, "cycle": 20},
-            {"id": "object-bk-grass", "lifetime": 30, "z": 4, "overlap": True, "cycle": 4},
-            {"id": "ctrl-loop", "count": 15},
-        ]
-    }
-    colorings = os.listdir(SCAN_OUT)
-    for coloring in colorings:
-        with open(SCAN_OUT + coloring, "rb") as f:
-            dic["orders"].append({"id": "object-bitmap", "lifetime": 0.5, "bitmap": base64.b64encode(f.read())})
-
-    print(dic)
-    led = LedFramework()
-    led.show(dic)
+    return checked
 
 
 SCAN_IN = 'asset/coloring/scan_in/'
@@ -243,13 +279,14 @@ class ChangeHandler(FileSystemEventHandler):
         if self.getext(event.src_path) in ('.jpg', '.jpeg', '.png'):
             print('%s has been created.' % event.src_path)
             try:
-                create_coloring(event.src_path)
-                p = Process(target=show_led, name='show_led')
-                if self.led_process is not None and self.led_process.is_alive():
-                    self.led_process.terminate()
-                    self.led_process.join()
-                self.led_process = p
-                self.led_process.start()
+                # create_coloring(event.src_path, False, False)
+                # create_coloring(event.src_path, True)
+                # create_coloring(event.src_path, False, True)
+                # create_coloring(event.src_path, True, True)
+                checked = create_coloring(event.src_path,
+                                          option_saturation_max,
+                                          option_brightness_max)
+                self.show_led_on_multiprocess(checked)
             except Exception:
                 print("Unexpected error:", sys.exc_info()[0])
                 traceback.print_exc()
@@ -264,15 +301,23 @@ class ChangeHandler(FileSystemEventHandler):
                 print "convert tiff2jpg succeeded.", res
                 splitted_imgs = os.listdir(SCAN_TMP)
                 for img in sorted(splitted_imgs):
-                    create_coloring(os.path.join(SCAN_TMP, img))
-                    p = Process(target=show_led, name='show_led')
-                    if self.led_process is not None and self.led_process.is_alive():
-                        self.led_process.terminate()
-                        self.led_process.join()
-                    self.led_process = p
-                    self.led_process.start()
+                    checked = create_coloring(os.path.join(SCAN_TMP, img),
+                                              option_saturation_max,
+                                              option_brightness_max)
+                    self.show_led_on_multiprocess(checked)
             except Exception:
                 traceback.print_exc()
+
+    def show_led_on_multiprocess(self, checked):
+        # show_led(checked)
+        # return
+    
+        p = Process(target=show_led, name='show_led', args=(checked,))
+        if self.led_process is not None and self.led_process.is_alive():
+            self.led_process.terminate()
+            self.led_process.join()
+        self.led_process = p
+        self.led_process.start()
 
     def on_modified(self, event):
         if event.is_directory:
@@ -285,7 +330,90 @@ class ChangeHandler(FileSystemEventHandler):
         print('%s has been deleted.' % event.src_path)
 
 
+def show_led(checked):
+
+    options = [
+        {"id": "filter-skewed"},
+        {"id": "filter-rainbow"},
+        {"id": "filter-bk-snows", "lifetime": 30, "z": 7},
+        {"id": "filter-bk-grass", "lifetime": 30, "z": 4},
+        {"id": "filter-wave"}
+    ]
+
+    filters = [
+        {"id": "filter-rainbow"},
+        {"id": "filter-jump"},
+        {"id": "filter-jump"},
+        {"id": "filter-wave"},
+        {"id": "filter-skewed"},
+        {"id": "filter-flat-wave"}
+    ]
+    backgrounds = [
+        {"id": "filter-bk-snows", "lifetime": 30, "z": 7},
+        {"id": "filter-bk-mountain", "lifetime": 30, "z": 6},
+        {"id": "filter-bk-cloud", "lifetime": 30, "z": 7},
+        {"id": "filter-bk-grass", "lifetime": 30, "z": 4},
+    ]
+
+    dic = {"orders": []}
+
+    LOOP_COUNT = 15
+    
+    # 最初は画像のみを表示
+    colorings = os.listdir(SCAN_OUT)
+    dic["orders"].append({"id": "ctrl-loop", "count": LOOP_COUNT/len(colorings)})
+    for coloring in colorings:
+        with open(SCAN_OUT + coloring, "rb") as f:
+            dic["orders"].append({"id": "object-bitmap", "lifetime": 1, "z": 1, "thick": 3, "bitmap": base64.b64encode(f.read())})
+    led = LedFramework()
+    led.show(dic)
+
+    # オプションに従って表示
+    for i, chk in enumerate(checked):
+        if chk and i < len(options):
+            dic["orders"].append(options[i])
+            if i == 3:   # 草原の場合は雲と山も
+                dic["orders"].append({"id": "filter-bk-mountain", "lifetime": 30, "z": 6})
+                dic["orders"].append({"id": "filter-bk-cloud", "lifetime": 30, "z": 7})
+        elif chk:   # [?] はランダム
+            dic["orders"].append(random.choice(filters))
+            dic["orders"].append(random.choice(backgrounds))
+
+    dic["orders"].append({"id": "ctrl-loop", "count": LOOP_COUNT/len(colorings)})
+    colorings = os.listdir(SCAN_OUT)
+    for coloring in colorings:
+        with open(SCAN_OUT + coloring, "rb") as f:
+            dic["orders"].append({"id": "object-bitmap", "lifetime": 1, "z": 1, "thick": 3, "bitmap": base64.b64encode(f.read())})
+
+    print(dic)
+    led = LedFramework()
+    led.show(dic)
+
+
+option_saturation_max = True
+option_brightness_max = True
+
 if __name__ == "__main__":
+
+    parser = OptionParser()
+    parser.add_option("-d", "--dest",
+                      action="store", type="string", dest="dest", 
+                      help="(optional) device ip adddres.")
+    parser.add_option("-s", "--saturation",
+                      action="store", type="string", dest="saturation", 
+                      help="(optional) set the saturation to the maximum .")
+    parser.add_option("-v", "--brightness",
+                      action="store", type="string", dest="brightness", 
+                      help="(optional) set the brightness to the maximum .")
+
+    options, _ = parser.parse_args()
+
+    if options.dest is not None:
+        led.SetUrl(options.dest)
+        if options.saturation is not None:
+            option_saturation_max = True
+    if options.brightness is not None:
+        option_brightness_max = True
 
     while 1:
         event_handler = ChangeHandler()
