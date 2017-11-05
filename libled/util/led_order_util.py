@@ -45,6 +45,8 @@ from ..filter.led_rainbow_canvas_filter import LedRainbowCanvasFilter
 from ..filter.led_object_canvas_filter import LedObjectCanvasFilter
 from ..filter.led_bk_snows_object_canvas_filter import LedSnowsObjectCanvasFilter
 from ..filter.led_zoom_in_out_canvas_filter import LedZoomInOutCanvasFilter
+from ..filter.led_rolldown_canvas_filter import LedRollDownCanvasFilter
+
 
 from ..ctrl.led_filter_clear_ctrl import LedFilterClearCtrl
 
@@ -111,6 +113,8 @@ def create_object(order):
         obj = LedBitmapObject('asset/image/s_mario_run_1.png', 0, 0, z, thick, lifetime)
     elif oid == 'object-s-mario-run2':
         obj = LedBitmapObject('asset/image/s_mario_run_2.png', 0, 0, z, thick, lifetime)
+    elif oid == 'object-snow-crystal':
+        obj = LedBitmapObject('asset/image/snow_crystal_1.png', 0, 0, 3, thick, lifetime)
     elif oid == 'object-star':
         obj = LedStarObject(lifetime)
     elif oid == 'object-heart':
@@ -193,6 +197,8 @@ def create_filter(order, canvas):
         return LedRainbowCanvasFilter(canvas)
     elif oid == 'filter-zoom':
         return LedZoomInOutCanvasFilter(canvas)
+    elif oid == 'filter-rolldown':
+        return LedRollDownCanvasFilter(canvas)
     elif oid == 'filter-bk-mountain':
         z = get_param(order, 'z', 7)
         return LedObjectCanvasFilter(canvas, \
