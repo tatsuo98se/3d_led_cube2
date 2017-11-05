@@ -34,6 +34,7 @@ from ..object.led_snowman_obj import LedSnowmanObject
 from ..object.led_ghost_obj import LedGhostObject
 from ..object.led_note_obj import LedNoteObject
 from ..object.led_elefant_obj import LedElefantObject
+from ..object.led_socks_obj import LedSocksObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -133,6 +134,8 @@ def create_object(order):
         obj = LedNoteObject(lifetime)
     elif oid == 'object-elefant':
         obj = LedElefantObject(lifetime)
+    elif oid == 'object-socks':
+        obj = LedSocksObject(lifetime)
     elif oid == 'object-mario-run-anime':
         obj = LedMarioRunObject(z, lifetime)
     elif oid == 'object-bitmap':
