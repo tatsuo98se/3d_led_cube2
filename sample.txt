@@ -65,3 +65,5 @@ show:{"orders":[{"id":"filter-rolldown"},{"id":"object-socks", "lifetime":20}]}
 show:{"orders":[{"id":"filter-spiral"},{"id":"filter-jump"},{"id":"object-star", "lifetime":20}]}
 
 show:{"orders":[{"id":"filter-skewed"},{"id":"filter-jump"},{"id":"object-stickman", "lifetime":20}]}
+
+show:{"orders":[{"id":"filter-swaying"},{"id":"filter-bk-wave"},{"id":"object-heart", "lifetime":20}]}
