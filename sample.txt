@@ -61,3 +61,7 @@ show:{"orders":[{"id":"filter-jump"},{"id":"filter-rainbow"},{"id":"object-note"
 show:{"orders":[{"id":"filter-rolldown"},{"id":"object-elefant", "lifetime":20}]}
 
 show:{"orders":[{"id":"filter-rolldown"},{"id":"object-socks", "lifetime":20}]}
+
+show:{"orders":[{"id":"filter-spiral"},{"id":"filter-jump"},{"id":"object-star", "lifetime":20}]}
+
+show:{"orders":[{"id":"filter-skewed"},{"id":"filter-jump"},{"id":"object-stickman", "lifetime":20}]}

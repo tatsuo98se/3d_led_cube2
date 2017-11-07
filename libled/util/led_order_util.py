@@ -35,6 +35,8 @@ from ..object.led_ghost_obj import LedGhostObject
 from ..object.led_note_obj import LedNoteObject
 from ..object.led_elefant_obj import LedElefantObject
 from ..object.led_socks_obj import LedSocksObject
+from ..object.led_stickman_obj import LedStickmanObject
+from ..object.led_yacht_obj import LedYachtObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -49,6 +51,7 @@ from ..filter.led_object_canvas_filter import LedObjectCanvasFilter
 from ..filter.led_bk_snows_object_canvas_filter import LedSnowsObjectCanvasFilter
 from ..filter.led_zoom_in_out_canvas_filter import LedZoomInOutCanvasFilter
 from ..filter.led_rolldown_canvas_filter import LedRollDownCanvasFilter
+from ..filter.led_spiral_canvas_filter import LedSpiralCanvasFilter
 
 
 from ..ctrl.led_filter_clear_ctrl import LedFilterClearCtrl
@@ -136,6 +139,10 @@ def create_object(order):
         obj = LedElefantObject(lifetime)
     elif oid == 'object-socks':
         obj = LedSocksObject(lifetime)
+    elif oid == 'object-stickman':
+        obj = LedStickmanObject(lifetime)
+    elif oid == 'object-yacht':
+        obj = LedYachtObject(lifetime)
     elif oid == 'object-mario-run-anime':
         obj = LedMarioRunObject(z, lifetime)
     elif oid == 'object-bitmap':
@@ -208,6 +215,8 @@ def create_filter(order, canvas):
         return LedZoomInOutCanvasFilter(canvas)
     elif oid == 'filter-rolldown':
         return LedRollDownCanvasFilter(canvas)
+    elif oid == 'filter-spiral':
+        return LedSpiralCanvasFilter(canvas)
     elif oid == 'filter-bk-mountain':
         z = get_param(order, 'z', 7)
         return LedObjectCanvasFilter(canvas, \
