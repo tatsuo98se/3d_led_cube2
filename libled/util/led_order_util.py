@@ -52,6 +52,7 @@ from ..filter.led_bk_snows_object_canvas_filter import LedSnowsObjectCanvasFilte
 from ..filter.led_zoom_in_out_canvas_filter import LedZoomInOutCanvasFilter
 from ..filter.led_rolldown_canvas_filter import LedRollDownCanvasFilter
 from ..filter.led_spiral_canvas_filter import LedSpiralCanvasFilter
+from ..filter.led_swaying_canvas_filter import LedSwayingCanvasFilter
 
 
 from ..ctrl.led_filter_clear_ctrl import LedFilterClearCtrl
@@ -217,6 +218,8 @@ def create_filter(order, canvas):
         return LedRollDownCanvasFilter(canvas)
     elif oid == 'filter-spiral':
         return LedSpiralCanvasFilter(canvas)
+    elif oid == 'filter-swaying':
+        return LedSwayingCanvasFilter(canvas)
     elif oid == 'filter-bk-mountain':
         z = get_param(order, 'z', 7)
         return LedObjectCanvasFilter(canvas, \
