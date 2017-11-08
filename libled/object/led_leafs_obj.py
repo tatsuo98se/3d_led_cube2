@@ -8,7 +8,7 @@ class LedLeafsObject(LedObject):
     def __init__(self, color, lifetime = 0 ):
         super(LedLeafsObject, self).__init__(lifetime)
         self.color = color
-        self.set_timer(0.3)
+        self.set_timer(1)
         self.is_need_update = False
 
     def on_timer(self):

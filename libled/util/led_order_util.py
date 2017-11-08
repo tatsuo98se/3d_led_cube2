@@ -37,6 +37,7 @@ from ..object.led_elefant_obj import LedElefantObject
 from ..object.led_socks_obj import LedSocksObject
 from ..object.led_stickman_obj import LedStickmanObject
 from ..object.led_yacht_obj import LedYachtObject
+from ..object.led_leafs_obj import LedLeafsObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -121,7 +122,7 @@ def create_object(order):
     elif oid == 'object-s-mario-run2':
         obj = LedBitmapObject('asset/image/s_mario_run_2.png', 0, 0, z, thick, lifetime)
     elif oid == 'object-snow-crystal':
-        obj = LedBitmapObject('asset/image/snow_crystal_1.png', 0, 0, 3, thick, lifetime)
+        obj = LedBitmapObject('asset/image/snow_crystal_1.png', 0, 0, 4, 2, lifetime)
     elif oid == 'object-star':
         obj = LedStarObject(lifetime)
     elif oid == 'object-heart':
@@ -232,6 +233,9 @@ def create_filter(order, canvas):
         z = get_param(order, 'z', 7)
         return LedObjectCanvasFilter(canvas, \
                 LedScrolledBitmapObject('asset/image/background_cloud.png', 0, y, z, cycle))
+    elif oid == 'filter-bk-sakura':
+        return LedObjectCanvasFilter(canvas, \
+                LedLeafsObject(int(0xffcccc)))
     elif oid == 'filter-bk-wave':
         return LedObjectCanvasFilter(canvas, LedWaveObject(range(28, 50), int(0x0000ff)))
     elif oid == 'filter-bk-snows':
