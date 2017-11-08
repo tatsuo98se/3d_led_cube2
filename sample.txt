@@ -34,6 +34,10 @@ show:{"orders":[{"id":"filter-jump"},{"id":"object-star","lifetime":10},{"id":"o
 # サイネージ
 show:{"orders":[{"id":"ctrl-loop","count":25},{"id":"filter-rainbow"},{"id":"filter-jump"},{"id":"object-text","text":"3D LED CUBE きょうしつ","size":20,"y":16},{"id":"object-text","text":"LEGOGRAMING","size":20,"y":20},{"id":"object-text","text":"ぬりえ de アニメーション","size":20,"y":18}]}
 
+# サイネージ2
+show:{"orders":[{"id":"ctrl-loop","count":20},{"id":"filter-rainbow"},{"id":"object-text","text":"3D LED CU部 きょうしつ","size":24,"y":0},{"id":"object-text","text":"LEGOGRAMING","size":24,"y":6},{"id":"object-text","text":"ぬりえ de アニメーション","size":24,"y":12}]}
+
+
 show:{"orders":[ {"id":"filter-bk-cloud", "z":7}, {"id":"filter-bk-wave"}, {"id":"filter-skewed"},{"id":"filter-jump"},{"id":"filter-rainbow"}, {"id":"object-star","lifetime":10},{"id":"object-heart"},{"id":"object-fireworks"}]}
 
 show:{"orders":[ {"id":"filter-bk-snows" },{"id":"filter-bk-cloud", "z":7}, {"id":"filter-bk-wave"}, {"id":"filter-skewed"},{"id":"filter-jump"},{"id":"filter-rainbow"}, {"id":"object-star","lifetime":10},{"id":"ctrl-filter-clear"},{"id":"object-heart"},{"id":"object-fireworks"}]}
@@ -45,3 +49,19 @@ show:{"orders":[{"id":"filter-jump"},{"id":"filter-bk-snows"},{"id":"object-tree
 show:{"orders":[{"id":"filter-zoom"},{"id":"filter-jump"},{"id":"object-star", "lifetime":10}]}
 
 show:{"orders":[{"id":"filter-zoom"},{"id":"filter-rainbow"},{"id":"filter-jump"},{"id":"object-heart", "lifetime":10}]}
+
+show:{"orders":[{"id":"filter-rolldown"},{"id":"object-snow-crystal", "lifetime":20}]}
+
+show:{"orders":[{"id":"filter-rolldown"},{"id":"object-snowman", "lifetime":20}]}
+
+show:{"orders":[{"id":"filter-rolldown"},{"id":"object-ghost", "lifetime":20}]}
+
+show:{"orders":[{"id":"filter-jump"},{"id":"filter-rainbow"},{"id":"object-note", "lifetime":20}]}
+
+show:{"orders":[{"id":"filter-rolldown"},{"id":"object-elefant", "lifetime":20}]}
+
+show:{"orders":[{"id":"filter-rolldown"},{"id":"object-socks", "lifetime":20}]}
+
+show:{"orders":[{"id":"filter-spiral"},{"id":"filter-jump"},{"id":"object-star", "lifetime":20}]}
+
+show:{"orders":[{"id":"filter-skewed"},{"id":"filter-jump"},{"id":"object-stickman", "lifetime":20}]}
