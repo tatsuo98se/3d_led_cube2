@@ -147,6 +147,8 @@ def get_coloring_image(scan, rects_file,
 
         # 格子矩形でクリップ
         cropped = hsv_img[r[1]+offset:r[1]+r[3]-offset, r[0] + offset: r[0]+r[2]-offset]
+        cropped = cv2.resize(cropped, (cropped.shape[1]/4, cropped.shape[0]/4))
+
 
 #         cropped_bgr = scan[r[1]+offset:r[1]+r[3]-offset, r[0]+offset:r[0]+r[2]-offset]
 #         plt.imshow(cv2.cvtColor(cropped_bgr, cv2.COLOR_BGR2RGB))
@@ -342,8 +344,9 @@ def show_led(checked):
 
     filters = [
         {"id": "filter-rainbow"},
-        {"id": "filter-jump"},
-        {"id": "filter-jump"},
+        {"id": "filter-zoom"},
+        {"id": "filter-rolldown"},
+        {"id": "filter-spiral"},
         {"id": "filter-wave"},
         {"id": "filter-skewed"},
         {"id": "filter-flat-wave"}
