@@ -11,7 +11,11 @@ class LedSwayingCanvasFilter(LedCanvasFilter):
         self.born_at = time.time()
 
     def set_led(self, x0, y0, z, color):
+<<<<<<< HEAD
         swaying = math.cos((time.time() - self.born_at) * 4) * 0.03
+=======
+        swaying = math.cos((time.time() - self.born_at) * 4) * 0.015
+>>>>>>> 34139ca40fd866f86887b3e1c07b8f77331ec7f4
         T = 4
         s = math.sin(swaying*3.14*T)
         c = math.cos(swaying*3.14*T)
