@@ -1,1 +1,1 @@
-show:{"orders":[{"id":"filter-swaying"},{"id":"filter-bk-wave"},{"id":"object-yacht", "lifetime":20}]}
+show:{"orders":[{"id":"filter-rainbow"},{"id":"ctrl-loop","count":20},{"id":"object-text","text":"3D LED CU部 きょうしつ","size":24,"y":0},{"id":"object-text","text":"ブロックでイルミネーションを光らせよう","size":24,"y":6},{"id":"object-text","text":"ぬりえ de アニメーション","size":24,"y":12}]}
