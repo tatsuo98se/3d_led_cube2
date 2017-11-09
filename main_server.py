@@ -6,9 +6,19 @@ from Queue import Queue
 from libled.led_run_loop import LedRunLoop
 from flask import Flask
 from flask import request
+from os import listdir
+from os.path import isfile, join
 
 app = Flask(__name__)
 q = Queue()
+
+
+def get_logfiles(content_id):
+    logpath = "./log/"+ str(content_id)
+    logfiles = [join(logpath, f) for f in listdir(logpath) if isfile(join(logpath, f)) and not f.startswith('.') ]
+    logfiles.sort()
+    return logfiles
+
 
 @app.route('/')
 def hello_world():
@@ -17,9 +27,10 @@ def hello_world():
 
 @app.route('/api/content/<content_id>')
 def get_content(content_id):
-    logfile = "./log/order_history/"+ str(content_id) + ".log"
-    if os.path.isfile(logfile):
-    	return open(logfile).read()
+    logfiles = get_logfiles(content_id)
+
+    if os.path.isfile(logfiles[0]):
+    	return open(logfiles[0]).read()
     else:
         return "(no contents)"
 
