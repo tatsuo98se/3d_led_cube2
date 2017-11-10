@@ -243,6 +243,9 @@ def create_filter(order, canvas):
     elif oid == 'filter-bk-stars':
         return LedObjectCanvasFilter(canvas, \
                 LedTwinkleStartsObject())
+    elif oid == 'filter-bk-fireworks':
+        return LedObjectCanvasFilter(canvas, \
+                LedFireworksObject())
     else:
         raise KeyError('unknown filter id:{0} i'.format(oid))
 
