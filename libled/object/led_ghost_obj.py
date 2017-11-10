@@ -3,8 +3,8 @@ from ..led_cube import *
 
 class LedGhostObject(LedBitmapsObject):
 
-    def __init__(self, mode = None, lifetime = 0 ):
-        super(LedGhostObject, self).__init__(None, lifetime)
+    def __init__(self,  x=0, y=0, z=0, mode = None, lifetime = 0 ):
+        super(LedGhostObject, self).__init__(None, x, y, z, lifetime)
 
         filenames = [None for i in range(LED_DEPTH)]
 

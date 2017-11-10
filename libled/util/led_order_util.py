@@ -38,6 +38,7 @@ from ..object.led_socks_obj import LedSocksObject
 from ..object.led_stickman_obj import LedStickmanObject
 from ..object.led_yacht_obj import LedYachtObject
 from ..object.led_leafs_obj import LedLeafsObject
+from ..object.led_clouds_obj import LedCloudsObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -124,27 +125,27 @@ def create_object(order):
     elif oid == 'object-snow-crystal':
         obj = LedBitmapObject('asset/image/snow_crystal_1.png', 0, 0, 4, 2, lifetime)
     elif oid == 'object-star':
-        obj = LedStarObject(lifetime)
+        obj = LedStarObject(x, y, z, lifetime)
     elif oid == 'object-heart':
-        obj = LedHeartObject(lifetime)
+        obj = LedHeartObject(x, y, z, lifetime)
     elif oid == 'object-tree':
         s = get_param(order, 's', 0) is 1
-        obj = LedTreeObject(s, lifetime)
+        obj = LedTreeObject(x, y, z, s, lifetime)
     elif oid == 'object-snowman':
-        obj = LedSnowmanObject(lifetime)
+        obj = LedSnowmanObject(x, y, z, lifetime)
     elif oid == 'object-ghost':
         mode = get_param(order, 'mode', None)
-        obj = LedGhostObject(mode, lifetime)
+        obj = LedGhostObject(x, y, z, mode, lifetime)
     elif oid == 'object-note':
-        obj = LedNoteObject(lifetime)
+        obj = LedNoteObject(x, y, z, lifetime)
     elif oid == 'object-elefant':
-        obj = LedElefantObject(lifetime)
+        obj = LedElefantObject(x, y, z, lifetime)
     elif oid == 'object-socks':
         obj = LedSocksObject(lifetime)
     elif oid == 'object-stickman':
-        obj = LedStickmanObject(lifetime)
+        obj = LedStickmanObject(x, y, z, lifetime)
     elif oid == 'object-yacht':
-        obj = LedYachtObject(lifetime)
+        obj = LedYachtObject(x, y, z, lifetime)
     elif oid == 'object-mario-run-anime':
         obj = LedMarioRunObject(z, lifetime)
     elif oid == 'object-bitmap':
@@ -230,9 +231,7 @@ def create_filter(order, canvas):
         return LedObjectCanvasFilter(canvas, \
                 LedScrolledBitmapObject('asset/image/background_grass.png', 0, y, z, cycle))
     elif oid == 'filter-bk-cloud':
-        z = get_param(order, 'z', 7)
-        return LedObjectCanvasFilter(canvas, \
-                LedScrolledBitmapObject('asset/image/background_cloud.png', 0, y, z, cycle))
+        return LedObjectCanvasFilter(canvas, LedCloudsObject())
     elif oid == 'filter-bk-sakura':
         return LedObjectCanvasFilter(canvas, \
                 LedLeafsObject(int(0xffcccc)))

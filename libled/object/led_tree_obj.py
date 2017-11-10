@@ -4,9 +4,12 @@ from ..filter.led_bk_snows_object_canvas_filter import LedSnowsObjectCanvasFilte
 
 class LedTreeObject(LedObject):
 
-    def __init__(self, s = False, lifetime = 0):
+    def __init__(self, x=0, y=0, z=0, s = False, lifetime = 0):
         super(LedTreeObject, self).__init__(lifetime)
         self.snow = s
+        self.x = x
+        self.y = y
+        self.z = z
 
     def draw(self, canvas):
 
@@ -23,6 +26,7 @@ class LedTreeObject(LedObject):
                     'asset/image/tree/s_tree2.png',
                     'asset/image/tree/s_tree1.png',
                 ],
+                self.x, self.y, self.z, 
                 self.lifetime)
         else:
             bitmaps = LedBitmapsObject(\
@@ -36,6 +40,7 @@ class LedTreeObject(LedObject):
                     'asset/image/tree/tree2.png',
                     'asset/image/tree/tree1.png',
                 ],
+                self.x, self.y, self.z, 
                 self.lifetime)
         
         bitmaps.draw(canvas)
