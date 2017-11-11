@@ -39,6 +39,8 @@ from ..object.led_stickman_obj import LedStickmanObject
 from ..object.led_yacht_obj import LedYachtObject
 from ..object.led_leafs_obj import LedLeafsObject
 from ..object.led_clouds_obj import LedCloudsObject
+from ..object.led_scrolled_mountain_obj import LedScrolledMountainObject
+from ..object.led_scrolled_grass_obj import LedScrolledGrassObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -223,13 +225,11 @@ def create_filter(order, canvas):
     elif oid == 'filter-swaying':
         return LedSwayingCanvasFilter(canvas)
     elif oid == 'filter-bk-mountain':
-        z = get_param(order, 'z', 7)
         return LedObjectCanvasFilter(canvas, \
-                LedScrolledBitmapObject('asset/image/background_mountain.png', 0, y, z, cycle))
+                LedScrolledMountainObject())
     elif oid == 'filter-bk-grass':
-        z = get_param(order, 'z', 5)
         return LedObjectCanvasFilter(canvas, \
-                LedScrolledBitmapObject('asset/image/background_grass.png', 0, y, z, cycle))
+                LedScrolledGrassObject())
     elif oid == 'filter-bk-cloud':
         return LedObjectCanvasFilter(canvas, LedCloudsObject())
     elif oid == 'filter-bk-sakura':

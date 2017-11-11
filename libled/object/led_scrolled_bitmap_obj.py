@@ -14,10 +14,11 @@ class LedScrolledBitmapObject(LedObject):
         self.z = z
         self.start = 0
         self.size = self.image.size
-        self.set_timer(float(cycle if cycle else 5.0)/self.size[0])
+        self.set_timer(0.1)
+        self.add = 0.1 / (float(cycle if cycle else 5.0)/self.size[0])
 
     def on_timer(self):
-        self.start += 1
+        self.start += self.add
 
     def get_pixel(self, image, x, y):
         return self.image.getpixel((x % self.size[0] ,y % self.size[1]))
