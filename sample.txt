@@ -66,4 +66,14 @@ show:{"orders":[{"id":"filter-spiral"},{"id":"filter-jump"},{"id":"object-star",
 
 show:{"orders":[{"id":"filter-skewed"},{"id":"filter-jump"},{"id":"object-stickman", "lifetime":20}]}
 
-show:{"orders":[{"id":"filter-swaying"},{"id":"filter-bk-wave"},{"id":"object-heart", "lifetime":20}]}
+show:{"orders":[{"id":"filter-bk-snows"},{"id":"filter-bk-mountain"},{"id":"filter-bk-grass"},{"id":"filter-bk-cloud"},{"id":"object-star", "lifetime":20}]}
+show:{"orders":[{"id":"filter-swaying"},{"id":"filter-bk-wave"},{"id":"filter-bk-fireworks"},{"id":"object-yacht", "lifetime":20}]}
+
+#all reqular
+show:{"orders":[{"id":"object-elefant"},{"id":"object-ghost"},{"id":"object-heart"},{"id":"object-note"},{"id":"object-snowman"},{"id":"object-star"},{"id":"object-stickman"},{"id":"object-tree"},{"id":"object-yacht"}]}
+show:{"orders":[{"id":"filter-swaying"},{"id":"object-star"},{"id":"ctrl-filter-clear"},{"id":"filter-rolldown"},{"id":"object-star"},{"id":"ctrl-filter-clear"},{"id":"filter-zoom"},{"id":"object-star"},{"id":"ctrl-filter-clear"},{"id":"filter-flat-wave"},{"id":"object-star"},{"id":"ctrl-filter-clear"},{"id":"filter-skewed"},{"id":"object-star"},{"id":"ctrl-filter-clear"},{"id":"filter-rainbow"},{"id":"object-star"},{"id":"ctrl-filter-clear"},{"id":"filter-spiral"},{"id":"object-star"},{"id":"ctrl-filter-clear"},{"id":"filter-jump"},{"id":"object-star"},{"id":"ctrl-filter-clear"}]}
+show:{"orders":[{"id":"filter-bk-wave"},{"id":"object-star"},{"id":"ctrl-filter-clear"},{"id":"filter-bk-snows"},{"id":"object-star"},{"id":"ctrl-filter-clear"},{"id":"filter-bk-mountain"},{"id":"object-star"},{"id":"ctrl-filter-clear"},{"id":"filter-bk-grass"},{"id":"object-star"},{"id":"ctrl-filter-clear"},{"id":"filter-bk-stars"},{"id":"object-star"},{"id":"ctrl-filter-clear"},{"id":"filter-bk-fireworks"},{"id":"object-star"},{"id":"ctrl-filter-clear"},{"id":"filter-bk-cloud"},{"id":"object-star"},{"id":"ctrl-filter-clear"},{"id":"filter-bk-sakura"},{"id":"object-star", "lifetime":10},{"id":"ctrl-filter-clear"}]}
+
+show:{"orders":[{"id":"filter-bk-snows"},{"id":"filter-bk-mountain"},{"id":"filter-bk-grass"},{"id":"filter-bk-cloud"},{"id":"object-star", "lifetime":20}]}
+
+show:{"orders":[{"id":"filter-bk-cloud"},{"id":"object-yacht", "lifetime":10}]}

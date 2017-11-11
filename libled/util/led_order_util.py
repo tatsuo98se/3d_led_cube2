@@ -57,6 +57,7 @@ from ..filter.led_zoom_in_out_canvas_filter import LedZoomInOutCanvasFilter
 from ..filter.led_rolldown_canvas_filter import LedRollDownCanvasFilter
 from ..filter.led_spiral_canvas_filter import LedSpiralCanvasFilter
 from ..filter.led_swaying_canvas_filter import LedSwayingCanvasFilter
+from ..filter.led_bk_wave_object_canvas_filter import LedWaveObjectCanvasFilter
 
 
 from ..ctrl.led_filter_clear_ctrl import LedFilterClearCtrl
@@ -236,7 +237,7 @@ def create_filter(order, canvas):
         return LedObjectCanvasFilter(canvas, \
                 LedLeafsObject(int(0xffcccc)))
     elif oid == 'filter-bk-wave':
-        return LedObjectCanvasFilter(canvas, LedWaveObject(range(28, 50), int(0x0000ff)))
+        return LedWaveObjectCanvasFilter(canvas)
     elif oid == 'filter-bk-snows':
         return LedSnowsObjectCanvasFilter(canvas)
     elif oid == 'filter-bk-stars':
