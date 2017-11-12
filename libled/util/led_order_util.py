@@ -58,7 +58,7 @@ from ..filter.led_rolldown_canvas_filter import LedRollDownCanvasFilter
 from ..filter.led_spiral_canvas_filter import LedSpiralCanvasFilter
 from ..filter.led_swaying_canvas_filter import LedSwayingCanvasFilter
 from ..filter.led_bk_wave_object_canvas_filter import LedWaveObjectCanvasFilter
-
+from ..filter.led_bk_sakura_object_canvas_filter import LedSakuraObjectCanvasFilter
 
 from ..ctrl.led_filter_clear_ctrl import LedFilterClearCtrl
 
@@ -132,8 +132,8 @@ def create_object(order):
     elif oid == 'object-heart':
         obj = LedHeartObject(x, y, z, lifetime)
     elif oid == 'object-tree':
-        s = get_param(order, 's', 0) is 1
-        obj = LedTreeObject(x, y, z, s, lifetime)
+        mode = get_param(order, 'mode', None)
+        obj = LedTreeObject(x, y, z, mode, lifetime)
     elif oid == 'object-snowman':
         obj = LedSnowmanObject(x, y, z, lifetime)
     elif oid == 'object-ghost':
@@ -234,8 +234,7 @@ def create_filter(order, canvas):
     elif oid == 'filter-bk-cloud':
         return LedObjectCanvasFilter(canvas, LedCloudsObject())
     elif oid == 'filter-bk-sakura':
-        return LedObjectCanvasFilter(canvas, \
-                LedLeafsObject(int(0xffcccc)))
+        return LedSakuraObjectCanvasFilter(canvas)
     elif oid == 'filter-bk-wave':
         return LedWaveObjectCanvasFilter(canvas)
     elif oid == 'filter-bk-snows':
