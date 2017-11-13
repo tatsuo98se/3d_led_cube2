@@ -337,15 +337,13 @@ def show_led(checked, destip):
     options = [
         {"id": "filter-zoom"},
         {"id": "filter-rainbow"},
-        {"id": "filter-bk-snows", "lifetime": 30, "z": 7},
+        {"id": "filter-bk-snows"},
         {"id": "filter-bk-grass", "lifetime": 30, "z": 4},
         {"id": "filter-wave"}
     ]
 
     filters = [
-#        {"id": "filter-fadeinout"},
-#        {"id": "filter-heartbeats"},
-        {"id": "filter-swaing"},
+        {"id": "filter-swaying"},
         {"id": "filter-rolldown"},
         {"id": "filter-spiral"},
         {"id": "filter-skewed"},
@@ -354,7 +352,8 @@ def show_led(checked, destip):
     ]
 
     backgrounds = [
-        {"id": "filter-bk-snows", "lifetime": 30, "z": 7},
+        {"id": "filter-bk-snows"},
+        {"id": "filter-bk-sakura"},
         {"id": "filter-bk-mountain", "lifetime": 30, "z": 6},
         {"id": "filter-bk-cloud", "lifetime": 30, "z": 7},
         {"id": "filter-bk-grass", "lifetime": 30, "z": 4},
