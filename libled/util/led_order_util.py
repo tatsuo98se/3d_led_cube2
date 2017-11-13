@@ -92,7 +92,7 @@ def flatten_orders(orders):
 
     return flatten
 
-DEFAULT_LIFETIME = 5
+DEFAULT_LIFETIME = 13 # 2017.11.13 検証結果 コレぐらいの時間がちょうどいい
 
 def create_object(order):
     oid = order['id']
