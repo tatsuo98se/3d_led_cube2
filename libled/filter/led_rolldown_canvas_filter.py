@@ -11,6 +11,7 @@ class LedRollDownCanvasFilter(LedCanvasFilter):
         self.born_at = time.time()
 
     def pre_draw(self):
+        super(LedRollDownCanvasFilter, self).pre_draw()
         self.offset = int(round(time.time() * 10 - self.born_at * 10))
         
     def set_led(self, x, y, z, color):

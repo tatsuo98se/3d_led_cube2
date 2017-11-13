@@ -2,6 +2,7 @@
 import urllib2
 from optparse import OptionParser
 from libled.led_run_loop import LedRunLoop
+from libled.util.common_util import *
 
 class LedHttpClient(LedRunLoop):
 
@@ -25,9 +26,9 @@ class LedHttpClient(LedRunLoop):
 
     def read_data(self):
         print('Press Enter...')
-        _ = raw_input('>>> ')
+        rev_id = raw_input('>>> ')
 
-        content_url = "http://" + self.host + "/api/content/" + str(self.student)
+        content_url = "http://" + self.host + "/api/content/" + str(self.student) + "/" + str(to_int_safe(rev_id))
         return urllib2.urlopen(content_url).read()
  
 

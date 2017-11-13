@@ -6,20 +6,32 @@ from Queue import Queue
 from libled.led_run_loop import LedRunLoop
 from flask import Flask
 from flask import request
+from os import listdir
+from os.path import isfile, join
+from libled.util.common_util import *
 
 app = Flask(__name__)
 q = Queue()
+
+
+def get_logfiles(content_id):
+    logpath = "./log/"+ str(content_id)
+    logfiles = [join(logpath, f) for f in listdir(logpath) if isfile(join(logpath, f)) and not f.startswith('.') ]
+    logfiles.sort(reverse=True)
+    return logfiles
 
 @app.route('/')
 def hello_world():
     return 'Hello, World!'
 
 
-@app.route('/api/content/<content_id>')
-def get_content(content_id):
-    logfile = "./log/order_history/"+ str(content_id) + ".log"
-    if os.path.isfile(logfile):
-    	return open(logfile).read()
+@app.route('/api/content/<content_id>/<rev_id>')
+def get_content(content_id, rev_id):
+    logfiles = get_logfiles(content_id)
+    i = to_int_safe(rev_id)
+
+    if len(logfiles) > 0 and i < len(logfiles) and os.path.isfile(logfiles[i]):
+    	return open(logfiles[i]).read()
     else:
         return "(no contents)"
 
@@ -58,7 +70,7 @@ class LedTcpServer(LedRunLoop):
 
 class FlaskThread(threading.Thread):
 
-    def __init__(self, app, host='0.0.0.0', port=5000):
+    def __init__(self, app, host='0.0.0.0', port=5001):
         super(FlaskThread, self).__init__()
         self.app = app
         self.host = host
