@@ -107,8 +107,8 @@ def create_object(order):
 
     if oid == 'object-clear':
         obj = LedClearObject(lifetime)
-    if oid== 'object-fill':
-        obj = LedFillObject(Color(1,0,0), lifetime)
+    if oid== 'object-fill-white':
+        obj = LedFillObject(Color(1,1,1), lifetime)
     elif oid == 'object-ripple':
         obj = LedRandomRippleObject(lifetime)
     elif oid == 'object-mario':

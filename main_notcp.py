@@ -2,12 +2,14 @@
 from libled.led_run_loop import LedRunLoop
 import codecs
 import sys
+import platform
 
 class LedRawTextClient(LedRunLoop):
 
     def __init__(self):
         super(LedRawTextClient, self).__init__()
-        sys.stdin = codecs.getreader('shift_jis')(sys.stdin) # set input codec
+        if sys.platform == 'win32':
+            sys.stdin = codecs.getreader('shift_jis')(sys.stdin) # set input codec
 
     def on_finish(self):
         pass
