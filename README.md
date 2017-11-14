@@ -79,7 +79,7 @@ https://www.imagemagick.org/script/download.php
 + スキャン解像度
  200dpi
 + スキャン入稿フォルダ
-./asset/coloring/scan_in/
+./asset/coloring/scan_in2/
 + 塗り絵フォーム
 ./asset/coloring/3dledcube_form.xlsx
 
@@ -118,4 +118,10 @@ PCのブラウザからCWISでアクセスする.
 以下を設定する.    
 　解像度：200dpi  
 　カラーモード：カラー   
-　画像フォーマット：Jpeg  
+　画像フォーマット：TIFF   
+　フォルダ作成：ON   
++ DocuPrint CM210 z の場合の追加手順
+./asset/coloring/MoveTiffFile.cmdを実行する  
+  -> scan_inに格納されたTiff画像を、scan_in2へ移動する
+
+以上
