@@ -288,7 +288,7 @@ class ChangeHandler(FileSystemEventHandler):
                 checked = create_coloring(event.src_path,
                                           option_saturation_max,
                                           option_brightness_max)
-                self.show_led_on_multiprocess(checked)
+                self.show_led_on_multiprocess(checked, destip)
             except Exception:
                 print("Unexpected error:", sys.exc_info()[0])
                 traceback.print_exc()
@@ -306,15 +306,15 @@ class ChangeHandler(FileSystemEventHandler):
                     checked = create_coloring(os.path.join(SCAN_TMP, img),
                                               option_saturation_max,
                                               option_brightness_max)
-                    self.show_led_on_multiprocess(checked)
+                    self.show_led_on_multiprocess(checked, destip)
             except Exception:
                 traceback.print_exc()
 
-    def show_led_on_multiprocess(self, checked):
+    def show_led_on_multiprocess(self, checked, destip):
         # show_led(checked)
         # return
     
-        p = Process(target=show_led, name='show_led', args=(checked,))
+        p = Process(target=show_led, name='show_led', args=(checked,destip,))
         if self.led_process is not None and self.led_process.is_alive():
             self.led_process.terminate()
             self.led_process.join()
@@ -332,27 +332,28 @@ class ChangeHandler(FileSystemEventHandler):
         print('%s has been deleted.' % event.src_path)
 
 
-def show_led(checked):
+def show_led(checked, destip):
 
     options = [
-        {"id": "filter-skewed"},
+        {"id": "filter-zoom"},
         {"id": "filter-rainbow"},
-        {"id": "filter-bk-snows", "lifetime": 30, "z": 7},
+        {"id": "filter-bk-snows"},
         {"id": "filter-bk-grass", "lifetime": 30, "z": 4},
         {"id": "filter-wave"}
     ]
 
     filters = [
-        {"id": "filter-rainbow"},
-        {"id": "filter-zoom"},
+        {"id": "filter-swaying"},
         {"id": "filter-rolldown"},
         {"id": "filter-spiral"},
-        {"id": "filter-wave"},
         {"id": "filter-skewed"},
-        {"id": "filter-flat-wave"}
+        {"id": "filter-flat-wave"},
+        {"id": "filter-jump"}
     ]
+
     backgrounds = [
-        {"id": "filter-bk-snows", "lifetime": 30, "z": 7},
+        {"id": "filter-bk-snows"},
+        {"id": "filter-bk-sakura"},
         {"id": "filter-bk-mountain", "lifetime": 30, "z": 6},
         {"id": "filter-bk-cloud", "lifetime": 30, "z": 7},
         {"id": "filter-bk-grass", "lifetime": 30, "z": 4},
@@ -367,9 +368,15 @@ def show_led(checked):
     dic["orders"].append({"id": "ctrl-loop", "count": LOOP_COUNT/len(colorings)})
     for coloring in colorings:
         with open(SCAN_OUT + coloring, "rb") as f:
-            dic["orders"].append({"id": "object-bitmap", "lifetime": 1, "z": 1, "thick": 3, "bitmap": base64.b64encode(f.read())})
-    led = LedFramework()
-    led.show(dic)
+            dic["orders"].append({"id": "object-bitmap", "lifetime": 1, "z": 0, "thick": 3, "bitmap": base64.b64encode(f.read())})
+
+    if destip is not None:
+        led.SetUrl(destip)
+    ledfw = LedFramework()
+    ledfw.show(dic)
+
+    dic = {}
+    dic = {"orders": []}
 
     # オプションに従って表示
     for i, chk in enumerate(checked):
@@ -386,15 +393,14 @@ def show_led(checked):
     colorings = os.listdir(SCAN_OUT)
     for coloring in colorings:
         with open(SCAN_OUT + coloring, "rb") as f:
-            dic["orders"].append({"id": "object-bitmap", "lifetime": 1, "z": 1, "thick": 3, "bitmap": base64.b64encode(f.read())})
+            dic["orders"].append({"id": "object-bitmap", "lifetime": 1, "z": 0, "thick": 3, "bitmap": base64.b64encode(f.read())})
 
-    print(dic)
-    led = LedFramework()
-    led.show(dic)
+    ledfw.show(dic)
 
 
 option_saturation_max = True
 option_brightness_max = True
+destip = None
 
 if __name__ == "__main__":
 
@@ -412,9 +418,9 @@ if __name__ == "__main__":
     options, _ = parser.parse_args()
 
     if options.dest is not None:
-        led.SetUrl(options.dest)
-        if options.saturation is not None:
-            option_saturation_max = True
+        destip = options.dest
+    if options.saturation is not None:
+        option_saturation_max = True
     if options.brightness is not None:
         option_brightness_max = True
 
