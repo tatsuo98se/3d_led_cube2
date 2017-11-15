@@ -15,6 +15,7 @@ from multiprocessing import Process
 from optparse import OptionParser
 
 import numpy as np
+from watchdog import events
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
@@ -253,7 +254,7 @@ def create_coloring(src_path, saturation_max=False, brightness_max=False):
     return checked
 
 
-SCAN_IN = 'asset/coloring/scan_in/'
+SCAN_IN = 'asset/coloring/scan_in2/'
 SCAN_OUT = 'asset/coloring/scan_out/'
 SCAN_TMP = 'asset/coloring/scan_tmp'
 BASEDIR = SCAN_IN
@@ -266,11 +267,32 @@ class ChangeHandler(FileSystemEventHandler):
 
     def getext(self, filename):
         return os.path.splitext(filename)[-1].lower()
-    
-    def on_created(self, event):
 
+    def on_created(self, event):
+        print('%s has been created.' % event.src_path)
         if event.is_directory:
             return
+        if isinstance(event, events.FileCreatedEvent):
+            if self.getext(event.src_path) in ('.jpg','.tif','.tiff', '.png'):
+                print('%s has been created.' % event.src_path)
+                self.do_coloring(event.src_path)
+
+    def on_modified(self, event):
+        print('%s has been modified.' % event.src_path)
+        if event.is_directory:
+            return
+        if isinstance(event, events.FileModifiedEvent):
+            if self.getext(event.src_path) in ('.jpg','.tif','.tiff', '.png'):
+                print('%s has been modified.' % event.src_path)
+                self.do_coloring(event.src_path)
+
+    def on_deleted(self, event):
+        if event.is_directory:
+            return
+        print('%s has been deleted.' % event.src_path)
+
+    def do_coloring(self, src_path):
+
         if self.led_process is not None and self.led_process.is_alive():
             pass
         else:
@@ -278,27 +300,22 @@ class ChangeHandler(FileSystemEventHandler):
                 shutil.rmtree(SCAN_OUT)
                 os.mkdir(SCAN_OUT)
 
-        if self.getext(event.src_path) in ('.jpg', '.jpeg', '.png'):
-            print('%s has been created.' % event.src_path)
+        if self.getext(src_path) in ('.jpg', '.jpeg', '.png'):
             try:
-                # create_coloring(event.src_path, False, False)
-                # create_coloring(event.src_path, True)
-                # create_coloring(event.src_path, False, True)
-                # create_coloring(event.src_path, True, True)
-                checked = create_coloring(event.src_path,
+                checked = create_coloring(src_path,
                                           option_saturation_max,
                                           option_brightness_max)
                 self.show_led_on_multiprocess(checked, destip)
             except Exception:
                 print("Unexpected error:", sys.exc_info()[0])
                 traceback.print_exc()
-        elif self.getext(event.src_path) in ('.tif'):
+        elif self.getext(src_path) in ('.tif', '.tiff'):
             # マルチページTIFFをImageMagickでJpegに分解して画像生成
             try:
                 if os.path.exists(SCAN_TMP):
                     shutil.rmtree(SCAN_TMP)
                 os.mkdir(SCAN_TMP)
-                args = ['mogrify.exe', '-path', os.path.abspath(SCAN_TMP), '-format', 'jpeg', os.path.abspath(event.src_path)]
+                args = ['mogrify.exe', '-path', os.path.abspath(SCAN_TMP), '-format', 'jpeg', os.path.abspath(src_path)]
                 res = subprocess.check_output(args)
                 print "convert tiff2jpg succeeded.", res
                 splitted_imgs = os.listdir(SCAN_TMP)
@@ -311,9 +328,6 @@ class ChangeHandler(FileSystemEventHandler):
                 traceback.print_exc()
 
     def show_led_on_multiprocess(self, checked, destip):
-        # show_led(checked)
-        # return
-    
         p = Process(target=show_led, name='show_led', args=(checked,destip,))
         if self.led_process is not None and self.led_process.is_alive():
             self.led_process.terminate()
@@ -321,15 +335,6 @@ class ChangeHandler(FileSystemEventHandler):
         self.led_process = p
         self.led_process.start()
 
-    def on_modified(self, event):
-        if event.is_directory:
-            return
-        print('%s has been modified.' % event.src_path)
-
-    def on_deleted(self, event):
-        if event.is_directory:
-            return
-        print('%s has been deleted.' % event.src_path)
 
 
 def show_led(checked, destip):
@@ -338,7 +343,7 @@ def show_led(checked, destip):
         {"id": "filter-zoom"},
         {"id": "filter-rainbow"},
         {"id": "filter-bk-snows"},
-        {"id": "filter-bk-grass", "lifetime": 30, "z": 4},
+        {"id": "filter-bk-grass", "z": 4},
         {"id": "filter-wave"}
     ]
 
@@ -354,14 +359,14 @@ def show_led(checked, destip):
     backgrounds = [
         {"id": "filter-bk-snows"},
         {"id": "filter-bk-sakura"},
-        {"id": "filter-bk-mountain", "lifetime": 30, "z": 6},
-        {"id": "filter-bk-cloud", "lifetime": 30, "z": 7},
-        {"id": "filter-bk-grass", "lifetime": 30, "z": 4},
+        {"id": "filter-bk-mountain", "z": 6},
+        {"id": "filter-bk-cloud", "z": 7},
+        {"id": "filter-bk-grass", "z": 4},
     ]
 
     dic = {"orders": []}
 
-    LOOP_COUNT = 15
+    LOOP_COUNT = 10
     
     # 最初は画像のみを表示
     colorings = os.listdir(SCAN_OUT)
@@ -383,8 +388,8 @@ def show_led(checked, destip):
         if chk and i < len(options):
             dic["orders"].append(options[i])
             if i == 3:   # 草原の場合は雲と山も
-                dic["orders"].append({"id": "filter-bk-mountain", "lifetime": 30, "z": 6})
-                dic["orders"].append({"id": "filter-bk-cloud", "lifetime": 30, "z": 7})
+                dic["orders"].append({"id": "filter-bk-mountain", "z": 6})
+                dic["orders"].append({"id": "filter-bk-cloud", "z": 7})
         elif chk:   # [?] はランダム
             dic["orders"].append(random.choice(filters))
             dic["orders"].append(random.choice(backgrounds))
@@ -398,8 +403,8 @@ def show_led(checked, destip):
     ledfw.show(dic)
 
 
-option_saturation_max = True
-option_brightness_max = True
+option_saturation_max = False
+option_brightness_max = False
 destip = None
 
 if __name__ == "__main__":
@@ -424,14 +429,14 @@ if __name__ == "__main__":
     if options.brightness is not None:
         option_brightness_max = True
 
-    while 1:
-        event_handler = ChangeHandler()
-        observer = Observer()
-        observer.schedule(event_handler, BASEDIR, recursive=True)
-        observer.start()
-        try:
-            while True:
-                time.sleep(1)
-        except KeyboardInterrupt:
-            observer.stop()
-        observer.join()
+    _event_handler = ChangeHandler()
+    _observer = Observer()
+    _observer.schedule(_event_handler, BASEDIR, recursive=True)
+    _observer.start()
+
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        _observer.stop()
+    _observer.join()
