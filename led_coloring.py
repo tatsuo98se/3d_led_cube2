@@ -414,20 +414,18 @@ if __name__ == "__main__":
                       action="store", type="string", dest="dest", 
                       help="(optional) device ip adddres.")
     parser.add_option("-s", "--saturation",
-                      action="store", type="string", dest="saturation", 
+                      action="store_true", dest="option_saturation_max",
                       help="(optional) set the saturation to the maximum .")
-    parser.add_option("-v", "--brightness",
-                      action="store", type="string", dest="brightness", 
+    parser.add_option("-b", "--brightness",
+                      action="store_true", dest="option_brightness_max", 
                       help="(optional) set the brightness to the maximum .")
 
     options, _ = parser.parse_args()
 
     if options.dest is not None:
         destip = options.dest
-    if options.saturation is not None:
-        option_saturation_max = True
-    if options.brightness is not None:
-        option_brightness_max = True
+    option_saturation_max = options.option_saturation_max
+    option_brightness_max = options.option_brightness_max
 
     _event_handler = ChangeHandler()
     _observer = Observer()
