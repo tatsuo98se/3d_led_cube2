@@ -23,6 +23,7 @@ class LedZoomInOutCanvasFilter(LedCanvasFilter):
        return np.array([[[ [[0]*4] * LED_DEPTH] * LED_HEIGHT ] * LED_WIDTH ] , dtype = np.uint8)
 
     def pre_draw(self):
+        super(LedZoomInOutCanvasFilter, self).pre_draw()
         self.scale = math.sin(time.time()) / 2 + 1.0 
 
         self.src = self.get_new_canvas()
