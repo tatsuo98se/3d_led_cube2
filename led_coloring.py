@@ -15,6 +15,7 @@ from multiprocessing import Process
 from optparse import OptionParser
 
 import numpy as np
+#from matplotlib import pyplot as plt
 from watchdog import events
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
@@ -30,8 +31,8 @@ GRID_ROWS = 32
 def search_mark(img, pos):
     u""" search registar mark """
 
-    frmX, toX = 0, 280  # x mark range
-    frmY, toY = 0, 280  # y mark range
+    frmX, toX = 0, 250  # x mark range
+    frmY, toY = 0, 250  # y mark range
     if pos == 0:  # left upper
         mark = img[frmY:toY, frmX:toX]
         rect = {"x": frmX, "y": frmY}
@@ -46,9 +47,17 @@ def search_mark(img, pos):
         rect = {"x": img.shape[1]-toX, "y": img.shape[0]-toY}
 
     gray = cv2.cvtColor(mark, cv2.COLOR_BGR2GRAY)  # モノクロ化
-    ret, bin = cv2.threshold(gray, 127, 255, 0)  # ２値化
-#    cv2.imshow('out',bin)  # トンボの範囲を表示
-#    cv2.waitKey(1000)  #1秒停止
+    ret, bin0 = cv2.threshold(gray, 127, 255, 0)  # ２値化
+    # ノイズ除去
+    kernel = np.ones((2,2),np.uint8)
+    bin = cv2.morphologyEx(bin0, cv2.MORPH_CLOSE, kernel)
+    '''
+    cv2.imshow('bin0',bin0)
+    cv2.imshow('opening',bin)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    '''
+
     # 輪郭の抽出
     contours, hierarchy = cv2.findContours(bin,
                                            cv2.RETR_TREE,
@@ -75,6 +84,22 @@ def search_registration_marks(img):
     ex0, ey0 = search_mark(img, 2)  # 左下のトンボの重心（基準）
     fx0, fy0 = search_mark(img, 3)  # 右下のトンボの重心（基準）
 
+    count_blanks = 0
+    if cx0 == 0 and cy0 == 0:
+        count_blanks += 1
+    if dx0 == 0 and dy0 == 0:
+        count_blanks += 1
+    if ex0 == 0 and ey0 == 0:
+        count_blanks += 1
+    if fx0 == 0 and fy0 == 0:
+        count_blanks += 1
+
+    # トンボ3点検出失敗した場合はNoneを返す
+    if count_blanks > 1 or count_blanks == 0:
+        return None
+
+    pts2 = np.float32([[cx0, cy0], [dx0, dy0], [fx0, fy0]])
+
     if (ex0 == 0 & ey0 == 0):
         pts2 = np.float32([[cx0, cy0], [dx0, dy0], [fx0, fy0]])
     elif (dx0 == 0 & dy0 == 0):
@@ -99,19 +124,23 @@ def normalize_scan_image(scan_path, form_path):
     pts1 = search_registration_marks(scan)
 #    print 'scan = ', pts1
 
-    # 画面に収まるようにリサイズして表示
-#    resized_scan = cv2.resize(scan, (scan.shape[1]/4, scan.shape[0]/4))
-#    cv2.imshow("scan", resized_scan)
+    if pts1 is not None:
+        # アフィン変換
+        height, width, ch = src.shape
+        M = cv2.getAffineTransform(pts1, pts2)
+        dst = cv2.warpAffine(scan, M, (width, height))
 
-    # アフィン変換
-    height, width, ch = src.shape
-    M = cv2.getAffineTransform(pts1, pts2)
-    dst = cv2.warpAffine(scan, M, (width, height))
-
-#    resized_dst = cv2.resize(dst, (dst.shape[1]/4, dst.shape[0]/4))
-#    cv2.imshow("affine", resized_dst)
-
-    return dst
+        # 画面に収まるようにリサイズして表示
+        '''
+        resized_scan = cv2.resize(scan, (scan.shape[1]/4, scan.shape[0]/4))
+        resized_dst = cv2.resize(dst, (dst.shape[1]/4, dst.shape[0]/4))
+        cv2.imshow("scan", resized_scan)
+        cv2.imshow("affine", resized_dst)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+        '''
+        return dst
+    return scan
 
 
 def get_coloring_image(scan, rects_file,
@@ -151,9 +180,9 @@ def get_coloring_image(scan, rects_file,
         cropped = cv2.resize(cropped, (cropped.shape[1]/4, cropped.shape[0]/4))
 
 
-#         cropped_bgr = scan[r[1]+offset:r[1]+r[3]-offset, r[0]+offset:r[0]+r[2]-offset]
-#         plt.imshow(cv2.cvtColor(cropped_bgr, cv2.COLOR_BGR2RGB))
-#         plt.show()
+#        cropped_bgr = scan[r[1]+offset:r[1]+r[3]-offset, r[0]+offset:r[0]+r[2]-offset]
+#        plt.imshow(cv2.cvtColor(cropped_bgr, cv2.COLOR_BGR2RGB))
+#        plt.show()
 
         # HSVそれぞれの平均を求める（彩度Sがしきい値よりも大きいピクセルのみを採用）
         valid_h_list = [[hsv[0] for hsv in img_line if hsv[1] > saturation_threshold] for img_line in cropped]
@@ -187,6 +216,7 @@ def get_coloring_image(scan, rects_file,
 
     return bgr_img
 
+
 def get_checkbox_index(scan, rects_file):
     ''' get chacked box index from scan img'''
 
@@ -212,6 +242,8 @@ def get_checkbox_index(scan, rects_file):
 
         # 格子矩形でクリップ
         cropped = hsv_img[r[1]+offset:r[1]+r[3]-offset, r[0] + offset: r[0]+r[2]-offset]
+#        plt.imshow(cv2.cvtColor(cropped, cv2.COLOR_HSV2RGB))
+#        plt.show()
 
         # 彩度Sがしきい値よりも大きいピクセルのみを採用
         valid_h_list = [[hsv[0] for hsv in img_line if hsv[1] > saturation_threshold] for img_line in cropped]
@@ -237,9 +269,9 @@ def create_coloring(src_path, saturation_max=False, brightness_max=False):
 
     # 塗り絵画像を取得
     bgr_img = get_coloring_image(scan,
-                               'asset/coloring/rects.json',
-                               saturation_max,
-                               brightness_max)
+                                 'asset/coloring/rects.json',
+                                 saturation_max,
+                                 brightness_max)
 
     dst_path = SCAN_OUT + dt.now().strftime('%Y%m%d_%H%M%S_%f') + '.png'
     cv2.imwrite(dst_path, bgr_img)
@@ -248,6 +280,7 @@ def create_coloring(src_path, saturation_max=False, brightness_max=False):
 
     # チェックボックスを取得
     checked = get_checkbox_index(scan, 'asset/coloring/rects_checkbox.json')
+    print checked
     # matplotlibの色空間はRGB
 #    plt.imshow(cv2.cvtColor(bgr_img, cv2.COLOR_BGR2RGB))
 #    plt.show()
@@ -274,17 +307,15 @@ class ChangeHandler(FileSystemEventHandler):
             return
         if isinstance(event, events.FileCreatedEvent):
             if self.getext(event.src_path) in ('.jpg','.tif','.tiff', '.png'):
-                print('%s has been created.' % event.src_path)
                 self.do_coloring(event.src_path)
 
     def on_modified(self, event):
         print('%s has been modified.' % event.src_path)
         if event.is_directory:
             return
-        if isinstance(event, events.FileModifiedEvent):
-            if self.getext(event.src_path) in ('.jpg','.tif','.tiff', '.png'):
-                print('%s has been modified.' % event.src_path)
-                self.do_coloring(event.src_path)
+#        if isinstance(event, events.FileModifiedEvent):
+#            if self.getext(event.src_path) in ('.jpg','.tif','.tiff', '.png'):
+#                self.do_coloring(event.src_path)
 
     def on_deleted(self, event):
         if event.is_directory:
