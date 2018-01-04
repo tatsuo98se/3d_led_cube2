@@ -16,6 +16,8 @@ elif sys.platform == 'win32':
         ledlib = dirname + '/ledLib64.dll'
     else:
         ledlib = dirname + '/ledLib32.dll'
+elif 'linux' in sys.platform:
+    ledlib = dirname + '/ledLib.so' # build for raspberry pi
 else:
     raise NotImplementedError('Unsupported OS.' + sys.platform)
 
