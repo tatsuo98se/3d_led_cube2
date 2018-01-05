@@ -16,6 +16,8 @@ elif sys.platform == 'win32':
         ledlib = dirname + '/ledLib64.dll'
     else:
         ledlib = dirname + '/ledLib32.dll'
+elif 'linux' in sys.platform and platform.machine() == 'armv7l':
+    ledlib = dirname + '/ledLibarmv7l.so' # for Raspberry PI3
 else:
     raise NotImplementedError('Unsupported OS.' + sys.platform)
 
@@ -41,8 +43,11 @@ class LedCube(object):
     def SetLed(self, x, y, z, color):
         # print("led.SetLed()") comment out for performance
         self.led.SetLed(x, y, z, color)
-
+    
     def Wait(self, msec):
-        self.led.Wait(msec)
+        self.led.Wait(int(msec))
+
+    def EnableSimulator(self, is_enable):
+        self.led.EnableSimulator(is_enable)
 
 led = LedCube(cdll.LoadLibrary(ledlib))

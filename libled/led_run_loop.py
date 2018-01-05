@@ -24,12 +24,18 @@ class LedRunLoop(object):
         self.opt_parser.add_option("-d", "--dest",
                         action="store", type="string", dest="dest", 
                         help="(optional) ip address of destination device which connect to real 3d cube.")
+                        
+        self.opt_parser.add_option("-m", "--hide-simulator",
+                        action="store_true", dest="hide_simulator", default=False,
+                        help="(optional) hide simulator window")
 
         options, _ = self.opt_parser.parse_args()
 
         if options.dest != None:
             print("External Connect To: " + (options.dest))
             led.SetUrl(options.dest)
+        
+        led.EnableSimulator(not options.hide_simulator)
 
         th = threading.Thread(name="message_receive_loop", target=self.message_receive_loop, args=(self.message,))
         th.setDaemon(True)
