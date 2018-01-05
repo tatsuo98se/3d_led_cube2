@@ -15,6 +15,8 @@ from multiprocessing import Process
 from optparse import OptionParser
 
 import numpy as np
+#from matplotlib import pyplot as plt
+from watchdog import events
 from watchdog.events import FileSystemEventHandler
 from watchdog.observers import Observer
 
@@ -29,8 +31,8 @@ GRID_ROWS = 32
 def search_mark(img, pos):
     u""" search registar mark """
 
-    frmX, toX = 0, 280  # x mark range
-    frmY, toY = 0, 280  # y mark range
+    frmX, toX = 0, 250  # x mark range
+    frmY, toY = 0, 250  # y mark range
     if pos == 0:  # left upper
         mark = img[frmY:toY, frmX:toX]
         rect = {"x": frmX, "y": frmY}
@@ -45,9 +47,17 @@ def search_mark(img, pos):
         rect = {"x": img.shape[1]-toX, "y": img.shape[0]-toY}
 
     gray = cv2.cvtColor(mark, cv2.COLOR_BGR2GRAY)  # モノクロ化
-    ret, bin = cv2.threshold(gray, 127, 255, 0)  # ２値化
-#    cv2.imshow('out',bin)  # トンボの範囲を表示
-#    cv2.waitKey(1000)  #1秒停止
+    ret, bin0 = cv2.threshold(gray, 127, 255, 0)  # ２値化
+    # ノイズ除去
+    kernel = np.ones((2,2),np.uint8)
+    bin = cv2.morphologyEx(bin0, cv2.MORPH_CLOSE, kernel)
+    '''
+    cv2.imshow('bin0',bin0)
+    cv2.imshow('opening',bin)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    '''
+
     # 輪郭の抽出
     contours, hierarchy = cv2.findContours(bin,
                                            cv2.RETR_TREE,
@@ -74,6 +84,22 @@ def search_registration_marks(img):
     ex0, ey0 = search_mark(img, 2)  # 左下のトンボの重心（基準）
     fx0, fy0 = search_mark(img, 3)  # 右下のトンボの重心（基準）
 
+    count_blanks = 0
+    if cx0 == 0 and cy0 == 0:
+        count_blanks += 1
+    if dx0 == 0 and dy0 == 0:
+        count_blanks += 1
+    if ex0 == 0 and ey0 == 0:
+        count_blanks += 1
+    if fx0 == 0 and fy0 == 0:
+        count_blanks += 1
+
+    # トンボ3点検出失敗した場合はNoneを返す
+    if count_blanks > 1 or count_blanks == 0:
+        return None
+
+    pts2 = np.float32([[cx0, cy0], [dx0, dy0], [fx0, fy0]])
+
     if (ex0 == 0 & ey0 == 0):
         pts2 = np.float32([[cx0, cy0], [dx0, dy0], [fx0, fy0]])
     elif (dx0 == 0 & dy0 == 0):
@@ -98,19 +124,23 @@ def normalize_scan_image(scan_path, form_path):
     pts1 = search_registration_marks(scan)
 #    print 'scan = ', pts1
 
-    # 画面に収まるようにリサイズして表示
-#    resized_scan = cv2.resize(scan, (scan.shape[1]/4, scan.shape[0]/4))
-#    cv2.imshow("scan", resized_scan)
+    if pts1 is not None:
+        # アフィン変換
+        height, width, ch = src.shape
+        M = cv2.getAffineTransform(pts1, pts2)
+        dst = cv2.warpAffine(scan, M, (width, height))
 
-    # アフィン変換
-    height, width, ch = src.shape
-    M = cv2.getAffineTransform(pts1, pts2)
-    dst = cv2.warpAffine(scan, M, (width, height))
-
-#    resized_dst = cv2.resize(dst, (dst.shape[1]/4, dst.shape[0]/4))
-#    cv2.imshow("affine", resized_dst)
-
-    return dst
+        # 画面に収まるようにリサイズして表示
+        '''
+        resized_scan = cv2.resize(scan, (scan.shape[1]/4, scan.shape[0]/4))
+        resized_dst = cv2.resize(dst, (dst.shape[1]/4, dst.shape[0]/4))
+        cv2.imshow("scan", resized_scan)
+        cv2.imshow("affine", resized_dst)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+        '''
+        return dst
+    return scan
 
 
 def get_coloring_image(scan, rects_file,
@@ -150,9 +180,9 @@ def get_coloring_image(scan, rects_file,
         cropped = cv2.resize(cropped, (cropped.shape[1]/4, cropped.shape[0]/4))
 
 
-#         cropped_bgr = scan[r[1]+offset:r[1]+r[3]-offset, r[0]+offset:r[0]+r[2]-offset]
-#         plt.imshow(cv2.cvtColor(cropped_bgr, cv2.COLOR_BGR2RGB))
-#         plt.show()
+#        cropped_bgr = scan[r[1]+offset:r[1]+r[3]-offset, r[0]+offset:r[0]+r[2]-offset]
+#        plt.imshow(cv2.cvtColor(cropped_bgr, cv2.COLOR_BGR2RGB))
+#        plt.show()
 
         # HSVそれぞれの平均を求める（彩度Sがしきい値よりも大きいピクセルのみを採用）
         valid_h_list = [[hsv[0] for hsv in img_line if hsv[1] > saturation_threshold] for img_line in cropped]
@@ -186,6 +216,7 @@ def get_coloring_image(scan, rects_file,
 
     return bgr_img
 
+
 def get_checkbox_index(scan, rects_file):
     ''' get chacked box index from scan img'''
 
@@ -211,6 +242,8 @@ def get_checkbox_index(scan, rects_file):
 
         # 格子矩形でクリップ
         cropped = hsv_img[r[1]+offset:r[1]+r[3]-offset, r[0] + offset: r[0]+r[2]-offset]
+#        plt.imshow(cv2.cvtColor(cropped, cv2.COLOR_HSV2RGB))
+#        plt.show()
 
         # 彩度Sがしきい値よりも大きいピクセルのみを採用
         valid_h_list = [[hsv[0] for hsv in img_line if hsv[1] > saturation_threshold] for img_line in cropped]
@@ -236,9 +269,9 @@ def create_coloring(src_path, saturation_max=False, brightness_max=False):
 
     # 塗り絵画像を取得
     bgr_img = get_coloring_image(scan,
-                               'asset/coloring/rects.json',
-                               saturation_max,
-                               brightness_max)
+                                 'asset/coloring/rects.json',
+                                 saturation_max,
+                                 brightness_max)
 
     dst_path = SCAN_OUT + dt.now().strftime('%Y%m%d_%H%M%S_%f') + '.png'
     cv2.imwrite(dst_path, bgr_img)
@@ -247,13 +280,14 @@ def create_coloring(src_path, saturation_max=False, brightness_max=False):
 
     # チェックボックスを取得
     checked = get_checkbox_index(scan, 'asset/coloring/rects_checkbox.json')
+    print checked
     # matplotlibの色空間はRGB
 #    plt.imshow(cv2.cvtColor(bgr_img, cv2.COLOR_BGR2RGB))
 #    plt.show()
     return checked
 
 
-SCAN_IN = 'asset/coloring/scan_in/'
+SCAN_IN = 'asset/coloring/scan_in2/'
 SCAN_OUT = 'asset/coloring/scan_out/'
 SCAN_TMP = 'asset/coloring/scan_tmp'
 BASEDIR = SCAN_IN
@@ -266,11 +300,30 @@ class ChangeHandler(FileSystemEventHandler):
 
     def getext(self, filename):
         return os.path.splitext(filename)[-1].lower()
-    
-    def on_created(self, event):
 
+    def on_created(self, event):
+        print('%s has been created.' % event.src_path)
         if event.is_directory:
             return
+        if isinstance(event, events.FileCreatedEvent):
+            if self.getext(event.src_path) in ('.jpg','.tif','.tiff', '.png'):
+                self.do_coloring(event.src_path)
+
+    def on_modified(self, event):
+        print('%s has been modified.' % event.src_path)
+        if event.is_directory:
+            return
+#        if isinstance(event, events.FileModifiedEvent):
+#            if self.getext(event.src_path) in ('.jpg','.tif','.tiff', '.png'):
+#                self.do_coloring(event.src_path)
+
+    def on_deleted(self, event):
+        if event.is_directory:
+            return
+        print('%s has been deleted.' % event.src_path)
+
+    def do_coloring(self, src_path):
+
         if self.led_process is not None and self.led_process.is_alive():
             pass
         else:
@@ -278,27 +331,22 @@ class ChangeHandler(FileSystemEventHandler):
                 shutil.rmtree(SCAN_OUT)
                 os.mkdir(SCAN_OUT)
 
-        if self.getext(event.src_path) in ('.jpg', '.jpeg', '.png'):
-            print('%s has been created.' % event.src_path)
+        if self.getext(src_path) in ('.jpg', '.jpeg', '.png'):
             try:
-                # create_coloring(event.src_path, False, False)
-                # create_coloring(event.src_path, True)
-                # create_coloring(event.src_path, False, True)
-                # create_coloring(event.src_path, True, True)
-                checked = create_coloring(event.src_path,
+                checked = create_coloring(src_path,
                                           option_saturation_max,
                                           option_brightness_max)
-                self.show_led_on_multiprocess(checked)
+                self.show_led_on_multiprocess(checked, destip)
             except Exception:
                 print("Unexpected error:", sys.exc_info()[0])
                 traceback.print_exc()
-        elif self.getext(event.src_path) in ('.tif'):
+        elif self.getext(src_path) in ('.tif', '.tiff'):
             # マルチページTIFFをImageMagickでJpegに分解して画像生成
             try:
                 if os.path.exists(SCAN_TMP):
                     shutil.rmtree(SCAN_TMP)
                 os.mkdir(SCAN_TMP)
-                args = ['mogrify.exe', '-path', os.path.abspath(SCAN_TMP), '-format', 'jpeg', os.path.abspath(event.src_path)]
+                args = ['mogrify.exe', '-path', os.path.abspath(SCAN_TMP), '-format', 'jpeg', os.path.abspath(src_path)]
                 res = subprocess.check_output(args)
                 print "convert tiff2jpg succeeded.", res
                 splitted_imgs = os.listdir(SCAN_TMP)
@@ -306,78 +354,73 @@ class ChangeHandler(FileSystemEventHandler):
                     checked = create_coloring(os.path.join(SCAN_TMP, img),
                                               option_saturation_max,
                                               option_brightness_max)
-                    self.show_led_on_multiprocess(checked)
+                    self.show_led_on_multiprocess(checked, destip)
             except Exception:
                 traceback.print_exc()
 
-    def show_led_on_multiprocess(self, checked):
-        # show_led(checked)
-        # return
-    
-        p = Process(target=show_led, name='show_led', args=(checked,))
+    def show_led_on_multiprocess(self, checked, destip):
+        p = Process(target=show_led, name='show_led', args=(checked,destip,))
         if self.led_process is not None and self.led_process.is_alive():
             self.led_process.terminate()
             self.led_process.join()
         self.led_process = p
         self.led_process.start()
 
-    def on_modified(self, event):
-        if event.is_directory:
-            return
-        print('%s has been modified.' % event.src_path)
-
-    def on_deleted(self, event):
-        if event.is_directory:
-            return
-        print('%s has been deleted.' % event.src_path)
 
 
-def show_led(checked):
+def show_led(checked, destip):
 
     options = [
-        {"id": "filter-skewed"},
+        {"id": "filter-zoom"},
         {"id": "filter-rainbow"},
-        {"id": "filter-bk-snows", "lifetime": 30, "z": 7},
-        {"id": "filter-bk-grass", "lifetime": 30, "z": 4},
+        {"id": "filter-bk-snows"},
+        {"id": "filter-bk-grass", "z": 4},
         {"id": "filter-wave"}
     ]
 
     filters = [
-        {"id": "filter-rainbow"},
-        {"id": "filter-zoom"},
+        {"id": "filter-swaying"},
         {"id": "filter-rolldown"},
         {"id": "filter-spiral"},
-        {"id": "filter-wave"},
         {"id": "filter-skewed"},
-        {"id": "filter-flat-wave"}
+        {"id": "filter-flat-wave"},
+        {"id": "filter-jump"}
     ]
+
     backgrounds = [
-        {"id": "filter-bk-snows", "lifetime": 30, "z": 7},
-        {"id": "filter-bk-mountain", "lifetime": 30, "z": 6},
-        {"id": "filter-bk-cloud", "lifetime": 30, "z": 7},
-        {"id": "filter-bk-grass", "lifetime": 30, "z": 4},
+        {"id": "filter-bk-snows"},
+        {"id": "filter-bk-sakura"},
+        {"id": "filter-bk-mountain", "z": 6},
+        {"id": "filter-bk-cloud", "z": 7},
+        {"id": "filter-bk-grass", "z": 4},
     ]
 
     dic = {"orders": []}
 
-    LOOP_COUNT = 15
+    LOOP_COUNT = 10
     
     # 最初は画像のみを表示
     colorings = os.listdir(SCAN_OUT)
     dic["orders"].append({"id": "ctrl-loop", "count": LOOP_COUNT/len(colorings)})
     for coloring in colorings:
         with open(SCAN_OUT + coloring, "rb") as f:
-            dic["orders"].append({"id": "object-bitmap", "lifetime": 1, "z": 1, "thick": 3, "bitmap": base64.b64encode(f.read())})
-    led = LedFramework()
-    led.show(dic)
+            dic["orders"].append({"id": "object-bitmap", "lifetime": 1, "z": 0, "thick": 3, "bitmap": base64.b64encode(f.read())})
+
+    if destip is not None:
+        led.SetUrl(destip)
+    ledfw = LedFramework()
+    ledfw.show(dic)
+
+    dic = {}
+    dic = {"orders": []}
 
     # オプションに従って表示
     for i, chk in enumerate(checked):
         if chk and i < len(options):
             dic["orders"].append(options[i])
             if i == 3:   # 草原の場合は雲と山も
-                dic["orders"].append({"id": "filter-bk-mountain", "lifetime": 30, "z": 6})
-                dic["orders"].append({"id": "filter-bk-cloud", "lifetime": 30, "z": 7})
+                dic["orders"].append({"id": "filter-bk-mountain", "z": 6})
+                dic["orders"].append({"id": "filter-bk-cloud", "z": 7})
         elif chk:   # [?] はランダム
             dic["orders"].append(random.choice(filters))
             dic["orders"].append(random.choice(backgrounds))
@@ -386,15 +429,14 @@ def show_led(checked):
     colorings = os.listdir(SCAN_OUT)
     for coloring in colorings:
         with open(SCAN_OUT + coloring, "rb") as f:
-            dic["orders"].append({"id": "object-bitmap", "lifetime": 1, "z": 1, "thick": 3, "bitmap": base64.b64encode(f.read())})
+            dic["orders"].append({"id": "object-bitmap", "lifetime": 1, "z": 0, "thick": 3, "bitmap": base64.b64encode(f.read())})
 
-    print(dic)
-    led = LedFramework()
-    led.show(dic)
+    ledfw.show(dic)
 
 
-option_saturation_max = True
-option_brightness_max = True
+option_saturation_max = False
+option_brightness_max = False
+destip = None
 
 if __name__ == "__main__":
 
@@ -403,29 +445,27 @@ if __name__ == "__main__":
                       action="store", type="string", dest="dest", 
                       help="(optional) device ip adddres.")
     parser.add_option("-s", "--saturation",
-                      action="store", type="string", dest="saturation", 
+                      action="store_true", dest="option_saturation_max",
                       help="(optional) set the saturation to the maximum .")
-    parser.add_option("-v", "--brightness",
-                      action="store", type="string", dest="brightness", 
+    parser.add_option("-b", "--brightness",
+                      action="store_true", dest="option_brightness_max", 
                       help="(optional) set the brightness to the maximum .")
 
     options, _ = parser.parse_args()
 
     if options.dest is not None:
-        led.SetUrl(options.dest)
-        if options.saturation is not None:
-            option_saturation_max = True
-    if options.brightness is not None:
-        option_brightness_max = True
+        destip = options.dest
+    option_saturation_max = options.option_saturation_max
+    option_brightness_max = options.option_brightness_max
 
-    while 1:
-        event_handler = ChangeHandler()
-        observer = Observer()
-        observer.schedule(event_handler, BASEDIR, recursive=True)
-        observer.start()
-        try:
-            while True:
-                time.sleep(1)
-        except KeyboardInterrupt:
-            observer.stop()
-        observer.join()
+    _event_handler = ChangeHandler()
+    _observer = Observer()
+    _observer.schedule(_event_handler, BASEDIR, recursive=True)
+    _observer.start()
+
+    try:
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        _observer.stop()
+    _observer.join()

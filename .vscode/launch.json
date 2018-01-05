@@ -16,7 +16,8 @@
                 "WaitOnAbnormalExit",
                 "WaitOnNormalExit",
                 "RedirectOutput"
-            ]
+            ],
+            "args": ["-d", "192.168.0.10", "-sb" ]
         },
         {
             "name": "Python(Offline)",

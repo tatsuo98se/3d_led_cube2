@@ -16,8 +16,13 @@ elif sys.platform == 'win32':
         ledlib = dirname + '/ledLib64.dll'
     else:
         ledlib = dirname + '/ledLib32.dll'
+<<<<<<< HEAD
 elif 'linux' in sys.platform and platform.machine() == 'armv7l':
     ledlib = dirname + '/ledLibarmv7l.so' # for Raspberry PI3
+=======
+elif 'linux' in sys.platform:
+    ledlib = dirname + '/ledLib.so' # build for raspberry pi
+>>>>>>> 11cec0e698eb7d5ee338551ce8c61d1ab5014cf4
 else:
     raise NotImplementedError('Unsupported OS.' + sys.platform)
 
