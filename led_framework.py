@@ -1,6 +1,7 @@
 import json
 from libled.led_cube import *
 from datetime import datetime
+import time
 from libled.led_canvas import LedCanvas
 from libled.util.led_order_util import *
 from libled.i_led_canvas import ILedCanvas
@@ -40,6 +41,7 @@ class LedFramework(object):
 
 
             while(True):
+                span = time.time()
                 if self.is_abort:
                     canvas.abort()
                     return
@@ -71,7 +73,10 @@ class LedFramework(object):
                 canvas.show()
                 if current_order is not None and current_order.is_expired(overlap_time):
                     current_order = None
-                led.Wait(20)
+                
+                spanx = (time.time() - span) * 1000
+                wait = max(0, 70 - spanx)
+                led.Wait(wait)
 
         except KeyError as err:
             print("error unexpected json : {0}".format(err))
