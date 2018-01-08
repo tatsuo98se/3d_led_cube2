@@ -76,6 +76,7 @@ class LedFramework(object):
                 
                 spanx = (time.time() - span) * 1000
                 wait = max(0, 70 - spanx)
+                #print('span: ' + str(spanx) + ' wait:' + str(wait))
                 led.Wait(wait)
 
         except KeyError as err:
