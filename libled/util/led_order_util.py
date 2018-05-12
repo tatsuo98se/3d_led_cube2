@@ -59,6 +59,7 @@ from ..filter.led_spiral_canvas_filter import LedSpiralCanvasFilter
 from ..filter.led_swaying_canvas_filter import LedSwayingCanvasFilter
 from ..filter.led_bk_wave_object_canvas_filter import LedWaveObjectCanvasFilter
 from ..filter.led_bk_sakura_object_canvas_filter import LedSakuraObjectCanvasFilter
+from ..filter.led_color_ctrl_canvas_filter import LedColorCtrlCanvasFilter
 
 from ..ctrl.led_filter_clear_ctrl import LedFilterClearCtrl
 
@@ -225,6 +226,8 @@ def create_filter(order, canvas):
         return LedSpiralCanvasFilter(canvas)
     elif oid == 'filter-swaying':
         return LedSwayingCanvasFilter(canvas)
+    elif oid == 'filter-color-ctrl':
+        return LedColorCtrlCanvasFilter(canvas)
     elif oid == 'filter-bk-mountain':
         return LedObjectCanvasFilter(canvas, \
                 LedScrolledMountainObject())

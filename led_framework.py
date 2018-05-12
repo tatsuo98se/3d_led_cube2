@@ -2,6 +2,7 @@ import json
 from libled.led_cube import *
 from datetime import datetime
 import time
+from libled.util.serial_manager import SerialManager
 from libled.led_canvas import LedCanvas
 from libled.util.led_order_util import *
 from libled.i_led_canvas import ILedCanvas
@@ -24,6 +25,7 @@ class LedFramework(object):
 
     def show(self, data):
         self.is_running = True
+        SerialManager.init('/dev/cu.usbmodem1411', 9600)
 
         canvas = self.base_canvas
         current_order = None
@@ -85,6 +87,7 @@ class LedFramework(object):
         finally:
             self.is_abort = False
             self.is_running = False
+            SerialManager.stop()
             canvas.clear()
             led.Show()
 
