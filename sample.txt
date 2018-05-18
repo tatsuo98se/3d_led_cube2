@@ -77,8 +77,12 @@ show:{"orders":[{"id":"filter-bk-cloud"},{"id":"object-yacht", "lifetime":10}]}
 # 塗り絵シナリオ 正解表示
 show:{"orders":[{"id":"ctrl-overlap"},{"id":"ctrl-inout-effect"},{"id":"object-fill-white", "lifetime":8},{"id":"filter-rainbow"},{"id":"object-fill-white", "lifetime":8},{"id":"object-text","text":"4096こ","size":20,"y":16},{"id":"filter-jump"},{"id":"object-text","text":"4096こ","size":20,"y":16},{"id":"filter-flat-wave"},{"id":"object-text","text":"4096こ","size":20,"y":16}]}
 
+show:{"orders":[{"id":"filter-spiral2"},{"id":"object-star", "lifetime":120}]}
 
 show:{"orders":[{"id":"filter-color-ctrl"},{"id":"object-yacht", "lifetime":120}]}
+
+show:{"orders":[{"id":"filter-wakame"},{"id":"filter-spiral2"},{"id":"filter-swaying"},{"id":"object-stickman", "lifetime":120}]}
+show:{"orders":[{"id":"filter-wakame"}{"id":"object-stickman", "lifetime":120}]}
 
 
 

@@ -43,22 +43,32 @@ class SerialManager:
     @classmethod
     def init(cls, port_name, port_number):
         if cls._instance is None:
-            cls._instance = cls(port_name, port_number)
+            try:
+                cls._instance = cls(port_name, port_number)
+            except serial.SerialException:
+                pass
 
         return cls._instance
 
     @classmethod
     def get_serial_handle(cls):
-        return cls._instance.__get_serial_handle()
+        if cls._instance is not None:
+            return cls._instance.__get_serial_handle()
+        else:
+            return None
 
     @classmethod
     def get_data(cls):
-        return cls._instance.worker.get_data()
+        if cls._instance is not None:
+            return cls._instance.worker.get_data()
+        else:
+            return ''
 
     @classmethod
     def stop(cls):
-        cls._instance.__stop()
-        cls._instance = None
+        if cls._instance is not None:
+            cls._instance.__stop()
+            cls._instance = None
 
     def __get_serial_handle(self):
         return self.serial
