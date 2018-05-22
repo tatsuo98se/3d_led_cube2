@@ -80,9 +80,11 @@ show:{"orders":[{"id":"ctrl-overlap"},{"id":"ctrl-inout-effect"},{"id":"object-f
 show:{"orders":[{"id":"filter-spiral2"},{"id":"object-star", "lifetime":120}]}
 
 show:{"orders":[{"id":"filter-color-ctrl"},{"id":"object-yacht", "lifetime":120}]}
+show:{"orders":[{"id":"filter-rainbow-ctrl"},{"id":"object-yacht", "lifetime":120}]}
 
 show:{"orders":[{"id":"filter-wakame"},{"id":"filter-spiral2"},{"id":"filter-swaying"},{"id":"object-stickman", "lifetime":120}]}
-show:{"orders":[{"id":"filter-wakame"}{"id":"object-stickman", "lifetime":120}]}
+show:{"orders":[{"id":"filter-vibe"},{"id":"object-stickman", "lifetime":120}]}
+show:{"orders":[{"id":"filter-vibe"},{"id":"filter-jump"},{"id":"filter-wakame"},{"id":"object-stickman", "lifetime":120}]}
 
 
 

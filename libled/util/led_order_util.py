@@ -61,6 +61,7 @@ from ..filter.led_swaying_canvas_filter import LedSwayingCanvasFilter
 from ..filter.led_bk_wave_object_canvas_filter import LedWaveObjectCanvasFilter
 from ..filter.led_bk_sakura_object_canvas_filter import LedSakuraObjectCanvasFilter
 from ..filter.led_color_ctrl_canvas_filter import LedColorCtrlCanvasFilter
+from ..filter.led_rainbow_ctrl_canvas_filter import LedRainbowCtrlCanvasFilter
 from ..filter.led_wakame_canvas_filter import LedWakameCanvasFilter
 from ..filter.led_vibe_canvas_filter import LedVibeCanvasFilter
 
@@ -233,6 +234,8 @@ def create_filter(order, canvas):
         return LedSwayingCanvasFilter(canvas)
     elif oid == 'filter-color-ctrl':
         return LedColorCtrlCanvasFilter(canvas)
+    elif oid == 'filter-rainbow-ctrl':
+        return LedRainbowCtrlCanvasFilter(canvas)
     elif oid == 'filter-wakame':
         return LedWakameCanvasFilter(canvas)
     elif oid == 'filter-vibe':
