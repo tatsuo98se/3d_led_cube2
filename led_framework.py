@@ -25,7 +25,7 @@ class LedFramework(object):
 
     def show(self, data):
         self.is_running = True
-        SerialManager.init('/dev/cu.usbmodem1411', 9600)
+        SerialManager.init()
 
         canvas = self.base_canvas
         current_order = None

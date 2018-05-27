@@ -54,6 +54,7 @@ from ..filter.led_rainbow_canvas_filter import LedRainbowCanvasFilter
 from ..filter.led_object_canvas_filter import LedObjectCanvasFilter
 from ..filter.led_bk_snows_object_canvas_filter import LedSnowsObjectCanvasFilter
 from ..filter.led_zoom_in_out_canvas_filter import LedZoomInOutCanvasFilter
+from ..filter.led_zoom_in_out_ctrl_canvas_filter import LedZoomInOutCtrlCanvasFilter
 from ..filter.led_rolldown_canvas_filter import LedRollDownCanvasFilter
 from ..filter.led_spiral_canvas_filter import LedSpiralCanvasFilter
 from ..filter.led_spiral_canvas_filter2 import LedSpiralCanvasFilter2
@@ -64,6 +65,11 @@ from ..filter.led_color_ctrl_canvas_filter import LedColorCtrlCanvasFilter
 from ..filter.led_rainbow_ctrl_canvas_filter import LedRainbowCtrlCanvasFilter
 from ..filter.led_wakame_canvas_filter import LedWakameCanvasFilter
 from ..filter.led_vibe_canvas_filter import LedVibeCanvasFilter
+from ..filter.led_jump_ctrl_canvas_filter import LedJumpCtrlCanvasFilter
+from ..filter.led_rolling_ctrl_canvas_filter import LedRollingCtrlCanvasFilter
+from ..filter.led_skewed_ctrl_canvas_filter import LedSkewedCtrlCanvasFilter
+from ..filter.led_wakame_ctrl_canvas_filter import LedWakameCtrlCanvasFilter
+from ..filter.led_jump_button_canvas_filter import LedJumpButtonCanvasFilter
 
 from ..ctrl.led_filter_clear_ctrl import LedFilterClearCtrl
 
@@ -224,6 +230,8 @@ def create_filter(order, canvas):
         return LedRainbowCanvasFilter(canvas)
     elif oid == 'filter-zoom':
         return LedZoomInOutCanvasFilter(canvas)
+    elif oid == 'filter-zoom-ctrl':
+        return LedZoomInOutCtrlCanvasFilter(canvas)
     elif oid == 'filter-rolldown':
         return LedRollDownCanvasFilter(canvas)
     elif oid == 'filter-spiral':
@@ -236,8 +244,18 @@ def create_filter(order, canvas):
         return LedColorCtrlCanvasFilter(canvas)
     elif oid == 'filter-rainbow-ctrl':
         return LedRainbowCtrlCanvasFilter(canvas)
+    elif oid == 'filter-jump-ctrl':
+        return LedJumpCtrlCanvasFilter(canvas)
+    elif oid == 'filter-jump-button':
+        return LedJumpButtonCanvasFilter(canvas)
+    elif oid == 'filter-rolling-ctrl':
+        return LedRollingCtrlCanvasFilter(canvas)
+    elif oid == 'filter-skewed-ctrl':
+        return LedSkewedCtrlCanvasFilter(canvas)
     elif oid == 'filter-wakame':
         return LedWakameCanvasFilter(canvas)
+    elif oid == 'filter-wakame-ctrl':
+        return LedWakameCtrlCanvasFilter(canvas)
     elif oid == 'filter-vibe':
         return LedVibeCanvasFilter(canvas)
     elif oid == 'filter-bk-mountain':

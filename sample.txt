@@ -81,6 +81,15 @@ show:{"orders":[{"id":"filter-spiral2"},{"id":"object-star", "lifetime":120}]}
 
 show:{"orders":[{"id":"filter-color-ctrl"},{"id":"object-yacht", "lifetime":120}]}
 show:{"orders":[{"id":"filter-rainbow-ctrl"},{"id":"object-yacht", "lifetime":120}]}
+show:{"orders":[{"id":"filter-jump-ctrl"},{"id":"object-yacht", "lifetime":120}]}
+show:{"orders":[{"id":"filter-skewed-ctrl"},{"id":"object-yacht", "lifetime":120}]}
+show:{"orders":[{"id":"filter-rolling-ctrl"},{"id":"object-yacht", "lifetime":120}]}
+
+show:{"orders":[{"id":"filter-rainbow-ctrl"},{"id":"filter-skewed-ctrl"},{"id":"filter-jump-ctrl"},{"id":"object-stickman", "lifetime":3000}]}
+
+show:{"orders":[{"id":"filter-zoom-ctrl"},{"id":"filter-rainbow-ctrl"},{"id":"object-star", "lifetime":120}]}
+show:{"orders":[{"id":"filter-jump-button"},{"id":"filter-rainbow-ctrl"},{"id":"object-star", "lifetime":120}]}
+
 
 show:{"orders":[{"id":"filter-wakame"},{"id":"filter-spiral2"},{"id":"filter-swaying"},{"id":"object-stickman", "lifetime":120}]}
 show:{"orders":[{"id":"filter-vibe"},{"id":"object-stickman", "lifetime":120}]}

@@ -1,3 +1,5 @@
+import sys
+import glob
 import serial
 import json
 import time
@@ -23,7 +25,7 @@ class ReadLineWorker(Thread):
         while not self.is_stop:
             line = self.readline(self.ser)
             if line is not '':
-        	    self.line = line
+                self.line = line
             time.sleep(0.2)
     
     def stop(self):
@@ -35,16 +37,34 @@ class ReadLineWorker(Thread):
 class SerialManager:
     _instance = None
 
-    def __init__(self, port_name, port_number):
-        self.serial = serial.Serial(port_name, port_number)
+    def __init__(self):
+        self.serial = self.open_arduino_port()
         self.worker = ReadLineWorker(self.serial)
         self.worker.start()
 
+    def open_arduino_port(self):
+        if sys.platform.startswith('win'):
+            raise EnvironmentError('Unsupported platform')
+        elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
+            raise EnvironmentError('Unsupported platform')
+        elif sys.platform.startswith('darwin'):
+            ports = glob.glob('/dev/cu.usbmodem*')
+        else:
+            raise EnvironmentError('Unsupported platform')
+
+        if len(ports) > 0:
+            print("arduino serial port found: " + ports[0])
+            return serial.Serial(ports[0], 9600)
+        else:
+            print("arduino serial port not found")
+            raise serial.SerialException
+
+
     @classmethod
-    def init(cls, port_name, port_number):
+    def init(cls):
         if cls._instance is None:
             try:
-                cls._instance = cls(port_name, port_number)
+                cls._instance = cls()
             except serial.SerialException:
                 pass
 
@@ -63,6 +83,17 @@ class SerialManager:
             return cls._instance.worker.get_data()
         else:
             return ''
+
+    @classmethod
+    def get_data_as_json(cls):
+        while True:
+            try:
+                line = cls.get_data()
+                return json.loads(line)
+            except ValueError:
+                time.sleep(0.2)
+                continue
+        
 
     @classmethod
     def stop(cls):

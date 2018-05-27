@@ -19,9 +19,9 @@ class LedColorCtrlCanvasFilter(LedCanvasFilter):
             try:
                 line = SerialManager.get_data()
                 color = json.loads(line)
-                return Color(color['r'], color['g'], color['b'])
+                return Color(color['a0'], color['a1'], color['a2'])
             except ValueError:
-                continue
+                return Color(0,0,0)
 
     def pre_draw(self):
         super(LedColorCtrlCanvasFilter, self).pre_draw()
