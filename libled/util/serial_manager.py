@@ -36,35 +36,66 @@ class ReadLineWorker(Thread):
 
 class SerialManager:
     _instance = None
+    _port = None
 
-    def __init__(self):
-        self.serial = self.open_arduino_port()
+    def __init__(self, port):
+        self.serial = serial.Serial(port, 9600)
         self.worker = ReadLineWorker(self.serial)
         self.worker.start()
 
     def open_arduino_port(self):
+        ports = enum_serial_posts()
+        port = find_controller_port(ports)
+
+        if port is None:
+            raise serial.SerialException
+
+        return port
+
+
+    @classmethod
+    def __enum_serial_posts(cls):
         if sys.platform.startswith('win'):
-            raise EnvironmentError('Unsupported platform')
+            return ['COM%s' % (i + 1) for i in range(10)]
         elif sys.platform.startswith('linux') or sys.platform.startswith('cygwin'):
-            raise EnvironmentError('Unsupported platform')
+            # this excludes your current terminal "/dev/tty"
+            return glob.glob('/dev/tty[A-Za-z]*')
         elif sys.platform.startswith('darwin'):
-            ports = glob.glob('/dev/cu.usbmodem*')
+            return glob.glob('/dev/tty.*')
+
         else:
             raise EnvironmentError('Unsupported platform')
 
-        if len(ports) > 0:
-            print("arduino serial port found: " + ports[0])
-            return serial.Serial(ports[0], 9600)
-        else:
-            print("arduino serial port not found")
-            raise serial.SerialException
+    @classmethod
+    def __find_controller_port(cls):
+        ports = cls.__enum_serial_posts()
+        for port in ports:
+            try:
+                s = serial.Serial(port, 9600, timeout=0.5)
+                line = ''
+                for _ in xrange(3): # try 3 times
+                    s.write("z")
+                    line = s.readline()
+                    if not line == '':
+                        j = json.loads(line)
+                        if j['version'] == '1.0':
+                            return port
+                    sleep(0.1)
+                s.close()
+            except (OSError, serial.SerialException, ValueError):
+                pass
+        return None
 
 
     @classmethod
     def init(cls):
+        if cls._port is None:
+            cls._port = cls.__find_controller_port()
+            print("find port: " + str(cls._port))
+
         if cls._instance is None:
             try:
-                cls._instance = cls()
+                cls._instance = cls(cls._port)
             except serial.SerialException:
                 pass
 
