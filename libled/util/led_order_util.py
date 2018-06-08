@@ -2,6 +2,7 @@
 from color import Color
 import base64
 import cStringIO
+import block_dictionary
 from ..led_canvas import LedCanvas
 from ..object.led_overlapped_object import LedOverlappedObject
 from ..object.led_dot_obj import LedDotObject
@@ -76,7 +77,7 @@ from ..ctrl.led_filter_clear_ctrl import LedFilterClearCtrl
 def get_orders_in_loop(orders, start):
     orders_in_loop = []
     for i in range(start, len(orders)):
-        if str(orders[i]['id']) == 'ctrl-loop':
+        if 'id' is orders[i] and str(orders[i]['id']) == 'ctrl-loop':
             return orders_in_loop
 
         orders_in_loop.append(orders[i])
@@ -91,7 +92,7 @@ def flatten_orders(orders):
     flatten = []
     i = 0
     while i<len(orders):
-        if orders[i]['id'] == 'ctrl-loop':
+        if 'id' is orders[i] and orders[i]['id'] == 'ctrl-loop':
             count = get_param(orders[i], 'count', 3)
             loop = get_orders_in_loop(orders, i+1) 
             flatten.extend(loop * count)
@@ -119,7 +120,7 @@ def create_object(order):
     if oid == 'object-clear':
         obj = LedClearObject(lifetime)
     if oid== 'object-fill-white':
-        obj = LedFillObject(Color(1,1,1), lifetime)
+        obj = LedFillObject(Color(0.5,0.5,0.5), lifetime)
     elif oid == 'object-ripple':
         obj = LedRandomRippleObject(lifetime)
     elif oid == 'object-mario':
@@ -289,6 +290,9 @@ def create_ctrl(order):
         return None
 
 def create_order(order, canvas):
+    if 'id' not in order:
+        order['id'] = block_dictionary.convert_json(order)
+
     oid = order['id']
     if oid.startswith('object'):
         return create_object(order)
@@ -301,7 +305,7 @@ def create_order(order, canvas):
 
 def get_ctrl(orders, ctrl_id):
     for order in orders:
-        if order['id'].startswith(ctrl_id):
+        if 'id' in order and order['id'].startswith(ctrl_id):
             return order
 
     return None
