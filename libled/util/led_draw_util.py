@@ -56,6 +56,14 @@ def get_scled_image(src , wscale, hscale):
     scaled = scaled.rotate(Image.ROTATE_90)
     return np.asarray(scaled)
 
+def get_scled_rgb_image(src , wscale, hscale):
+    image = Image.fromarray(src, 'RGB')
+    nw = int(round(image.width * wscale))
+    nh = int(round(image.height * hscale))
+    scaled = image.resize((nw, nh))
+    scaled = scaled.rotate(Image.ROTATE_90)
+    return np.asarray(scaled)
+
 def resize2(src, new_size, pos, fill):
     dx, dy, sx, sy, w, h = get_copy_positions(new_size, src.shape, pos)
 

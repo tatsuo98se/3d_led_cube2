@@ -3,6 +3,7 @@ from libled.led_cube import *
 from datetime import datetime
 import time
 from libled.util.serial_manager import SerialManager
+from libled.util.realsense_manager import RealsenseManager
 from libled.led_canvas import LedCanvas
 from libled.util.led_order_util import *
 from libled.i_led_canvas import ILedCanvas
@@ -17,6 +18,8 @@ class LedFramework(object):
         self.is_running = False
         self.is_abort = False
         self.base_canvas = LedCanvas()
+        SerialManager.init()
+        RealsenseManager.init()
 
     def abort(self):
         if not self.is_running:
@@ -25,7 +28,6 @@ class LedFramework(object):
 
     def show(self, data):
         self.is_running = True
-        SerialManager.init()
 
         canvas = self.base_canvas
         current_order = None
