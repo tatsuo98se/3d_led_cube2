@@ -64,7 +64,6 @@ class RealsenseManager:
                 print("initialize realsense is successfull.")
             except:
                 print("initialize realsense failed.:", sys.exc_info()[0])
-                raise
 
         return cls._instance
 
