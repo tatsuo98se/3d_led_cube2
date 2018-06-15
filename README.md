@@ -4,7 +4,7 @@ Python 2.7
 pip install pillow  
 pip install numpy  
 pip install flask  
-pip install opencv-python
+pip install opencv-python  
 [Optional] pip install pyrealsense
 
 ### for macOS
