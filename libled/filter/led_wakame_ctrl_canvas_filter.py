@@ -13,7 +13,7 @@ class LedWakameCtrlCanvasFilter(LedCanvasFilter):
 
     def pre_draw(self):
         super(LedWakameCtrlCanvasFilter, self).pre_draw()
-        param = SerialManager.get_data_as_json()
+        param = SerialManager.get_data_as_json(defaults={'a0':0.5, 'a1':0.5})
         self.t += 3 * param['a0']
         self.shift = 0.8 + param['a1'] * 3
  

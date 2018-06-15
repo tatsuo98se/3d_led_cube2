@@ -5,6 +5,7 @@ import json
 import time
 from time import sleep
 from threading import Thread
+import logger
 
 class ReadLineWorker(Thread):
 
@@ -43,16 +44,6 @@ class SerialManager:
         self.worker = ReadLineWorker(self.serial)
         self.worker.start()
 
-    def open_arduino_port(self):
-        ports = enum_serial_posts()
-        port = find_controller_port(ports)
-
-        if port is None:
-            raise serial.SerialException
-
-        return port
-
-
     @classmethod
     def __enum_serial_posts(cls):
         if sys.platform.startswith('win'):
@@ -70,6 +61,7 @@ class SerialManager:
     def __find_controller_port(cls):
         ports = cls.__enum_serial_posts()
         for port in ports:
+            s = None
             try:
                 s = serial.Serial(port, 9600, timeout=0.5)
                 line = ''
@@ -81,23 +73,33 @@ class SerialManager:
                         if j['version'] == '1.0':
                             return port
                     sleep(0.1)
-                s.close()
             except (OSError, serial.SerialException, ValueError):
                 pass
+            finally:
+                if s is not None:
+                    s.close()
+
         return None
 
 
     @classmethod
     def init(cls):
-        if cls._port is None:
-            cls._port = cls.__find_controller_port()
-            print("find port: " + str(cls._port))
+        try:
+            if cls._port is None:
+                logger.i("searching controller....")
+                cls._port = cls.__find_controller_port()
 
-        if cls._instance is None:
-            try:
-                cls._instance = cls(cls._port)
-            except serial.SerialException:
-                pass
+            if cls._instance is None and cls._port is not None:
+                logger.i("find port: " + str(cls._port))
+                try:
+                    cls._instance = cls(cls._port)
+                except serial.SerialException:
+                    pass
+            else:
+                logger.w("controller is not connected.")
+        except:
+            logger.e('SerialManager.init() failed.' + str(sys.exc_info()[0]))
+
 
         return cls._instance
 
@@ -113,10 +115,13 @@ class SerialManager:
         if cls._instance is not None:
             return cls._instance.worker.get_data()
         else:
-            return ''
+            return None
 
     @classmethod
-    def get_data_as_json(cls):
+    def get_data_as_json(cls, defaults=None):
+        if cls._instance is None:
+            return defaults
+
         while True:
             try:
                 line = cls.get_data()

@@ -24,7 +24,7 @@ class LedJumpButtonCanvasFilter(LedCanvasFilter):
         if time.time() - self.last_update < UPDATE_FREQ:
             return
 
-        param = SerialManager.get_data_as_json()
+        param = SerialManager.get_data_as_json(defaults={'d1':0.5})
 
         if self.push != param['d1'] and param['d1'] == 1:
             self.initial_power = self.update_initial_power()
