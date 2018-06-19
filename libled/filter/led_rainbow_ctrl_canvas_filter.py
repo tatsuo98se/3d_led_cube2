@@ -18,7 +18,7 @@ class LedRainbowCtrlCanvasFilter(LedCanvasFilter):
         self.born_at = time.time()
 
     def get_color_from_serial(self, ser):
-        color = SerialManager.get_data_as_json()
+        color = SerialManager.get_data_as_json(defaults={'a0':0.5, 'a1':0.5, 'a2':0.5})
         return Color(color['a0'], color['a1'], color['a2'])
 
     def pre_draw(self):

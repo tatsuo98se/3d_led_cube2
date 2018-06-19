@@ -2,6 +2,7 @@ import os
 from ctypes import *
 import sys
 import platform
+import util.logger as logger
 
 LED_HEIGHT = 32
 LED_WIDTH = 16
@@ -21,7 +22,7 @@ elif 'linux' in sys.platform and platform.machine() == 'armv7l':
 else:
     raise NotImplementedError('Unsupported OS.' + sys.platform)
 
-print('LoadLibrary: '+ ledlib)
+logger.i('LoadLibrary: '+ ledlib)
 
 
 class LedCube(object):

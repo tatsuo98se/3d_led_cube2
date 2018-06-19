@@ -9,6 +9,7 @@ import traceback
 import socket
 import json
 import sys
+import util.logger as logger
 
 class LedRunLoop(object):
 
@@ -32,7 +33,7 @@ class LedRunLoop(object):
         options, _ = self.opt_parser.parse_args()
 
         if options.dest != None:
-            print("External Connect To: " + (options.dest))
+            logger.i("External Connect To: " + (options.dest))
             led.SetUrl(options.dest)
         
         led.EnableSimulator(not options.hide_simulator)
@@ -54,73 +55,74 @@ class LedRunLoop(object):
 
 
         except KeyboardInterrupt:
-            print('keybord Ctrl+C')
+            logger.i('keybord Ctrl+C')
             self.on_keyboard_interrupt()
         except:
-            print("Unexpected error:", sys.exc_info()[0])
-            print(traceback.format_exc())
+            logger.e("Unexpected error:" + str(sys.exc_info()[0]))
+            logger.e(traceback.format_exc())
             raise
         finally:
             self.aborted = True
             self.on_finish()
             th.join()
-            print('finish main loop')
+            logger.i('finish main loop')
 
     def message_receive_loop(self, q):
-        led_framework = LedFramework()
+#        led_framework = LedFramework()
+        with LedFramework() as led_framework:
+            try:
+                while True:
+                    try:
+                        self.on_pre_exec_runloop()
 
-        try:
-            while True:
-                try:
-                    self.on_pre_exec_runloop()
+                        while True:
 
-                    while True:
+                            line = self.read_data()
+                            if self.aborted:
+                                return
 
-                        line = self.read_data()
-                        if self.aborted:
+                            if not line:
+                                print('')
+                                logger.w("line is empty")
+                                break
+                            
+                            if line.startswith('abort'):
+                                logger.i('abort canvas')
+                                led_framework.abort()
+                            elif line.startswith('show:'):
+                                logger.i('show by orders')
+                                orders = line[len('show:'):].strip()
+
+                                dic_orders = None
+                                try:
+                                    dic_orders = json.loads(orders)
+                                except ValueError:
+                                    logger.w('invalid order:' + str(orders))
+                                    continue
+                                
+                                led_framework.abort()
+                                q.put([led_framework.show, dic_orders])
+
+                        self.on_post_exec_runloop()
+
+                    except Exception as exception:
+                        ret = self.on_exception_at_runloop(exception)
+                        if(ret == LedRunLoop.CONTINUE):
+                            logger.i("continue runloop")
+                            continue
+                        else:
+                            logger.e("Unexpected error:" + str(sys.exc_info()[0]))
+                            logger.e(traceback.format_exc())
+                            logger.e("exit runloop by exception")
                             return
 
-                        if not line:
-                            print("line is empty")
-                            break
-                        
-                        if line.startswith('abort'):
-                            print('abort canvas')
-                            led_framework.abort()
-                        elif line.startswith('show:'):
-                            print('show by orders')
-                            orders = line[len('show:'):].strip()
-
-                            dic_orders = None
-                            try:
-                                dic_orders = json.loads(orders)
-                            except ValueError:
-                                print('invalid order:' + str(orders))
-                                continue
-                            
-                            led_framework.abort()
-                            q.put([led_framework.show, dic_orders])
-
-                    self.on_post_exec_runloop()
-
-                except Exception as exception:
-                    ret = self.on_exception_at_runloop(exception)
-                    if(ret == LedRunLoop.CONTINUE):
-                        print("continue runloop")
-                        continue
-                    else:
-                        print("Unexpected error:", sys.exc_info()[0])
-                        print(traceback.format_exc())
-                        print("exit runloop by exception")
-                        return
-
-        except:
-            print("Unexpected error:", sys.exc_info()[0])
-            print(traceback.format_exc())
-            raise
-        finally:
-            self.run_loop_finished = True
-            print('finish led order loop')
+            except:
+                logger.e("Unexpected error:" + str(sys.exc_info()[0]))
+                logger.e(traceback.format_exc())
+                raise
+            finally:
+                self.run_loop_finished = True
+                logger.i('finish led order loop')
 
 
     def on_finish(self):

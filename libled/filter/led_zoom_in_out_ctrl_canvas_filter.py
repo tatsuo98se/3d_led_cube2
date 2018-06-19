@@ -26,7 +26,7 @@ class LedZoomInOutCtrlCanvasFilter(LedCanvasFilter):
 
     def pre_draw(self):
         super(LedZoomInOutCtrlCanvasFilter, self).pre_draw()
-        param = SerialManager.get_data_as_json()
+        param = SerialManager.get_data_as_json(defaults={'a0':0.5, 'a1':0.5})
 
         self.t += param['a0'] * 2
 
