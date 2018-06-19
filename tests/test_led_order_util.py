@@ -177,7 +177,7 @@ class TestLedOrderUtil(unittest.TestCase):
             
 
     def test_create_order_1(self):
-        actual = create_order({"id":"object-fill"}, None)
+        actual = create_order({"id":"object-fill-white"}, None)
         self.assertTrue(isinstance(actual, LedFillObject))
 
 
@@ -211,11 +211,11 @@ class TestLedOrderUtil(unittest.TestCase):
 
     def test_get_lifetime_from_order_1(self):
         data = {"abc":"def", "lifetime":1}
-        self.assertEqual(1, get_lifetime_from_order(data))
+        self.assertEqual(1, get_param(data, 'lifetime', DEFAULT_LIFETIME))
 
     def test_get_lifetime_from_order_2(self):
         data = {"abc":"def"}
-        self.assertEqual(5, get_lifetime_from_order(data))
+        self.assertEqual(DEFAULT_LIFETIME, get_param(data, 'lifetime', DEFAULT_LIFETIME))
 
 
     def test_get_param_1(self):

@@ -78,7 +78,7 @@ from ..ctrl.led_filter_clear_ctrl import LedFilterClearCtrl
 def get_orders_in_loop(orders, start):
     orders_in_loop = []
     for i in range(start, len(orders)):
-        if 'id' is orders[i] and str(orders[i]['id']) == 'ctrl-loop':
+        if 'id' in orders[i] and str(orders[i]['id']) == 'ctrl-loop':
             return orders_in_loop
 
         orders_in_loop.append(orders[i])
@@ -93,7 +93,7 @@ def flatten_orders(orders):
     flatten = []
     i = 0
     while i<len(orders):
-        if 'id' is orders[i] and orders[i]['id'] == 'ctrl-loop':
+        if 'id' in orders[i] and orders[i]['id'] == 'ctrl-loop':
             count = get_param(orders[i], 'count', 3)
             loop = get_orders_in_loop(orders, i+1) 
             flatten.extend(loop * count)
