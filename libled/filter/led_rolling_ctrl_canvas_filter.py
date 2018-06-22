@@ -13,7 +13,7 @@ class LedRollingCtrlCanvasFilter(LedCanvasFilter):
 
     def pre_draw(self):
         super(LedRollingCtrlCanvasFilter, self).pre_draw()
-        param = SerialManager.get_data_as_json()
+        param = SerialManager.get_data_as_json(defaults={'a0':0.5, 'a1':0.5})
         direction = (param['a0'] - 0.5) * 2
         speed = param['a1'] * 200
 
