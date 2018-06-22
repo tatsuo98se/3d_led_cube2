@@ -32,7 +32,6 @@ try:
 
 except KeyboardInterrupt:
     print('keybord Ctrl+C')
-    self.on_keyboard_interrupt()
 except:
     print("Unexpected error:", sys.exc_info()[0])
     print(traceback.format_exc())

@@ -20,12 +20,12 @@
             "args": ["-d", "192.168.0.10", "-sb" ]
         },
         {
-            "name": "Python(Offline)",
+            "name": "Python(main_block_test.py)",
             "type": "python",
             "request": "launch",
             "stopOnEntry": false,
             "pythonPath": "${config:python.pythonPath}",
-            "program": "${workspaceRoot}/main_notcp.py",
+            "program": "${workspaceRoot}/main_block_test.py.py",
             "cwd": "${workspaceRoot}",
             "env": {},
             "envFile": "${workspaceRoot}/.env",
@@ -36,34 +36,12 @@
             ]
         },
         {
-            "name": "Python(Main Client)",
+            "name": "Python(main_block_server)",
             "type": "python",
             "request": "launch",
             "stopOnEntry": false,
             "pythonPath": "${config:python.pythonPath}",
-            "program": "${workspaceRoot}/main_client.py",
-            "cwd": "${workspaceRoot}",
-            "env": {},
-            "envFile": "${workspaceRoot}/.env",
-            "args": [
-                "-H",
-                "0.0.0.0:5001",
-                "-n",
-                "1"
-            ],
-            "debugOptions": [
-                "WaitOnAbnormalExit",
-                "WaitOnNormalExit",
-                "RedirectOutput"
-            ]
-        }, 
-        {
-            "name": "Python(Main Server)",
-            "type": "python",
-            "request": "launch",
-            "stopOnEntry": false,
-            "pythonPath": "${config:python.pythonPath}",
-            "program": "${workspaceRoot}/main_server.py",
+            "program": "${workspaceRoot}/main_block_server.py",
             "cwd": "${workspaceRoot}",
             "env": {},
             "envFile": "${workspaceRoot}/.env",

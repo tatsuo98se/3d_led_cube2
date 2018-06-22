@@ -48,10 +48,10 @@ def abort():
     return ""
 
 
-class LedTcpServer(LedRunLoop):
+class LedBlockHttpServer(LedRunLoop):
 
     def __init__(self):
-        super(LedTcpServer, self).__init__()
+        super(LedBlockHttpServer, self).__init__()
 
     def on_exception_at_runloop(self, exception):
         return LedRunLoop.EXIT
@@ -88,4 +88,4 @@ flask = FlaskThread(app)
 flask.daemon = True
 flask.start()
 
-LedTcpServer().run()
+LedBlockHttpServer().run()
