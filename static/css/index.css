@@ -1,0 +1,42 @@
+body
+{
+    background-image: url("assets/wallpaper.png");
+}
+#cells
+{
+    border-spacing: 0px;
+}
+#trash
+{
+    position: absolute;
+    text-align: center;
+}
+#trash img
+{
+    margin-top: 7px;
+}
+.cell
+{
+    border-radius: 30%;
+    padding: 0px;
+    border: solid 1px gray;
+}
+#pallets
+{
+    margin-left: 20px;
+}
+.pallet
+{
+    border-radius: 50%;
+    height: 60px;
+    width: 60px;
+    display: block;
+    margin: 10px;
+    border-style: solid;
+    border-width: 5px;
+    text-align: center;
+}
+.pallet img
+{
+    margin-top: 3px;
+}

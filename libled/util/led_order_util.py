@@ -44,6 +44,7 @@ from ..object.led_scrolled_mountain_obj import LedScrolledMountainObject
 from ..object.led_scrolled_grass_obj import LedScrolledGrassObject
 from ..object.led_realsense_obj import LedRealsenseObject
 from ..object.led_makey_obj import LedMakeyObject
+from ..object.led_painting_obj import LedPaintingObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -202,6 +203,8 @@ def create_object(order):
     elif oid == 'object-makey':
         makeytype = get_param(order, 'type')
         obj = LedMakeyObject(x, y, z, lifetime, makeytype)
+    elif oid == 'object-painting':
+        obj = LedPaintingObject(lifetime)
     elif oid == 'object-text':
         x = get_param(order, 'x', 15) # LED_WIDTH -1
         size = get_param(order, 'size', 26)

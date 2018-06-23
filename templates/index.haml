@@ -1,0 +1,35 @@
+%html lang="ja"
+  %head
+    %meta charset="utf-8"
+    %meta name="viewport" content="width=device-width initial-scale=1 maximum-scale=1 user-scalable=no minimal-ui"
+    %meta name="apple-mobile-web-app-capable"  content="yes"
+    %meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"
+    %link type="text/css"  rel="stylesheet" href="/static/css/index.css"
+    %link rel="shortcut icon" href="/static/assets/favicon.png"
+    %link rel="apple-touch-icon" href="/static/assets/favicon.png"
+    %script src="/static/js/jquery-3.3.1.min.js" 
+    %script src="/static/js/index.js" 
+    %title=title
+  %body ontouchmove="event.preventDefault()" style= "background-image: url(/static/assets/wallpaper.jpg);" 
+    %div#trash.pallet  style="background-color: white" 
+      %img border=0 src="/static/assets/trash.png" width="40px" height="40px"
+    %table#main
+      %tr
+        %td
+          %table#cells
+            {% for y in range(32): %}
+              %tr
+              {% for x in range(16): %}
+                  %td
+                    %div class='cell'  id="cell_{{x}}_{{y}}"
+              {% endfor %}
+            {% endfor %}
+        %td
+          %table#pallets
+            {% for y in range(8): %}
+              %tr
+              {% for x in range(2): %}
+                %td
+                  %div id="pallet{{y + 8 * x}}"
+              {% endfor %}
+            {% endfor %}

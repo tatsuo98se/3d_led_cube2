@@ -3,9 +3,11 @@ import numpy as np
 import cv2
 import json
 import time
+import traceback
 from time import sleep
 from threading import Thread
 import pyrealsense as pyrs
+from pyrealsense.constants import rs_option
 import realsense_manager_impl
 from led_draw_util import *
 import logger
@@ -65,6 +67,7 @@ class RealsenseManager:
                 logger.i("initialize realsense is successfull.")
             except:
                 logger.e("initialize realsense failed.:" + str(sys.exc_info()[0]))
+                logger.e(traceback.format_exc())
 
         return cls._instance
 

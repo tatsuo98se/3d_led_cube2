@@ -17,7 +17,7 @@
                 "WaitOnNormalExit",
                 "RedirectOutput"
             ],
-            "args": ["-d", "192.168.0.10", "-sb" ]
+            "args": []
         },
         {
             "name": "Python(main_block_test.py)",
