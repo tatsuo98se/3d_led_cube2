@@ -2,6 +2,7 @@
 import os.path
 import time
 import threading
+import json
 from Queue import Queue
 from libled.led_run_loop import LedRunLoop
 from flask import Flask, render_template
@@ -21,22 +22,34 @@ class FlaskWithHamlish(Flask):
 app = FlaskWithHamlish(__name__)
 
 q = Queue()
+q.put('show:' + json.dumps({'orders': [{'id':'object-painting', 'lifetime':0}]}))
 
 @app.route('/')
 def index():
-    q.put('show:' + "{\"orders\":[{\"id\":\"object-painting\", \"lifetime\":0}]}")
     return render_template('index.haml')
+
+@app.route('/api/filter')
+def api_filter():
+    orders = {'orders': [
+        {'id':'filter-wakame'},
+        {'id':'object-painting', 'lifetime':0}
+    ]}
+    q.put('show:' + json.dumps(orders))
 
 
 @app.route('/api/led', methods=['POST'])
 def api_led():
-    print('param:' + str(request.args))
-
-    for x in range(16):
-        datalist_id = "led[{0}][]".format(x)
-        datalist = request.form.getlist(datalist_id)
-        for y in range(32):
-            PaintManager.get_instance().set_color(x, y,  Color.int_to_color(int(datalist[y], 16)))
+    x = request.form.get('x')
+    if x is None:
+        for x in range(16):
+            datalist_id = "led[{0}][]".format(x)
+            datalist = request.form.getlist(datalist_id)
+            for y in range(32):
+                PaintManager.get_instance().set_color(x, y, Color.int_to_color(int(datalist[y], 16)))
+    else:
+        y = request.form.get('y')
+        color = request.form.get('color')
+        PaintManager.get_instance().set_color(int(x), int(y), Color.int_to_color(int(color, 16)))
     return ""
 
 

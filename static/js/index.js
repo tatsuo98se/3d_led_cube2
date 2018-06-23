@@ -40,7 +40,7 @@ const updateCellColor = event => {
     const x = Math.floor((p1.pageX - p0.left) / (CELL_WIDTH + 3.6));
     const y = Math.floor((p1.pageY - p0.top) / (CELL_HEIGHT + 3.6));
     setCell(x, y, g_selected_pallet);
-    postCells()
+    postCell(x, y)
 }
 const clearCells = () => {
     for(let x = 0; x < g_led_req_params.length; ++x){
@@ -50,9 +50,17 @@ const clearCells = () => {
     }
     postCells()
 }
+
+const postCell = (x, y) =>{
+    $.ajax({
+        url:'./api/led',
+        type:'POST',
+        data:{ 'x' : x, 'y': y, 'color': g_led_req_params[x][y] }
+    }).done(data => {}).fail(data => {});
+}
 const postCells = () => {
     const now = Date.now();
-    if(now - g_last_update  < 50){
+    if(now - g_last_update  < 80){
         return;
     }
     g_last_update = now;
