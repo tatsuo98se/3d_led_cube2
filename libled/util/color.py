@@ -80,6 +80,23 @@ class Color:
             self.g / other,
             self.b / other)
 
+    def __or__(self, other):
+        return Color.rgbtapple255_to_color(
+            (
+            int(self.r * 255) | int(other.r * 255),
+            int(self.g * 255) | int(other.g* 255),
+            int(self.b * 255) | int(other.b* 255))
+            )
+
+    def __and__(self, other):
+        return Color.rgbtapple255_to_color(
+            (
+            int(self.r * 255) & int(other.r * 255),
+            int(self.g * 255) & int(other.g* 255),
+            int(self.b * 255) & int(other.b* 255))
+            )
+
+
     def __sub__(self, other):
         if(isinstance(other, Color)):
             return Color(

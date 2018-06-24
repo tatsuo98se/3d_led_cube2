@@ -2,7 +2,6 @@ import json
 from libled.led_cube import *
 from datetime import datetime
 import time
-from libled.util.serial_manager import SerialManager
 from libled.led_canvas import LedCanvas
 from libled.util.led_order_util import *
 from libled.i_led_canvas import ILedCanvas
@@ -11,7 +10,7 @@ from libled.util import sync
 from libled.util.queue import Queue
 from libled.object.led_fadeinout_obj_filter import LedFadeinoutOjbectFilter
 from libled.util.realsense_manager import RealsenseManager
-
+from libled.util.hw_controller_bridge import get_data_as_json
 
 class LedFramework(object):
 
@@ -21,12 +20,13 @@ class LedFramework(object):
         self.base_canvas = LedCanvas()
 
     def start(self):
-        SerialManager.init()
+        test = get_data_as_json()
+        if test is None:
+            logger.e('HW Contoller Server is stop.')
         RealsenseManager.init()
 
     def stop(self):
         RealsenseManager.stop()
-        SerialManager.stop()
 
     def __enter__(self):
         self.start()

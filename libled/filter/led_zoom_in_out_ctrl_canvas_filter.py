@@ -3,7 +3,7 @@ from ..led_cube import *
 from ..util.led_draw_util import *
 from ..util.cube_util import *
 from ..util.color import Color
-from ..util.serial_manager import SerialManager
+from ..util.hw_controller_bridge import get_data_as_json
 import math
 import numpy as np
 import random
@@ -26,7 +26,7 @@ class LedZoomInOutCtrlCanvasFilter(LedCanvasFilter):
 
     def pre_draw(self):
         super(LedZoomInOutCtrlCanvasFilter, self).pre_draw()
-        param = SerialManager.get_data_as_json(defaults={'a0':0.5, 'a1':0.5})
+        param = get_data_as_json(defaults={'a0':0.5, 'a1':0.5})
 
         self.t += param['a0'] * 2
 

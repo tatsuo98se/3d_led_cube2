@@ -1,7 +1,7 @@
 from led_canvs_filter import LedCanvasFilter
 from ..led_cube import *
 from ..util.cube_util import *
-from ..util.serial_manager import SerialManager
+from ..util.hw_controller_bridge import get_data_as_json
 import time
 
 class LedRollingCtrlCanvasFilter(LedCanvasFilter):
@@ -13,7 +13,7 @@ class LedRollingCtrlCanvasFilter(LedCanvasFilter):
 
     def pre_draw(self):
         super(LedRollingCtrlCanvasFilter, self).pre_draw()
-        param = SerialManager.get_data_as_json(defaults={'a0':0.5, 'a1':0.5})
+        param = get_data_as_json(defaults={'a0':0.5, 'a1':0.5})
         direction = (param['a0'] - 0.5) * 2
         speed = param['a1'] * 200
 

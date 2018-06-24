@@ -1,7 +1,7 @@
 from led_canvs_filter import LedCanvasFilter
 from ..led_cube import *
 from ..util.color import Color
-from ..util.serial_manager import SerialManager
+from ..util.hw_controller_bridge import get_data_as_json
 import math
 import time
 
@@ -14,7 +14,7 @@ class LedSkewedCtrlCanvasFilter(LedCanvasFilter):
 
     def pre_draw(self):
         super(LedSkewedCtrlCanvasFilter, self).pre_draw()
-        param = SerialManager.get_data_as_json(defaults={'a0':0.5, 'a1':0.5})
+        param = get_data_as_json(defaults={'a0':0.5, 'a1':0.5})
         direction = (param['a0'] - 0.5)
         speed = param['a1'] / 5
         self.t += direction * speed

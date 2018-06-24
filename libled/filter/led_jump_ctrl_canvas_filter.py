@@ -1,7 +1,7 @@
 # -*- encoding:utf8 -*-
 from led_canvs_filter import LedCanvasFilter
 import time
-from ..util.serial_manager import SerialManager
+from ..util.hw_controller_bridge import get_data_as_json
 
 GRAVITY = 0.8
 UPDATE_FREQ = 0.08
@@ -17,7 +17,7 @@ class LedJumpCtrlCanvasFilter(LedCanvasFilter):
 
     def pre_draw(self):
         super(LedJumpCtrlCanvasFilter, self).pre_draw()
-        param = SerialManager.get_data_as_json(defaults={'a0':0.5, 'a1':0.5})
+        param = get_data_as_json(defaults={'a0':0.5, 'a1':0.5})
         if time.time() - self.last_update < UPDATE_FREQ:
             return
 
@@ -34,5 +34,5 @@ class LedJumpCtrlCanvasFilter(LedCanvasFilter):
         return power * power
 
     def update_initial_power(self):
-        param = SerialManager.get_data_as_json(defaults={'a0':0.5, 'a1':0.5})
+        param = bwctrl.get_data_as_json(defaults={'a0':0.5, 'a1':0.5})
         return 2.5 * (0.5 + param['a1'])

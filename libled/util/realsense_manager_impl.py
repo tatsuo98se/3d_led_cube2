@@ -55,9 +55,9 @@ class RealsenseManager:
         d = self.dev.depth /256.0
         d = cv2.applyColorMap(d.astype(np.uint8), cv2.COLORMAP_BONE)
 #        d = np.rot90(d)
-        scale = max(32.0/480, 16.0/640)
+        scale = max(32.0/640, 16.0/480)
         scaled =  get_scled_rgb_image(d, scale, scale) # / 256.0
-        return resize2(scaled, (16, 32), (0,0), [[0]*4])
+        return resize2(scaled, (16, 32), (-4,0), [[0]*4])
  
     @classmethod
     def init(cls):

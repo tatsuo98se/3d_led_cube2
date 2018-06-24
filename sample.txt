@@ -98,3 +98,7 @@ show:{"orders":[{"id":"filter-vibe"},{"id":"filter-jump"},{"id":"filter-wakame"}
 show:{"orders":[{"id":"filter-vibe"},{"id":"object-realsense", "lifetime":120}]}
 
 show:{"orders":[{"id":"object-makey", "lifetime":3},{"id":"object-makey", "lifetime":3, "type":"two"},{"id":"object-makey", "lifetime":3, "type":"three"}]}
+
+show:{"orders":[{"id":"filter-exile"},{"id":"object-note", "lifetime":120}]}
+show:{"orders":[{"id":"filter-zanzo"},{"id":"filter-jump"},{"id":"object-note", "lifetime":120}]}
+show:{"orders":[{"id":"filter-zanzo"},{"id":"object-realsense", "lifetime":0}]}

@@ -35,7 +35,7 @@ class ReadLineWorker(Thread):
     def get_data(self):
         return self.line 
 
-class SerialManager:
+class HwControllerManager:
     _instance = None
     _port = None
 
@@ -98,7 +98,7 @@ class SerialManager:
             else:
                 logger.w("controller is not connected.")
         except:
-            logger.e('SerialManager.init() failed.' + str(sys.exc_info()[0]))
+            logger.e('HwControllerManager.init() failed.' + str(sys.exc_info()[0]))
 
 
         return cls._instance
