@@ -2,6 +2,7 @@ import json
 from libled.led_cube import *
 from datetime import datetime
 import time
+import traceback
 from libled.led_canvas import LedCanvas
 from libled.util.led_order_util import *
 from libled.i_led_canvas import ILedCanvas
@@ -99,7 +100,8 @@ class LedFramework(object):
                 led.Wait(wait)
 
         except KeyError as err:
-            print("error unexpected json : {0}".format(err))
+            logger.e("error unexpected json : {0}".format(err))
+            logger.e(traceback.format_exc())
             return
         finally:
             self.is_abort = False

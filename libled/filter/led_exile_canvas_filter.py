@@ -1,6 +1,7 @@
 from led_canvs_filter import LedCanvasFilter
 from ..led_cube import *
 from ..util.color import Color
+from ..util.common_util import *
 from ..util.cube_util import *
 import math
 import time
@@ -15,9 +16,10 @@ class LedExileCanvasFilter(LedCanvasFilter):
         self.src = self.get_new_canvas()
 
     def get_new_canvas(self):
-        return [[None for height in range(LED_HEIGHT)] for width in range(LED_WIDTH)]
+        return create_nested_dict(2)
 
     def pre_draw(self):
+        super(LedExileCanvasFilter, self).pre_draw()
         self.src = self.get_new_canvas()
 
     def show(self, canvas = None):
@@ -25,8 +27,6 @@ class LedExileCanvasFilter(LedCanvasFilter):
         super(LedExileCanvasFilter, self).show(canvas)
 
     def set_led(self, xx, yy, z, color):
-        if not is_in_cube(xx, yy, z):
-            return
 
         x = int(round(xx))
         y = int(round(yy))
@@ -37,6 +37,7 @@ class LedExileCanvasFilter(LedCanvasFilter):
             self.src[x][y] = self.src[x][y] | Color.object_to_color(color)  
 
     def post_draw(self):
+        super(LedExileCanvasFilter, self).post_draw()
         step = 2
         for x in range(LED_WIDTH):
             for y in range(LED_HEIGHT):

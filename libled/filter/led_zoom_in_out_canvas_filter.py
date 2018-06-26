@@ -39,6 +39,7 @@ class LedZoomInOutCanvasFilter(LedCanvasFilter):
 
  
     def post_draw(self):
+        super(LedZoomInOutCanvasFilter, self).post_draw()
 
         scale = self.scale
         for z in range(LED_DEPTH):

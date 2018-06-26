@@ -24,6 +24,7 @@ class LedHeartsBeatsCanvasFilter(LedCanvasFilter):
        return np.array([[[ [[0]*4] * LED_DEPTH] * LED_HEIGHT ] * LED_WIDTH ] , dtype = np.uint8)
 
     def pre_draw(self):
+        super(LedHeartsBeatsCanvasFilter, self).pre_draw()
         T = time.time() - self.last_update
         if T > 0.5:
             self.need_update = True
@@ -42,6 +43,7 @@ class LedHeartsBeatsCanvasFilter(LedCanvasFilter):
         self.src[0, ix, iy, iz] = Color.object_to_color(color).to_rgba255()
 
     def post_draw(self):
+        super(LedHeartsBeatsCanvasFilter, self).post_draw()
 
         if self.need_update:
             scale = random.uniform(1.1 ,1.5)

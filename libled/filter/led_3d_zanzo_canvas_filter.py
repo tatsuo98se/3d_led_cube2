@@ -2,6 +2,7 @@ from led_canvs_filter import LedCanvasFilter
 from ..led_cube import *
 from ..util.color import Color
 from ..util.cube_util import *
+from ..util.common_util import *
 import math
 import time
 import numpy as np
@@ -18,10 +19,11 @@ class Led3DZanzoCanvasFilter(LedCanvasFilter):
             self.q.append(self.get_new_canvas())
 
     def get_new_canvas(self):
-        return [[None for _ in range(LED_HEIGHT)] for _ in range(LED_WIDTH)]
+        return create_nested_dict(2)
 
     def pre_draw(self):
-        self.buffer = [[[None for _ in range(LED_DEPTH)] for _ in range(LED_HEIGHT)] for _ in range(LED_WIDTH)]
+        super(Led3DZanzoCanvasFilter, self).pre_draw()
+        self.buffer = create_nested_dict(3)
 
     def show(self, canvas = None):
         self.t += 0.3
@@ -41,6 +43,7 @@ class Led3DZanzoCanvasFilter(LedCanvasFilter):
 
 
     def post_draw(self):
+        super(Led3DZanzoCanvasFilter, self).post_draw()
 
         for x in range(LED_WIDTH):
             for y in range(LED_HEIGHT):

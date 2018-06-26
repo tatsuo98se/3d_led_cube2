@@ -1,7 +1,7 @@
 import numpy as np
 
 class Color:
-    def __init__(self, r, g, b, a=1.0):
+    def __init__(self, r=0, g=0, b=0, a=1.0):
         self.r = float(r)
         self.g = float(g)
         self.b = float(b)
