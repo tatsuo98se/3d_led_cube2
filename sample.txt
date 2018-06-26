@@ -104,3 +104,4 @@ show:{"orders":[{"id":"filter-zanzo"},{"id":"filter-jump"},{"id":"object-note", 
 show:{"orders":[{"id":"filter-zanzo"},{"id":"object-realsense", "lifetime":0}]}
 show:{"orders":[{"id":"filter-3d-zanzo"},{"id":"filter-skewed"},{"id":"object-star", "lifetime":0}]}
 show:{"orders":[{"id":"filter-3d-zanzo"},{"id":"filter-skewed"},{"id":"filter-z-skewed-ctrl"},{"id":"object-stickman", "lifetime":0}]}
+show:{"orders":[{"id":"filter-explosion"},{"id":"object-stickman", "lifetime":0}]}

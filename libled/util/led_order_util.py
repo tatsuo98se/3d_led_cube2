@@ -78,6 +78,7 @@ from ..filter.led_exile_canvas_filter import LedExileCanvasFilter
 from ..filter.led_zanzo_canvas_filter import LedZanzoCanvasFilter
 from ..filter.led_3d_zanzo_canvas_filter import Led3DZanzoCanvasFilter
 from ..filter.led_z_skewed_ctrl_canvas_filter import LedZSkewedCtrlCanvasFilter
+from ..filter.led_explosion_canvas_filter import LedExplosionCanvasFilter
 
 from ..ctrl.led_filter_clear_ctrl import LedFilterClearCtrl
 
@@ -281,6 +282,8 @@ def create_filter(order, canvas):
         return LedZanzoCanvasFilter(canvas)
     elif oid == 'filter-3d-zanzo':
         return Led3DZanzoCanvasFilter(canvas)
+    elif oid == 'filter-explosion':
+        return LedExplosionCanvasFilter(canvas)
     elif oid == 'filter-bk-mountain':
         return LedObjectCanvasFilter(canvas, \
                 LedScrolledMountainObject())

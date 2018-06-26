@@ -34,5 +34,5 @@ class LedJumpCtrlCanvasFilter(LedCanvasFilter):
         return power * power
 
     def update_initial_power(self):
-        param = bwctrl.get_data_as_json(defaults={'a0':0.5, 'a1':0.5})
+        param = get_data_as_json(defaults={'a0':0.5, 'a1':0.5})
         return 2.5 * (0.5 + param['a1'])
