@@ -76,6 +76,8 @@ from ..filter.led_wakame_ctrl_canvas_filter import LedWakameCtrlCanvasFilter
 from ..filter.led_jump_button_canvas_filter import LedJumpButtonCanvasFilter
 from ..filter.led_exile_canvas_filter import LedExileCanvasFilter
 from ..filter.led_zanzo_canvas_filter import LedZanzoCanvasFilter
+from ..filter.led_3d_zanzo_canvas_filter import Led3DZanzoCanvasFilter
+from ..filter.led_z_skewed_ctrl_canvas_filter import LedZSkewedCtrlCanvasFilter
 
 from ..ctrl.led_filter_clear_ctrl import LedFilterClearCtrl
 
@@ -265,6 +267,8 @@ def create_filter(order, canvas):
         return LedRollingCtrlCanvasFilter(canvas)
     elif oid == 'filter-skewed-ctrl':
         return LedSkewedCtrlCanvasFilter(canvas)
+    elif oid == 'filter-z-skewed-ctrl':
+        return LedZSkewedCtrlCanvasFilter(canvas)
     elif oid == 'filter-wakame':
         return LedWakameCanvasFilter(canvas)
     elif oid == 'filter-wakame-ctrl':
@@ -275,6 +279,8 @@ def create_filter(order, canvas):
         return LedExileCanvasFilter(canvas)
     elif oid == 'filter-zanzo':
         return LedZanzoCanvasFilter(canvas)
+    elif oid == 'filter-3d-zanzo':
+        return Led3DZanzoCanvasFilter(canvas)
     elif oid == 'filter-bk-mountain':
         return LedObjectCanvasFilter(canvas, \
                 LedScrolledMountainObject())

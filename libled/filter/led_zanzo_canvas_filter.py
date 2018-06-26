@@ -52,6 +52,6 @@ class LedZanzoCanvasFilter(LedCanvasFilter):
                     if z == 0:
                         self.canvas.set_led(x, y, z, s[x][y])
                     else:
-                        h = (math.sin(self.t+z/step) + 1) /2
+                        h = (math.sin(self.t-z/step) + 1) /2
                         self.canvas.set_led(x, y, z, 
                             Color.rgbtapple_to_color(colorsys.hsv_to_rgb(h, 1.0, 1.0)))

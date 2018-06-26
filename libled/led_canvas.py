@@ -15,6 +15,9 @@ class LedCanvas(ILedCanvas):
 
     def set_led(self, x, y, z, color):
 
+        if color is None:
+            return
+
         ix, iy, iz = rounds(x, y, z)
         if not is_in_cube(ix, iy, iz):
             return
