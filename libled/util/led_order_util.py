@@ -45,6 +45,7 @@ from ..object.led_scrolled_grass_obj import LedScrolledGrassObject
 from ..object.led_realsense_obj import LedRealsenseObject
 from ..object.led_makey_obj import LedMakeyObject
 from ..object.led_painting_obj import LedPaintingObject
+from ..object.led_3d_makey_obj import Led3DMakeyObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -208,6 +209,8 @@ def create_object(order):
     elif oid == 'object-makey':
         makeytype = get_param(order, 'type')
         obj = LedMakeyObject(x, y, z, lifetime, makeytype)
+    elif oid == 'object-3d-makey':
+        obj = Led3DMakeyObject(x, y, z, lifetime)
     elif oid == 'object-painting':
         obj = LedPaintingObject(lifetime)
     elif oid == 'object-text':
@@ -283,6 +286,8 @@ def create_filter(order, canvas):
     elif oid == 'filter-3d-zanzo':
         return Led3DZanzoCanvasFilter(canvas)
     elif oid == 'filter-explosion':
+        return LedExplosionCanvasFilter(canvas, 2)
+    elif oid == 'filter-3d-explosion':
         return LedExplosionCanvasFilter(canvas)
     elif oid == 'filter-bk-mountain':
         return LedObjectCanvasFilter(canvas, \

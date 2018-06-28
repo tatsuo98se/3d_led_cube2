@@ -24,11 +24,13 @@ def rgb(ix):
 
 class LedExplosionCanvasFilter(LedCanvasFilter):
 
-    def __init__(self, canvas):
+    def __init__(self, canvas, dimension=3):
         super(LedExplosionCanvasFilter, self).__init__(canvas)
         self.t  = 0
+        self.dimension = dimension
         self.param = None
         self.speeds = self.get_new_canvas()
+        self.centers = self.get_new_canvas()
 
     def get_new_canvas(self):
         return create_nested_dict(3)
@@ -39,23 +41,36 @@ class LedExplosionCanvasFilter(LedCanvasFilter):
             for y in range(LED_HEIGHT):
                 for z in range(LED_DEPTH):
                     self.speeds[x][y][z] = (random.uniform(1.5, 3.0), random.uniform(2.0, 4.0))
+                    if self.dimension == 3:
+                        self.centers[x][y][z] = \
+                                (LED_WIDTH / 2.0 + random.uniform(-1, 1),  \
+                                LED_HEIGHT / 4.0 * 3+ random.uniform(-1, 1), \
+                                LED_DEPTH / 2+ random.uniform(-1, 1))
+                    else:
+                        self.centers[x][y][z] = \
+                                (LED_WIDTH / 2.0 + random.uniform(-1, 1),  \
+                                LED_HEIGHT / 4.0 * 3+ random.uniform(-1, 1), \
+                                -1 + random.uniform(-1, 1))
+
+
 
         self.param = get_data_as_json(defaults={'a0':0.5, 'a1':0.5})
         self.t += 0.2
 
     def set_led(self, xx, yy, zz, color):
 
-        center = (LED_WIDTH / 2.0, LED_HEIGHT / 4.0 * 3, LED_DEPTH / 2)
 
         x = int(round(xx))
         y = int(round(yy))
         z = int(round(zz))
 
+        center = self.centers[x][y][z]
+
         for speed in self.speeds[x][y][z]:
             pt = np.array([xx - center[0], yy - center[1], zz - center[2]])
             if math.sin(self.t) > 0:
 #                color = Color.rgbtapple_to_color(colorsys.hsv_to_rgb(np.average(pt)%1, 1.0, 1.0))
-                color = rgb(np.linalg.norm(pt))
+#                color = rgb(np.linalg.norm(pt))
 
                 pt *= math.sin(self.t)* 3 * speed + 1
             self.canvas.set_led(pt[0] + center[0], pt[1] + center[1], pt[2] + center[2], color)
