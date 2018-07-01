@@ -15,43 +15,34 @@ class FrameWorker(Thread):
 
     def __init__(self, realsense):
         super(FrameWorker,self).__init__()
-        self.realsense = realsense
+        context = zmq.Context()
+        self.socket = context.socket(zmq.SUB)
+        logger.i("Collecting updates from realsense server...")
+        self.socket.connect("tcp://localhost:5501")
+        self.socket.setsockopt(zmq.SUBSCRIBE, '')
+
         self.is_stop = False
         self.frame = None
 
     def run(self):
         while not self.is_stop:
-            self.realsense.wait_for_frames()
-            self.frame = self.realsense.frame()
+            self.frame = recv_array(self.socket)
         self.dev.stop()
-        pyrs.stop()
-
-
     
     def stop(self):
         self.is_stop = True
 
     def get_data(self):
-        return self.frame 
+        return self.frame
+                
 
 class RealsenseManager:
     _instance = None
 
     def __init__(self):
-        context = zmq.Context()
-        self.socket = context.socket(zmq.SUB)
-        logger.i("Collecting updates from realsense server...")
-        self.socket.connect("tcp://localhost:5556")
-        self.socket.setsockopt(zmq.SUBSCRIBE, '')
         self.worker = FrameWorker(self)
         self.worker.start()
         
-    def wait_for_frames(self):
-        pass
-
-    def frame(self):
-        return recv_array(self.socket)
- 
     @classmethod
     def init(cls):
         if cls._instance is None:
@@ -65,12 +56,16 @@ class RealsenseManager:
         return cls._instance
 
     @classmethod
+    def get_instance(cls):
+        return RealsenseManager.init()
+
+    @classmethod
     def get_data(cls):
-        if cls._instance is not None:
-            return cls._instance.worker.get_data()
+        instance = RealsenseManager.get_instance()
+        if instance is not None:
+            return instance.worker.get_data()
         else:
             return None
-
 
     @classmethod
     def stop(cls):

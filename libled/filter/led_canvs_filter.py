@@ -5,6 +5,9 @@ class LedCanvasFilter(ILedCanvas):
     def __init__(self, canvas):
         self.canvas = canvas
 
+    def destructer(self):
+        self.canvas.destructor()
+
     def set_led(self, x, y, z, color):
         self.canvas.set_led(x, y, z, color)
 
@@ -34,7 +37,7 @@ class LedCanvasFilter(ILedCanvas):
 
     def clear(self):
         self.canvas.clear()
-
+    
     def get_object_count(self):
         self.canvas.get_object_count()
 

@@ -9,7 +9,7 @@ import numpy as np
 import colorsys
 import random
 import time
-from ..util.hw_controller_bridge import get_data_as_json
+from ..util.hw_controller_util import get_data_as_json
 def red(ix):
     i = int(ix) % 90
     if i < 30:

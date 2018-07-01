@@ -10,8 +10,11 @@ class LedCanvas(ILedCanvas):
         self.objects = []
         self.led_cube = self.get_new_canvas()
 
+    def destructor(self):
+        pass
+
     def get_new_canvas(self):
-        return [[[Color(0,0,0,0) for depth in range(LED_DEPTH)] for height in range(LED_HEIGHT)] for width in range(LED_WIDTH)]
+        return [[[Color(0,0,0,0) for _ in range(LED_DEPTH)] for _ in range(LED_HEIGHT)] for _ in range(LED_WIDTH)]
 
     def set_led(self, x, y, z, color):
 

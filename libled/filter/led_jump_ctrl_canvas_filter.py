@@ -1,7 +1,7 @@
 # -*- encoding:utf8 -*-
 from led_canvs_filter import LedCanvasFilter
 import time
-from ..util.hw_controller_bridge import get_data_as_json
+from ..util.hw_controller_util import get_data_as_json
 
 GRAVITY = 0.8
 UPDATE_FREQ = 0.08

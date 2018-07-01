@@ -2,7 +2,7 @@ from led_canvs_filter import LedCanvasFilter
 import math
 import colorsys
 from ..util.color import Color
-from ..util.hw_controller_bridge import get_data_as_json
+from ..util.hw_controller_util import get_data_as_json
 import json
 import time
 

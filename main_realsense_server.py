@@ -15,7 +15,7 @@ from libled.util.zmq_util import *
 
 context = zmq.Context()
 socket = context.socket(zmq.PUB)
-socket.bind("tcp://*:5556")
+socket.bind("tcp://*:5501")
 
 dev = None
 

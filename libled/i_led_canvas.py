@@ -5,6 +5,10 @@ from abc import ABCMeta, abstractmethod
 class ILedCanvas(object):
 
     @abstractmethod
+    def destructor(self):
+        pass
+
+    @abstractmethod
     def set_led(self, x, y, z, color):
         pass
 

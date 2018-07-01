@@ -3,7 +3,7 @@ from ..led_cube import *
 from ..util.led_draw_util import *
 from ..util.cube_util import *
 from ..util.color import Color
-from ..util.hw_controller_bridge import get_data_as_json
+from ..util.hw_controller_util import get_data_as_json
 import math
 import numpy as np
 import random

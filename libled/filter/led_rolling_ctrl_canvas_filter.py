@@ -1,7 +1,7 @@
 from led_canvs_filter import LedCanvasFilter
 from ..led_cube import *
 from ..util.cube_util import *
-from ..util.hw_controller_bridge import get_data_as_json
+from ..util.hw_controller_util import get_data_as_json
 import time
 
 class LedRollingCtrlCanvasFilter(LedCanvasFilter):
