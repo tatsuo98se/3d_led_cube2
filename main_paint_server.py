@@ -14,6 +14,7 @@ from werkzeug import ImmutableDict
 from libled.led_cube import *
 from libled.util.color import Color
 from libled.util.paint_manager import PaintManager
+from libled.util.flask_on_thread import FlaskOnThread
 
 class FlaskWithHamlish(Flask):
     jinja_options = ImmutableDict(
@@ -78,23 +79,7 @@ class LedPaintHttpServer(LedRunLoop):
                 return q.get()
 
 
-class FlaskThread(threading.Thread):
-
-    def __init__(self, app, host='0.0.0.0', port=5301):
-        super(FlaskThread, self).__init__()
-        self.app = app
-        self.host = host
-        self.port = port
-    
-    def run(self):
-        self.app.run(
-            debug=False,
-            host=self.host,
-            port=int(self.port)
-        )
-        
-
-flask = FlaskThread(app)
+flask = FlaskOnThread(app)
 flask.daemon = True
 flask.start()
 
