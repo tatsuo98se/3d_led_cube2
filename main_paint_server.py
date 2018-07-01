@@ -29,12 +29,13 @@ q.put('show:' + json.dumps({'orders': [{'id':'object-painting', 'lifetime':0}]})
 def index():
     return render_template('index.haml')
 
-@app.route('/api/filter')
+@app.route('/api/filters', methods=['POST'])
 def api_filter():
-    orders = {'orders': [
-        {'id':'filter-wakame'},
-        {'id':'object-painting', 'lifetime':0}
-    ]}
+    filters = json.loads(request.data)
+
+    filters.append({'id':'object-painting', 'lifetime':0})
+
+    orders = {'orders': filters}
     q.put('show:' + json.dumps(orders))
 
 
