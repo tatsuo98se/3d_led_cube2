@@ -30,9 +30,6 @@ class Led3DZanzoCanvasFilter(LedCanvasFilter):
         super(Led3DZanzoCanvasFilter, self).show(canvas)
 
     def set_led(self, xx, yy, zz, color):
-        c = Color.object_to_color(color)
-        if c.is_black():
-            return
 
         x = int(round(xx))
         y = int(round(yy))

@@ -29,8 +29,6 @@ class LedExileCanvasFilter(LedCanvasFilter):
     def set_led(self, xx, yy, z, color):
 
         c = Color.object_to_color(color)
-        if c.is_black():
-            return
 
         x = int(round(xx))
         y = int(round(yy))
