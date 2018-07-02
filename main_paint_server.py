@@ -31,12 +31,13 @@ def index():
 
 @app.route('/api/filters', methods=['POST'])
 def api_filter():
-    filters = json.loads(request.data)
+    filters = json.loads(request.data)['filters']
 
     filters.append({'id':'object-painting', 'lifetime':0})
 
     orders = {'orders': filters}
     q.put('show:' + json.dumps(orders))
+    return ""
 
 
 @app.route('/api/led', methods=['POST'])
@@ -80,7 +81,7 @@ class LedPaintHttpServer(LedRunLoop):
                 return q.get()
 
 
-flask = FlaskOnThread(app)
+flask = FlaskOnThread(app, port=5301)
 flask.daemon = True
 flask.start()
 

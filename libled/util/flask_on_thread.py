@@ -1,9 +1,12 @@
+import sys
+import traceback
 import threading
 from flask import Flask, request
+import logger
 
 class FlaskOnThread(threading.Thread):
 
-    def __init__(self, flask_app, host='0.0.0.0', port=5301):
+    def __init__(self, flask_app, host='0.0.0.0', port=5000):
         super(FlaskOnThread, self).__init__()
         if not isinstance(flask_app, Flask):
             raise ValueError(Flask)
@@ -16,12 +19,15 @@ class FlaskOnThread(threading.Thread):
     
     def run(self):
         try:
+            logger.i("flask server has started. host:{0}, port:{1}".format(self.host, self.port))
             self.flask_app.run(
                 debug=False,
                 host=self.host,
                 port=int(self.port)
             )
         except Exception as e:
+            logger.e("Unexpected error:" + str(sys.exc_info()[0]))
+            logger.e(traceback.format_exc())
             self.lock.acquire()            
             self.errors.append(e)
             self.lock.release()            

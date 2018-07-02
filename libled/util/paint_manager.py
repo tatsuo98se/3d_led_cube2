@@ -12,7 +12,7 @@ class PaintManager:
     _instance = None
 
     def __init__(self):
-        self._canvas = [[Color(0,0,0,0) for height in range(LED_HEIGHT)] for width in range(LED_WIDTH)]
+        self._canvas = [[Color(0,0,0,0) for _ in range(LED_HEIGHT)] for _ in range(LED_WIDTH)]
 
     @classmethod
     def get_instance(cls):
