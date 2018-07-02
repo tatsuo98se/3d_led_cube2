@@ -44,6 +44,7 @@ class HwControllerManager:
 
     def __init__(self):
         initial_data = None
+        self.worker = None
         try:
             initial_data = urllib2.urlopen('http://localhost:5601/api/gamepad').read()
             self.worker = ReadLineWorker(lambda: HwControllerManager.event(), json.loads(initial_data))
@@ -78,7 +79,7 @@ class HwControllerManager:
 
     @classmethod
     def get_data(cls):
-        if cls._instance is not None:
+        if cls._instance is not None and cls._instance.worker is not None:
             return cls._instance.worker.get_data()
         else:
             return None

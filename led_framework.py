@@ -67,6 +67,9 @@ class LedFramework(object):
                 span = time.time()
                 if self.is_abort:
                     canvas.abort()
+                    canvas.clear()
+                    led.Clear()
+                    led.Show()
                     return
 
                 if current_order is None:
@@ -110,6 +113,5 @@ class LedFramework(object):
             self.is_abort = False
             self.is_running = False
             canvas.clear()
-            led.Show()
 
 

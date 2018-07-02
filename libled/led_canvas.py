@@ -93,8 +93,6 @@ class LedCanvas(ILedCanvas):
         for obj in self.objects[:]:
             obj.abort()
         self.objects = []
-        led.Clear()
-        led.Show()
 
     def get_object_count(self):
         return len(self.objects)
