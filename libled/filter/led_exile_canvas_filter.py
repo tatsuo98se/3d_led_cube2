@@ -28,13 +28,17 @@ class LedExileCanvasFilter(LedCanvasFilter):
 
     def set_led(self, xx, yy, z, color):
 
+        c = Color.object_to_color(color)
+        if c.is_black():
+            return
+
         x = int(round(xx))
         y = int(round(yy))
 
         if self.src[x][y] is None:
-            self.src[x][y] = Color.object_to_color(color)  
+            self.src[x][y] = c
         else:
-            self.src[x][y] = self.src[x][y] | Color.object_to_color(color)  
+            self.src[x][y] = self.src[x][y] | c
 
     def post_draw(self):
         super(LedExileCanvasFilter, self).post_draw()
