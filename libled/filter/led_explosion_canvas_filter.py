@@ -35,27 +35,29 @@ class LedExplosionCanvasFilter(LedCanvasFilter):
     def get_new_canvas(self):
         return create_nested_dict(3)
 
+    def get_speeds(self, x, y, z):
+        if self.speeds[x][y][z] is None:
+            self.speeds[x][y][z] = (random.uniform(1.5, 3.0), random.uniform(2.0, 4.0))
+        return self.speeds[x][y][z]
+        
+    def get_center(self, x, y, z):
+        if self.centers[x][y][z] is None:
+            if self.dimension == 3:
+                self.centers[x][y][z] = \
+                        (LED_WIDTH / 2.0 + random.uniform(-1, 1),  \
+                        LED_HEIGHT / 4.0 * 3 + random.uniform(-1, 1), \
+                        LED_DEPTH / 2 + random.uniform(-1, 1))
+            else:
+                self.centers[x][y][z] = \
+                        (LED_WIDTH / 2.0 + random.uniform(-1, 1),  \
+                        LED_HEIGHT / 4.0 * 3 + random.uniform(-1, 1), \
+                        -1 + random.uniform(-1, 1))
+        return self.centers[x][y][z]
+
     def pre_draw(self):
         super(LedExplosionCanvasFilter, self).pre_draw()
-        for x in range(LED_WIDTH):
-            for y in range(LED_HEIGHT):
-                for z in range(LED_DEPTH):
-                    self.speeds[x][y][z] = (random.uniform(1.5, 3.0), random.uniform(2.0, 4.0))
-                    if self.dimension == 3:
-                        self.centers[x][y][z] = \
-                                (LED_WIDTH / 2.0 + random.uniform(-1, 1),  \
-                                LED_HEIGHT / 4.0 * 3+ random.uniform(-1, 1), \
-                                LED_DEPTH / 2+ random.uniform(-1, 1))
-                    else:
-                        self.centers[x][y][z] = \
-                                (LED_WIDTH / 2.0 + random.uniform(-1, 1),  \
-                                LED_HEIGHT / 4.0 * 3+ random.uniform(-1, 1), \
-                                -1 + random.uniform(-1, 1))
-
-
-
         self.param = get_data_as_json(defaults={'a0':0.5, 'a1':0.5})
-        self.t += 0.2
+        self.t += 0.15
 
     def set_led(self, xx, yy, zz, color):
 
@@ -64,9 +66,9 @@ class LedExplosionCanvasFilter(LedCanvasFilter):
         y = int(round(yy))
         z = int(round(zz))
 
-        center = self.centers[x][y][z]
+        center = self.get_center(x, y, z)
 
-        for speed in self.speeds[x][y][z]:
+        for speed in self.get_speeds(x, y, z):
             pt = np.array([xx - center[0], yy - center[1], zz - center[2]])
             if math.sin(self.t) > 0:
 #                color = Color.rgbtapple_to_color(colorsys.hsv_to_rgb(np.average(pt)%1, 1.0, 1.0))
