@@ -68,15 +68,13 @@ class LedFramework(object):
                 if self.is_abort:
                     canvas.abort()
                     canvas.clear()
-                    led.Clear()
-                    led.Show()
-                    return
-
+                    break
+                    
                 if current_order is None:
                     data = flatten_data.dequeue()
                     if data is None:
                         if canvas.get_object_count() <= 0:
-                            return
+                            break
                         else:
                             pass
                     else:
@@ -104,6 +102,9 @@ class LedFramework(object):
                 wait = max(0, 70 - spanx)
                 #print('span: ' + str(spanx) + ' wait:' + str(wait))
                 led.Wait(wait)
+
+            led.Clear()
+            led.Show()
 
         except KeyError as err:
             logger.e("error unexpected json : {0}".format(err))
