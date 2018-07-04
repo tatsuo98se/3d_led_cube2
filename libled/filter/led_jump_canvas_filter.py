@@ -3,9 +3,11 @@ from led_canvs_filter import LedCanvasFilter
 from ..led_cube import *
 import time
 import random
+from ..util.sound_player import SoundPlayer as sp
 
 GRAVITY = 0.8
 UPDATE_FREQ = 0.08
+
 
 class LedJumpCanvasFilter(LedCanvasFilter):
 
@@ -14,7 +16,9 @@ class LedJumpCanvasFilter(LedCanvasFilter):
         self.elapsed = 0
         self.last_update = time.time()
         self.initial_power = self.update_initial_power()
-        self.power = self.update_initial_power() #テキトーな上昇する力の値
+        self.power = self.update_initial_power()  # テキトーな上昇する力の値
+        self.wav = 'asset/audio/se_jump.wav'
+        sp.instance().do_play(self.wav)
 
     def pre_draw(self):
         super(LedJumpCanvasFilter, self).pre_draw()
@@ -25,13 +29,16 @@ class LedJumpCanvasFilter(LedCanvasFilter):
         if(self.power < -self.initial_power):
             self.initial_power = self.update_initial_power()
             self.power = self.initial_power
+            sp.instance().do_play(self.wav)
+
         self.last_update = time.time()
 
     def set_led(self, x, y, z, color):
-        self.canvas.set_led(x, y + self.get_power(self.power) - self.get_power(self.initial_power), z, color)
+        self.canvas.set_led(x, y + self.get_power(self.power) -
+                            self.get_power(self.initial_power), z, color)
 
     def get_power(self, power):
         return power * power
 
     def update_initial_power(self):
-        return random.uniform(2.5,4)
+        return random.uniform(2.5, 4)

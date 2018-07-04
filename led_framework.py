@@ -12,6 +12,8 @@ from libled.util.queue import Queue
 from libled.object.led_fadeinout_obj_filter import LedFadeinoutOjbectFilter
 from libled.util.realsense_manager import RealsenseManager
 from libled.util.hw_controller_manager import HwControllerManager
+from libled.util.sound_player import SoundPlayer
+
 
 class LedFramework(object):
 
@@ -103,6 +105,7 @@ class LedFramework(object):
                 #print('span: ' + str(spanx) + ' wait:' + str(wait))
                 led.Wait(wait)
 
+            SoundPlayer.instance().do_stop()
             led.Clear()
             led.Show()
 

@@ -6,11 +6,14 @@ pip install numpy
 pip install flask  
 pip install opencv-python  
 [Optional] pip install pyrealsense
+pip install pyaudio
 
 ### for macOS
 
 brew install opencv  
 brew install boost  
+brew install portaudio
+> pyaudioをインストールする前にportaudioを導入してください。
 
 ### for win
 
