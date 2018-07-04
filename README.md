@@ -12,6 +12,11 @@ pip install opencv-python
 brew install opencv  
 brew install boost  
 
+### for win
+
+pip zmq
+pip serial
+
 ## Tested with
 
 macOS
@@ -29,7 +34,7 @@ macOS
 ローカル環境確認用  
 コンソールへの以下の入力で、HTTP経由での命令と等価の動作となる
 
-| HTTPでの表示命令 | main_notcp.pyでのコンソールへの表示命令入力 |
+| HTTPでの表示命令 | main_block_test.pyでのコンソールへの表示命令入力 |
 | ---------------- | ----------------------- |
 | HTTP POST<br/>http://(サーバーのIP)/api/show<br/>コンテンツ: (JSON表示命令) | show:{(JSON表示命令)} |
 | HTTP POST<br/>http://(サーバーのIP)/api/abort | abort |
