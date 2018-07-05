@@ -283,6 +283,8 @@ def create_filter(order, canvas):
         return LedExileCanvasFilter(canvas)
     elif oid == 'filter-zanzo':
         return LedZanzoCanvasFilter(canvas)
+    elif oid == 'filter-zanzo-ctrl':
+        return LedZanzoCanvasFilter(canvas, True)
     elif oid == 'filter-3d-zanzo':
         return Led3DZanzoCanvasFilter(canvas)
     elif oid == 'filter-explosion':

@@ -1,9 +1,14 @@
 from ..i_led_canvas import ILedCanvas
+from ..util.hw_controller_manager import HwControllerManager as hcm
+from ..util.timer_util import TimerUtil
+from ..util.logger import *
 
 class LedCanvasFilter(ILedCanvas):
 
-    def __init__(self, canvas):
+    def __init__(self, canvas, enable_controller=False):
         self.canvas = canvas
+        self.enable_controller = enable_controller
+        self.timer = TimerUtil()
 
     def destructer(self):
         self.canvas.destructor()
@@ -18,6 +23,7 @@ class LedCanvasFilter(ILedCanvas):
             self.canvas.show(canvas)
 
     def pre_draw(self):
+        self.timer.update_timer()
         self.canvas.pre_draw()
     
     def post_draw(self):
@@ -59,5 +65,23 @@ class LedCanvasFilter(ILedCanvas):
 
             canvas = canvas.canvas
 
+    def get_param_from_controller(self, defaults = None):
+        if not self.enable_controller:
+            return defaults
+
+        data =  hcm.get_data()
+        if data is not None and data != '':
+            return data
+        else:
+            return defaults
+        
+    def set_timer(self, timer, callback):
+        self.timer.set_timer(timer, callback)
+
+    def reset_timer(self):
+        self.timer.reset_timer()
+
+    def on_timer(self):
+        e('you should implement on_timer on your filter class.')
         
             

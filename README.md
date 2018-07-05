@@ -5,6 +5,7 @@ pip install pillow
 pip install numpy  
 pip install flask  
 pip install opencv-python  
+pip install pyzmq
 [Optional] pip install pyrealsense
 
 ### for macOS
