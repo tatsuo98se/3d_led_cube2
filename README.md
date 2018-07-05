@@ -12,13 +12,13 @@ pip install pyaudio
 
 brew install opencv  
 brew install boost  
-brew install portaudio
+brew install portaudio  
 > pyaudioをインストールする前にportaudioを導入してください。
 
 ### for win
 
-pip zmq
-pip serial
+pip zmq  
+pip pyserial  
 
 ## Tested with
 
