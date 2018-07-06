@@ -5,8 +5,10 @@ pip install pillow
 pip install numpy  
 pip install flask  
 pip install opencv-python  
-[Optional] pip install pyrealsense
-pip install pyaudio
+[Optional] pip install pyrealsense  
+pip zmq  
+pip pyserial  
+pip install pyaudio  
 
 ### for macOS
 
@@ -14,11 +16,6 @@ brew install opencv
 brew install boost  
 brew install portaudio  
 > pyaudioをインストールする前にportaudioを導入してください。
-
-### for win
-
-pip zmq  
-pip pyserial  
 
 ## Tested with
 
