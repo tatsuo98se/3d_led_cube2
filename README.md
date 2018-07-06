@@ -5,13 +5,17 @@ pip install pillow
 pip install numpy  
 pip install flask  
 pip install opencv-python  
-pip install pyzmq
-[Optional] pip install pyrealsense
+pip install pyzmq  
+pip pyserial  
+pip install pyaudio  
+[Optional] pip install pyrealsense  
 
 ### for macOS
 
 brew install opencv  
 brew install boost  
+brew install portaudio  
+> pyaudioをインストールする前にportaudioを導入してください。
 
 ## Tested with
 
@@ -30,7 +34,7 @@ macOS
 ローカル環境確認用  
 コンソールへの以下の入力で、HTTP経由での命令と等価の動作となる
 
-| HTTPでの表示命令 | main_notcp.pyでのコンソールへの表示命令入力 |
+| HTTPでの表示命令 | main_block_test.pyでのコンソールへの表示命令入力 |
 | ---------------- | ----------------------- |
 | HTTP POST<br/>http://(サーバーのIP)/api/show<br/>コンテンツ: (JSON表示命令) | show:{(JSON表示命令)} |
 | HTTP POST<br/>http://(サーバーのIP)/api/abort | abort |
