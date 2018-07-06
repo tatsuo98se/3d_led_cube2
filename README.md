@@ -5,10 +5,10 @@ pip install pillow
 pip install numpy  
 pip install flask  
 pip install opencv-python  
-[Optional] pip install pyrealsense  
-pip zmq  
+pip install pyzmq  
 pip pyserial  
 pip install pyaudio  
+[Optional] pip install pyrealsense  
 
 ### for macOS
 
