@@ -6,17 +6,18 @@ import time
 
 class LedWakameCanvasFilter(LedCanvasFilter):
 
-    def __init__(self, canvas):
-        super(LedWakameCanvasFilter, self).__init__(canvas)
+    def __init__(self, canvas, enable_controller=False):
+        super(LedWakameCanvasFilter, self).__init__(canvas, enable_controller)
         self.t = 0
 
-    def show(self, canvas = None):
-        self.t += 1
-        super(LedWakameCanvasFilter, self).show(canvas)
-
+    def pre_draw(self):
+        super(LedWakameCanvasFilter, self).pre_draw()
+        param = self.get_param_from_controller(defaults={'a0':0.5, 'a1':0.5})
+        self.t += 3 * param['a0']
+        self.shift = 0.8 + param['a1'] * 3
+ 
     def set_led(self, x, y, z, color):
-
         p = (self.t+y)/2
-        sx = math.sin(p)
-        sz = math.cos(p)
+        sx = math.sin(p) * self.shift
+        sz = math.cos(p) * self.shift
         self.canvas.set_led(x+sx, y, z+sz, color)

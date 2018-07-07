@@ -1,19 +1,19 @@
 from led_canvs_filter import LedCanvasFilter
 from ..led_cube import *
 from ..util.cube_util import *
-from ..util.hw_controller_util import get_data_as_json
 import time
 
-class LedRollingCtrlCanvasFilter(LedCanvasFilter):
+class LedRollingCanvasFilter(LedCanvasFilter):
 
-    def __init__(self, canvas):
-        super(LedRollingCtrlCanvasFilter, self).__init__(canvas)
+    def __init__(self, canvas, down=True, enable_controller=False):
+        super(LedRollingCanvasFilter, self).__init__(canvas, enable_controller)
         self.offset = 0
         self.last_update = time.time()
+        self.direction_value = 0.6 if down else 0.4
 
     def pre_draw(self):
-        super(LedRollingCtrlCanvasFilter, self).pre_draw()
-        param = get_data_as_json(defaults={'a0':0.5, 'a1':0.5})
+        super(LedRollingCanvasFilter, self).pre_draw()
+        param = self.get_param_from_controller(defaults={'a0':self.direction_value, 'a1':0.5})
         direction = (param['a0'] - 0.5) * 2
         speed = param['a1'] * 200
 

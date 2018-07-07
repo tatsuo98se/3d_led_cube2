@@ -12,7 +12,7 @@ from ..util.hw_controller_util import get_data_as_json
 class LedZanzoCanvasFilter(LedCanvasFilter):
 
     def __init__(self, canvas, enable_controller = False):
-        super(LedZanzoCanvasFilter, self).__init__(canvas, enable_controller=enable_controller)
+        super(LedZanzoCanvasFilter, self).__init__(canvas, enable_controller)
         self.t = 0
         self.src = None
         self.q = []
