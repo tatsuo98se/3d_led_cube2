@@ -38,17 +38,18 @@ class SoundPlayer(object):
         # event flags
         self._event_pause = threading.Event()
         self._event_stop = threading.Event()
-        self.event_init()
+        self.__event_init()
 
         # effect params
         self._mod_samplingrate = 1.0
         # 0 < volume < 1
         self._mod_volume = 0.5
 
-    def event_init(self):
+    def __event_init(self):
         self._event_pause.clear()
         self._event_stop.clear()
 
+    @classmethod
     def show_wavinfo(self, wfinfo):
         logger.d(wfinfo)
         logger.d('wave file info')
@@ -58,7 +59,7 @@ class SoundPlayer(object):
         logger.d('frame count = {}'.format(wfinfo[3]))
         logger.d('sound time = {} s'.format((int)(wfinfo[3] / wfinfo[2])))
 
-    def playsound(self, wavfile):
+    def __playsound(self, wavfile):
         if (wavfile == ""):
             logger.d('empty sound file.')
             return
@@ -79,9 +80,9 @@ class SoundPlayer(object):
             input_data = wf.readframes(CHUNK)
             logger.d('started blocking sound play.')
             while len(input_data) > 0:
-                if self.ctrl_sound():
+                if self.__ctrl_sound():
                     break
-                s.write(self.mod_sound(input_data))
+                s.write(self.__mod_sound(input_data))
                 input_data = wf.readframes(CHUNK)
 
         finally:
@@ -92,7 +93,7 @@ class SoundPlayer(object):
             p.terminate()
             logger.d('finished sound play.')
 
-    def ctrl_sound(self):
+    def __ctrl_sound(self):
         is_brake = False
 
         # stop action
@@ -111,7 +112,7 @@ class SoundPlayer(object):
 
         return is_brake
 
-    def mod_sound(self, input_data):
+    def __mod_sound(self, input_data):
         data = fx.get_buffer(input_data, self.wfinfo[1])
 
         # mod
@@ -126,10 +127,10 @@ class SoundPlayer(object):
 
     def do_play(self, wavfile):
         # clear event flags
-        self.event_init()
+        self.__event_init()
         # threading
         self.thread = threading.Thread(
-            target=self.playsound, args=(wavfile,))
+            target=self.__playsound, args=(wavfile,))
         self.thread.start()
 
     def do_pause(self):
