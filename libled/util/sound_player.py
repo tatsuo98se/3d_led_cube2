@@ -27,7 +27,6 @@ class SoundPlayer(object):
         if not cls.__instance:
             with cls.__lock:
                 if not cls.__instance:
-                    print('call SoundPlayer.instance(cls)')
                     cls.__instance = cls.__internal_new__()
                     cls.__instance.__internal_init__()
         return cls.__instance
