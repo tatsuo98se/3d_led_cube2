@@ -18,12 +18,10 @@ from libled.object.led_drop_mushroom_obj import LedDropMushroomObject
 from libled.object.led_text_obj import LedTextObject
 from libled.object.led_heart_obj import LedHeartObject
 from libled.object.led_skewed_sphere_obj import LedSkewedSphereObject
-from libled.object.led_snow_obj import LedSnowObject
-from libled.object.led_snows_obj import LedSnowsObject
+from libled.object.led_snows_obj import LedSnowsObject, LedSnowObject
 from libled.object.led_wave_obj import LedWaveObject
 from libled.object.led_scrolled_bitmap_obj import LedScrolledBitmapObject
 from libled.object.led_star_obj import LedStarObject
-from libled.object.led_leaf_obj import LedLeafObject
 from libled.object.led_leafs_obj import LedLeafsObject
 from libled.object.led_tree_obj import LedTreeObject
 

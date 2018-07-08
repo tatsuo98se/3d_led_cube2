@@ -3,6 +3,7 @@ from led_object import LedObject
 from ..util.color import Color
 from ..led_cube import *
 import colorsys
+from ..util.sound_player import SoundPlayer as sp
 
 class LedRainObject(LedObject):
 
@@ -33,6 +34,8 @@ class LedRainsObject(LedObject):
         super(LedRainsObject, self).__init__(lifetime)
         self.set_timer(0.05)
         self.is_need_update = False
+        self.wav = 'asset/audio/se_rain.wav'
+        sp.instance().do_play(self.wav, True)
 
     def on_timer(self):
         self.is_need_update = True
