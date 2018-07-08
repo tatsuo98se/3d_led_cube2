@@ -46,6 +46,7 @@ from ..object.led_realsense_obj import LedRealsenseObject
 from ..object.led_makey_obj import LedMakeyObject
 from ..object.led_painting_obj import LedPaintingObject
 from ..object.led_3d_makey_obj import Led3DMakeyObject
+from ..object.led_rains_obj import LedRainsObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -236,6 +237,8 @@ def create_filter(order, canvas):
         return LedFlatWaveCanvasFilter(canvas)
     elif oid == 'filter-skewed':
         return LedSkewedCanvasFilter(canvas)
+    elif oid == 'filter-z-skewed':
+        return LedSkewedCanvasFilter(canvas, ['z'])
     elif oid == 'filter-skewed-ctrl':
         return LedSkewedCanvasFilter(canvas, enable_controller=True)
     elif oid == 'filter-z-skewed-ctrl':
@@ -262,7 +265,7 @@ def create_filter(order, canvas):
         return LedRainbowCanvasFilter(canvas, True)
     elif oid == 'filter-jump-ctrl':
         return LedJumpCanvasFilter(canvas, True)
-    elif oid == 'filter-jump-button':
+    elif oid == 'filter-jump-button-ctrl':
         return LedJumpButtonCanvasFilter(canvas)
     elif oid == 'filter-rolling-ctrl':
         return LedRollingCanvasFilter(canvas, True, True)
@@ -312,6 +315,9 @@ def create_filter(order, canvas):
     elif oid == 'filter-bk-fireworks':
         return LedObjectCanvasFilter(canvas, \
                 LedFireworksObject())
+    elif oid == 'filter-bk-rains':
+        return LedObjectCanvasFilter(canvas, \
+                LedRainsObject())
     else:
         raise KeyError('unknown filter id:{0} i'.format(oid))
 
