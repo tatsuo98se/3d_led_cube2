@@ -33,7 +33,7 @@ class SoundPlayer(object):
 
     def __internal_init__(self):
         # flags
-        self._loop = False
+        # self._loop = False
 
         # event flags
         self._event_pause = threading.Event()
@@ -59,7 +59,7 @@ class SoundPlayer(object):
         logger.d('frame count = {}'.format(wfinfo[3]))
         logger.d('sound time = {} s'.format((int)(wfinfo[3] / wfinfo[2])))
 
-    def __playsound(self, wavfile):
+    def __playsound(self, wavfile, loop=False):
         if (wavfile == ""):
             logger.d('empty sound file.')
             return
@@ -85,7 +85,7 @@ class SoundPlayer(object):
                 s.write(self.__mod_sound(input_data))
                 input_data = wf.readframes(CHUNK)
                 # loop
-                if self._loop and len(input_data) == 0:
+                if loop and len(input_data) == 0:
                     wf.rewind()
                     input_data = wf.readframes(CHUNK)
 
@@ -129,12 +129,12 @@ class SoundPlayer(object):
             data = fx.gain(data, self._mod_volume)
         return fx.set_buffer(data)
 
-    def do_play(self, wavfile):
+    def do_play(self, wavfile, loop=False):
         # clear event flags
         self.__event_init()
         # threading
         self.thread = threading.Thread(
-            target=self.__playsound, args=(wavfile,))
+            target=self.__playsound, args=(wavfile, loop,))
         self.thread.start()
 
     def do_pause(self):
@@ -159,9 +159,9 @@ class SoundPlayer(object):
         self._mod_volume = val
         logger.d('set volume = {}'.format(val))
 
-    def set_loop(self, val):
-        self._loop = val
-        logger.d('set loop play = {}'.format(val))
+    # def set_loop(self, val, id):
+    #     self._loop = val
+    #     logger.d('set loop play = {}'.format(val))
 
 '''
 def myhelp():
