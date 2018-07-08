@@ -33,7 +33,7 @@ class SoundPlayer(object):
 
     def __internal_init__(self):
         # flags
-        # self.loop = False
+        self._loop = False
 
         # event flags
         self._event_pause = threading.Event()
@@ -84,6 +84,10 @@ class SoundPlayer(object):
                     break
                 s.write(self.__mod_sound(input_data))
                 input_data = wf.readframes(CHUNK)
+                # loop
+                if self._loop and len(input_data) == 0:
+                    wf.rewind()
+                    input_data = wf.readframes(CHUNK)
 
         finally:
             # close stream
@@ -155,6 +159,9 @@ class SoundPlayer(object):
         self._mod_volume = val
         logger.d('set volume = {}'.format(val))
 
+    def set_loop(self, val):
+        self._loop = val
+        logger.d('set loop play = {}'.format(val))
 
 '''
 def myhelp():
