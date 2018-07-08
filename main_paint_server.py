@@ -3,6 +3,9 @@ import os.path
 import time
 import threading
 import json
+import pprint
+import csv
+from datetime import datetime
 from Queue import Queue
 from libled.led_run_loop import LedRunLoop
 from flask import Flask, render_template
@@ -39,6 +42,15 @@ def api_filter():
     q.put('show:' + json.dumps(orders))
     return ""
 
+@app.route('/api/stamp' , methods=['POST'])
+def api_stamp():
+    print("api_stamp()*******************")
+    filename = "stamp_params/"+str(datetime.now())+".csv"
+    writecsv = csv.writer(file(filename,'w'))
+    stamp_params = json.loads(request.data)['stamp_params']
+    pprint.pprint(stamp_params)
+    writecsv.writerow(stamp_params)
+    return ""
 
 @app.route('/api/led', methods=['POST'])
 def api_led():

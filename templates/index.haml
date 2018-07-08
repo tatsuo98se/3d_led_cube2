@@ -11,10 +11,21 @@
     %script src="/static/js/index.js" 
     %title=title
   %body ontouchmove="event.preventDefault()" style= "background-image: url(/static/assets/wallpaper.jpg);" 
-    %div#trash.pallet  style="background-color: white" 
-      %img border=0 src="/static/assets/trash.png" width="40px" height="40px"
     %table#main
       %tr
+        %td
+          %table#stamps
+            %tr
+              %td
+                %div#trash.pallet  style="background-color: white" 
+                  %img border=0 src="/static/assets/trash.png" width="40px" height="40px"
+            {% for y in range(7): %}
+              %tr
+              {% for x in range(2): %}
+                %td
+                  %div id="stamp{{y + 8 * x}}"
+              {% endfor %}
+            {% endfor %}
         %td
           %table#cells
             {% for y in range(32): %}
@@ -33,3 +44,9 @@
                   %div id="pallet{{y + 8 * x}}"
               {% endfor %}
             {% endfor %}
+    %table#effects
+      %tr
+      {% for x in range(5): %}
+        %td
+          %div id="effect{{x}}"
+      {% endfor %}
