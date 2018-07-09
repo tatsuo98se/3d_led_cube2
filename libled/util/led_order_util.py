@@ -121,6 +121,9 @@ def create_object(order):
     z = get_param(order, 'z', 0)
     y = get_param(order, 'y', 0)
     x = get_param(order, 'x', 0)
+    r = get_param(order, 'r', 0.5)
+    g = get_param(order, 'g', 0.5)
+    b = get_param(order, 'b', 0.5)
     thick = get_param(order, 'thick', 1)
     cycle = get_param(order, 'cycle')
     overlap = get_param(order, 'overlap', False)
@@ -128,7 +131,15 @@ def create_object(order):
 
     if oid == 'object-clear':
         obj = LedClearObject(lifetime)
-    if oid== 'object-fill-white':
+    elif oid== 'object-fill-red':
+        obj = LedFillObject(Color(r,g,b), lifetime)
+    elif oid== 'object-fill-red':
+        obj = LedFillObject(Color(1,0,0), lifetime)
+    elif oid== 'object-fill-green':
+        obj = LedFillObject(Color(0,1,0), lifetime)
+    elif oid== 'object-fill-blue':
+        obj = LedFillObject(Color(0,0,1), lifetime)
+    elif oid== 'object-fill-white':
         obj = LedFillObject(Color(0.5,0.5,0.5), lifetime)
     elif oid == 'object-ripple':
         obj = LedRandomRippleObject(lifetime)
