@@ -22,11 +22,11 @@ var EFFECTS = {
     effect4:{color:"white",frag:false,filter:"filter-bk-snows"},
 };
 var STAMPS = {
-    stamp0:{ color: "pink", off: "black", on: "red", led: "000000" },
-    stamp1:{ color: "pink", off: "black", on: "red", led: "000000" },
-    stamp2:{ color: "pink", off: "black", on: "red", led: "000000" },
-    stamp3:{ color: "pink", off: "black", on: "red", led: "000000" },
-    stamp4:{ color: "pink", off: "black", on: "red", led: "000000" },
+    stamp0:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/assets/eraser.png" },
+    stamp1:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/luigi.png" },
+    stamp2:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/luigi.png" },
+    stamp3:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/luigi.png" },
+    stamp4:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/luigi.png" },
 }
 const CELL_WIDTH = 16;
 const CELL_HEIGHT = 16;
@@ -39,31 +39,54 @@ const setPallet = pallet => {
     }
 }
 const setEffect = effect => {
-    let g_selected_effect = effect;
+    let selected_effect = effect;
     for(let id in EFFECTS){
-        if(id == g_selected_effect){
+        if(id == selected_effect){
             EFFECTS[id].frag = !EFFECTS[id].frag;
         }
     }
     postEffect();
 }
 const setStamp = stamp => {
-    for(let x = 0; x < g_led_req_params.length; ++x){
-        for(let y = 0; y < g_led_req_params[x].length; ++y){
-            var pallet;
-            for(let id in PALLETS){
-                if(PALLETS[id].led == g_saved_stamp_params[x][y]){
-                    pallet = id;
-                    console.log("(x,y) : (" + x +"," + y + ") led :" + g_saved_stamp_params[x][y]);
-                    console.log("pallet :" + pallet);
-                }
-            }
-            console.log("pallet_ :" + pallet);
-            setCell(x, y, pallet);
+    var stamp_url;
+    for(let id in STAMPS){
+        if(id == stamp){
+            stamp_url = STAMPS[id].url;
         }
     }
-    postCells()
+    var img = document.createElement('img');
+    img.src = stamp_url;
+    var canvas = document.createElement('canvas');
+    img.onload = function () {
+        canvas.width = img.width;
+        canvas.height = img.height;
+        console.log("w : "+ canvas.width +" h : " + canvas.height);
+        var context = canvas.getContext('2d');
+        context.drawImage(img, 0, 0 );
+        var imageData = context.getImageData(0,0,16,32);
+        console.log("iamgeData.length : " + imageData.length);
+        for(let x = 0; x < g_led_req_params.length; ++x){
+            for(let y = 0; y < g_led_req_params[x].length; ++y){
+                var rgb = [
+                   imageData.data[(x +y * 16) * 4],
+                    imageData.data[(x +y * 16) * 4 + 1],
+                    imageData.data[(x +y * 16) * 4 + 2]
+                ];
+                console.log(rgb);
+                var colorCode = convertToColorCodeFromRGB(rgb);
+                console.log("(x, y) : ("+x+","+y+")"+"colorCode : " + colorCode);
+                setCellFromColorCode(x, y, colorCode);
+            }
+        }
+        postCells()
+    }
 }
+function convertToColorCodeFromRGB ( rgb ) {
+	return rgb.map( function ( value ) {
+		return ( "0" + value.toString( 16 ) ).slice( -2 ) ;
+	} ).join( "" ) ;
+}
+
 const updateWindow = () => {
     $(".cell").css("width", CELL_WIDTH).css("height", CELL_HEIGHT);
     const top = ($(window).height() - $("#main").height()) / 2;
@@ -76,6 +99,11 @@ const setCell = (x, y, pallet) => {
     const id = "#cell_" + x + "_" + y;
     $(id).css("background-color", PALLETS[pallet].color);
     g_led_req_params[x][y] = PALLETS[pallet].led;
+}
+const setCellFromColorCode = (x, y, colorCode) =>{
+    const id = "#cell_" + x + "_" + y;
+    $(id).css("background-color", colorCode);
+    g_led_req_params[x][y] = colorCode;
 }
 const updateCellColor = event => {
     const p0 = $("#cells").offset();
@@ -169,7 +197,7 @@ $(document).ready(() => {
         g_saved_stamp_params[x] = new Array(32).fill(0);
     }
     clearCells();
-    $("#trash").click(() => {savePicture(),clearCells()});
+    $("#trash").click(() => clearCells());
     for(let id in PALLETS){
         const obj = $("#" + id);
         const color = PALLETS[id].color;
@@ -188,7 +216,7 @@ $(document).ready(() => {
     for(let id in STAMPS){
         const obj =$("#" + id);
         const color = STAMPS[id].color;
-        obj.addClass("stamp").on("touchstart",event => setStamp(id)).css("background-color", color);
+        obj.addClass("stamp").on("click",event => setStamp(id)).css("background-color", color);
     }
     setPallet("pallet0");
     updateWindow();
