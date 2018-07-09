@@ -47,6 +47,9 @@ from ..object.led_makey_obj import LedMakeyObject
 from ..object.led_painting_obj import LedPaintingObject
 from ..object.led_3d_makey_obj import Led3DMakeyObject
 from ..object.led_rains_obj import LedRainsObject
+from ..object.led_saboten_obj import LedSabotenObject
+from ..object.led_tulip_obj import LedTulipObject
+from ..object.led_penguin_obj import LedPenguinObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -218,6 +221,12 @@ def create_object(order):
         obj = Led3DMakeyObject(x, y, z, lifetime)
     elif oid == 'object-painting':
         obj = LedPaintingObject(lifetime)
+    elif oid == 'object-saboten':
+        obj = LedSabotenObject(lifetime)
+    elif oid == 'object-tulip':
+        obj = LedTulipObject(lifetime)
+    elif oid == 'object-penguin':
+        obj = LedPenguinObject(lifetime)
     elif oid == 'object-text':
         x = get_param(order, 'x', 15) # LED_WIDTH -1
         size = get_param(order, 'size', 26)
