@@ -11,20 +11,26 @@ import time
 
 class LedZoomInOutCanvasFilter(LedCanvasFilter):
 
-    def __init__(self, canvas):
-        super(LedZoomInOutCanvasFilter, self).__init__(canvas)
+    def __init__(self, canvas, enable_controller=False):
+        super(LedZoomInOutCanvasFilter, self).__init__(canvas, enable_controller)
         self.last_update = time.time()
         self.zoomin = False
         self.scale = 1.0
         self.src = self.get_new_canvas()
         self.dst = self.get_new_canvas()
+        self.t = 0
 
     def get_new_canvas(self):
        return np.array([[[ [[0]*4] * LED_DEPTH] * LED_HEIGHT ] * LED_WIDTH ] , dtype = np.uint8)
 
     def pre_draw(self):
         super(LedZoomInOutCanvasFilter, self).pre_draw()
-        self.scale = math.sin(time.time()) / 2 + 1.0 
+        param = self.get_param_from_controller(defaults={'a0':0.1, 'a1':0.4})
+
+        self.t += (time.time() - self.last_update) * (param['a0'] + 0.5) * 2
+        self.last_update = time.time()
+#        self.scale = (math.sin(self.t)) * param['a1'] + 1.0
+        self.scale = (math.sin(self.t)) * (param['a1'] + 0.01) + 1.2
 
         self.src = self.get_new_canvas()
         self.dst = self.get_new_canvas()
@@ -54,7 +60,7 @@ class LedZoomInOutCanvasFilter(LedCanvasFilter):
             src = self.dst[0, x, :, :]
             np_scaled = get_scled_image(src.astype('uint8'), scale, 1)
             pos = (src.shape[0] - np_scaled.shape[0], src.shape[1] - np_scaled.shape[1])
-            dx, dy, sx, sy, w, h = get_copy_positions(np_scaled.shape, src.shape, pos)
+#            dx, dy, sx, sy, w, h = get_copy_positions(np_scaled.shape, src.shape, pos)
             new_src = resize2(np_scaled, (LED_HEIGHT, LED_DEPTH), pos, [[0]*4])
             self.dst[0, x, :, :] = new_src
 

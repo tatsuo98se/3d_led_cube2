@@ -28,8 +28,12 @@ class ReadLineWorker(Thread):
 
     def run(self):
         while not self.is_stop:
-            self.event()
-            self.line = self.socket.recv_json()
+            try:
+                self.event()
+                self.line = self.socket.recv_json()
+            except ValueError:
+                logger.w("HwController recive unexpected data format.")
+                continue
 
     def stop(self):
         self.is_stop = True
