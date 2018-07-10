@@ -20,7 +20,7 @@ class LedJumpCanvasFilter(LedCanvasFilter):
 
     def pre_draw(self):
         super(LedJumpCanvasFilter, self).pre_draw()
-        param = self.get_param_from_controller(defaults={'a0':0.5, 'a1':0.5})
+        param = self.get_param()
         if time.time() - self.last_update < UPDATE_FREQ:
             return
 
@@ -39,6 +39,9 @@ class LedJumpCanvasFilter(LedCanvasFilter):
     def get_power(self, power):
         return power * power
 
+    def get_param(self):
+        return self.get_param_from_controller(defaults={'a0':0.5, 'a1':0.8})
+
     def update_initial_power(self):
-        param = self.get_param_from_controller(defaults={'a0':0.5, 'a1':0.5})
+        param = self.get_param()
         return 2.5 * (0.5 + param['a1'])

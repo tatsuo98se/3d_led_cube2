@@ -14,9 +14,9 @@ class LedBitmapObject(LedObject):
         self.z = z
         self.thick = thick
         self.size = self.image.size
-        self.X = min(self.size[0], LED_WIDTH)
-        self.Y = min(self.size[1], LED_HEIGHT)
-        self.cache = [[0 for i in range(self.Y)] for j in range(self.X)]
+        self.X = self.size[0]
+        self.Y = self.size[1]
+        self.cache = [[0 for _ in range(self.Y)] for _ in range(self.X)]
 
         for x in range(self.X):
             for y in range(self.Y):

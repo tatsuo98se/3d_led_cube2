@@ -51,6 +51,7 @@ from ..object.led_saboten_obj import LedSabotenObject
 from ..object.led_tulip_obj import LedTulipObject
 from ..object.led_penguin_obj import LedPenguinObject
 from ..object.led_color_cube_obj import LedColorCubeObject
+from ..object.led_rocket_obj import LedRocketObject
 
 from ..led_canvas import LedCanvas
 from ..filter.led_canvs_filter import LedCanvasFilter
@@ -230,6 +231,8 @@ def create_object(order):
         obj = LedPenguinObject(lifetime)
     elif oid == 'object-color-cube':
         obj = LedColorCubeObject(lifetime)
+    elif oid == 'object-rocket':
+        obj = LedRocketObject(lifetime)
     elif oid == 'object-text':
         x = get_param(order, 'x', 15) # LED_WIDTH -1
         size = get_param(order, 'size', 26)
