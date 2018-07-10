@@ -22,11 +22,11 @@ var EFFECTS = {
     effect4:{color:"white",frag:false,filter:"filter-bk-snows"},
 };
 var STAMPS = {
-    stamp0:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/assets/eraser.png" },
-    stamp1:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/luigi.png" },
-    stamp2:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/luigi.png" },
-    stamp3:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/luigi.png" },
-    stamp4:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/luigi.png" },
+    stamp0:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/mario.png" },
+    stamp1:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/yoshi.png" },
+    stamp2:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/s_ghost1.png" },
+    stamp3:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/yacht4.png" },
+    stamp4:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/eighth4.png" },
 }
 const CELL_WIDTH = 16;
 const CELL_HEIGHT = 16;
@@ -101,9 +101,12 @@ const setCell = (x, y, pallet) => {
     g_led_req_params[x][y] = PALLETS[pallet].led;
 }
 const setCellFromColorCode = (x, y, colorCode) =>{
-    const id = "#cell_" + x + "_" + y;
-    $(id).css("background-color", colorCode);
     g_led_req_params[x][y] = colorCode;
+    const id = "#cell_" + x + "_" + y;
+    if(colorCode == "000000"){
+        colorCode = "transparent";
+    }
+    $(id).css("background-color", colorCode);
 }
 const updateCellColor = event => {
     const p0 = $("#cells").offset();
