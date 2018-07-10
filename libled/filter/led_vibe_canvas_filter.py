@@ -11,7 +11,7 @@ class LedVibeCanvasFilter(LedCanvasFilter):
         self.t = 0
 
     def show(self, canvas = None):
-        self.t += 35
+        self.t += 40
         super(LedVibeCanvasFilter, self).show(canvas)
 
     def set_led(self, x, y, z, color):

@@ -128,7 +128,7 @@ def create_object(order):
 
     if oid == 'object-clear':
         obj = LedClearObject(lifetime)
-    elif oid== 'object-fill-red':
+    elif oid== 'object-fill':
         obj = LedFillObject(Color(r,g,b), lifetime)
     elif oid== 'object-fill-red':
         obj = LedFillObject(Color(1,0,0), lifetime)

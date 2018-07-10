@@ -49,13 +49,19 @@ class HwControllerManager:
     def __init__(self):
         initial_data = None
         self.worker = None
-        try:
-            initial_data = urllib2.urlopen('http://localhost:5601/api/gamepad').read()
-            self.worker = ReadLineWorker(lambda: HwControllerManager.event(), json.loads(initial_data))
-            self.worker.start()
-        except:
-            logger.e("Unexpected error:" + str(sys.exc_info()[0]))
-            logger.e(traceback.format_exc())
+        while True:
+            try:
+                initial_data = urllib2.urlopen('http://localhost:5601/api/gamepad').read()
+                self.worker = ReadLineWorker(lambda: HwControllerManager.event(), json.loads(initial_data))
+                self.worker.start()
+            except urllib2.HTTPError as e:
+                if e.code == 503:
+                    sleep(3)
+                    continue
+                else:
+                    raise
+            except:
+                raise
 
     @classmethod
     def event(cls):
