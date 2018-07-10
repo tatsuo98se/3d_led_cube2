@@ -12,7 +12,7 @@ class LedWakameCanvasFilter(LedCanvasFilter):
 
     def pre_draw(self):
         super(LedWakameCanvasFilter, self).pre_draw()
-        param = self.get_param_from_controller(defaults={'a0':0.5, 'a1':0.5})
+        param = self.get_param_from_controller(defaults={'a0':0.2, 'a1':0.2})
         self.t += 3 * param['a0']
         self.shift = 0.8 + param['a1'] * 3
  
