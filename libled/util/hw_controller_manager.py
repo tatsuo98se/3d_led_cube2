@@ -54,6 +54,7 @@ class HwControllerManager:
                 initial_data = urllib2.urlopen('http://localhost:5601/api/gamepad').read()
                 self.worker = ReadLineWorker(lambda: HwControllerManager.event(), json.loads(initial_data))
                 self.worker.start()
+                break
             except urllib2.HTTPError as e:
                 if e.code == 503:
                     sleep(3)
