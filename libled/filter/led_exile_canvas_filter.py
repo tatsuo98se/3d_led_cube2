@@ -40,7 +40,7 @@ class LedExileCanvasFilter(LedCanvasFilter):
 
     def post_draw(self):
         super(LedExileCanvasFilter, self).post_draw()
-        step = 2
+        step = 3
         for x in range(LED_WIDTH):
             for y in range(LED_HEIGHT):
                 for z in range(LED_DEPTH):
@@ -49,7 +49,7 @@ class LedExileCanvasFilter(LedCanvasFilter):
                     p = (self.t - z/step) # layer 4
                     sx = math.sin(p) * 3
                     sy = math.cos(p) * 3
-                    if z == 0 or z == 1:
+                    if z == 0 or z == 1 or z == 2:
                         self.canvas.set_led(x+sx, y+sy, z, self.src[x][y])
                     else:
                         h = (math.sin(self.t+z/step) + 1) /2

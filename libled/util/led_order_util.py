@@ -224,15 +224,15 @@ def create_object(order):
     elif oid == 'object-painting':
         obj = LedPaintingObject(lifetime)
     elif oid == 'object-saboten':
-        obj = LedSabotenObject(lifetime)
+        obj = LedSabotenObject(x, y, z, lifetime)
     elif oid == 'object-tulip':
-        obj = LedTulipObject(lifetime)
+        obj = LedTulipObject(x, y, z, lifetime)
     elif oid == 'object-penguin':
-        obj = LedPenguinObject(lifetime)
+        obj = LedPenguinObject(x, y, z, lifetime)
     elif oid == 'object-color-cube':
-        obj = LedColorCubeObject(lifetime)
+        obj = LedColorCubeObject(x, y, z, lifetime)
     elif oid == 'object-rocket':
-        obj = LedRocketObject(lifetime)
+        obj = LedRocketObject(x, y, z, lifetime)
     elif oid == 'object-text':
         x = get_param(order, 'x', 15) # LED_WIDTH -1
         size = get_param(order, 'size', 26)

@@ -23,8 +23,6 @@ class LedRollingCanvasFilter(LedCanvasFilter):
         self.offset += add * direction * speed
         
     def set_led(self, x, y, z, color):
-        if not is_in_cube(x, y, z):
-            return
         new_y = (y + self.offset) % LED_HEIGHT
 
         self.canvas.set_led(x, new_y, z, color)
