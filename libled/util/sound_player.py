@@ -14,6 +14,7 @@ CHUNK = 1024
 class SoundPlayer(object):
     __instance = None
     __lock = threading.Lock()
+    __pa_lock = threading.Lock()
 
     def __new__(cls):
         raise NotImplementedError('Cant call this Constructor.')
@@ -70,11 +71,12 @@ class SoundPlayer(object):
         self.wfinfo = wf.getparams()
         self.show_wavinfo(self.wfinfo)
         try:
-            p = pyaudio.PyAudio()
-            s = p.open(format=p.get_format_from_width(self.wfinfo[1]),
-                       channels=self.wfinfo[0],
-                       rate=self.wfinfo[2],
-                       output=True)
+            with SoundPlayer.__pa_lock:
+                p = pyaudio.PyAudio()
+                s = p.open(format=p.get_format_from_width(self.wfinfo[1]),
+                        channels=self.wfinfo[0],
+                        rate=self.wfinfo[2],
+                        output=True)
 
             # play stream
             input_data = wf.readframes(CHUNK)
@@ -91,10 +93,11 @@ class SoundPlayer(object):
 
         finally:
             # close stream
-            s.stop_stream()
-            s.close()
-            wf.close()
-            p.terminate()
+            with SoundPlayer.__pa_lock:
+                s.stop_stream()
+                s.close()
+                wf.close()
+                p.terminate()
             logger.d('finished sound play.')
 
     def __ctrl_sound(self):
