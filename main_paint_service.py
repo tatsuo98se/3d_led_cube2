@@ -18,6 +18,7 @@ from libled.led_cube import *
 from libled.util.color import Color
 from libled.util.paint_manager import PaintManager
 from libled.util.flask_on_thread import FlaskOnThread
+from libled.util.sound_player import SoundPlayer
 
 class FlaskWithHamlish(Flask):
     jinja_options = ImmutableDict(
@@ -71,6 +72,12 @@ def api_led():
 @app.route('/api/abort', methods=['POST'])
 def abort():
     q.put('abort')
+    return ""
+
+@app.route('/api/audio', methods=['POST'])
+def audio():
+    volume = float(json.loads(request.data)['volume'])
+    SoundPlayer.instance().set_volume(volume/100.0)
     return ""
 
 class LedPaintHttpServer(LedRunLoop):

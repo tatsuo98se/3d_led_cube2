@@ -6,10 +6,12 @@ from Queue import Queue
 from libled.led_run_loop import LedRunLoop
 from flask import Flask
 from flask import request
+import json
 from os import listdir
 from os.path import isfile, join
 from libled.util.common_util import *
 from libled.util.flask_on_thread import FlaskOnThread
+from libled.util.sound_player import SoundPlayer
 
 app = Flask(__name__)
 q = Queue()
@@ -47,6 +49,13 @@ def show():
 def abort():
     q.put('abort')
     return ""
+
+@app.route('/api/audio', methods=['POST'])
+def audio():
+    volume = float(json.loads(request.data)['volume'])
+    SoundPlayer.instance().set_volume(volume/100.0)
+    return ""
+
 
 
 class LedBlockHttpServer(LedRunLoop):
