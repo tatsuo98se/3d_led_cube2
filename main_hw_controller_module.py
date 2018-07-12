@@ -83,3 +83,9 @@ try:
 except:
     logger.e('HwControllerManager.init() failed.' + str(sys.exc_info()[0]))
     logger.e(traceback.format_exc())
+finally:
+    if socket is not None:
+        socket.close()
+    if context is not None:
+        context.term()
+ 

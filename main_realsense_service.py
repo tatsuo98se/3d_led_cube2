@@ -3,6 +3,9 @@ from libled.led_run_loop import LedRunLoop
 import codecs
 import sys
 import platform
+import time
+from Queue import Queue
+q = Queue()
 
 class LedRawTextClient(LedRunLoop):
 
@@ -11,22 +14,24 @@ class LedRawTextClient(LedRunLoop):
         if sys.platform == 'win32':
             sys.stdin = codecs.getreader('shift_jis')(sys.stdin) # set input codec
 
-    def on_finish(self):
-        pass
-
     def on_keyboard_interrupt(self):
+        q.put('abort')
         pass
 
     def on_exception_at_runloop(self, exception):
         return LedRunLoop.EXIT
 
     def read_data(self):
-        return 'show:{"orders":[{"id":"filter-zanzo"},{"id":"object-realsense", "lifetime":120}]}'
+        print("waiting data.")
+        while True:
+            if self.aborted:
+                break
 
-    def on_pre_exec_runloop(self):
-        pass
+            if q.empty():
+                time.sleep(0.1)
+            else:
+                return q.get()
 
-    def on_post_exec_runloop(self):
-        pass
-
+q.put('show:{"orders":[{"id":"filter-zanzo"},{"id":"object-realsense", "lifetime":0}]}')
 LedRawTextClient().run()
+

@@ -16,7 +16,7 @@ class ReadLineWorker(Thread):
     def __init__(self, event, initial_data):
         super(ReadLineWorker,self).__init__()
 
-        context = zmq.Context()
+        self.context = zmq.Context()
         self.socket = context.socket(zmq.SUB)
         logger.i("Collecting updates from gamepad server...")
         self.socket.connect("tcp://localhost:5602")
@@ -27,13 +27,20 @@ class ReadLineWorker(Thread):
         self.event = event
 
     def run(self):
-        while not self.is_stop:
-            try:
-                self.event()
-                self.line = self.socket.recv_json()
-            except ValueError:
-                logger.w("HwController recive unexpected data format.")
-                continue
+        try:
+            while not self.is_stop:
+                try:
+                    self.event()
+                    self.line = self.socket.recv_json()
+                except ValueError:
+                    logger.w("HwController recive unexpected data format.")
+                    continue
+        finally:
+            if self.socket is not None:
+                self.socket.close()
+            if self.context is not None:
+                self.context.term()
+         
 
     def stop(self):
         self.is_stop = True

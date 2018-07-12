@@ -43,3 +43,7 @@ finally:
     if dev is not None:
         dev.stop()
     pyrs.stop()
+    if socket is not None:
+        socket.close()
+    if context is not None:
+        context.term()
