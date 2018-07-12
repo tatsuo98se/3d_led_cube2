@@ -51,12 +51,7 @@ class RealsenseManager:
     @classmethod
     def init(cls):
         if cls._instance is None:
-            try:
-                cls._instance = cls()
-                logger.i("initialize realsense is successfull.")
-            except:
-                logger.e("initialize realsense failed.:" + str(sys.exc_info()[0]))
-                logger.e(traceback.format_exc())
+            cls._instance = cls()
 
         return cls._instance
 
