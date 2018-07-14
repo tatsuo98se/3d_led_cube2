@@ -24,6 +24,7 @@ class ReadLineWorker(Thread):
 
         self.is_stop = False
         self.event = event
+        self.line = None
         try:
             self.line = self.get_initial_data()
             logger.i("initialize gamepad is successfull.")
