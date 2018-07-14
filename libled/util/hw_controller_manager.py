@@ -46,6 +46,10 @@ class ReadLineWorker(Thread):
                 except ValueError:
                     logger.w("HwController recive unexpected data format.")
                     continue
+                except urllib2.URLError:
+                    sleep(3)
+                    continue
+
         finally:
             if self.socket is not None:
                 self.socket.close()
