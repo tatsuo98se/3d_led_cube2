@@ -15,8 +15,8 @@ class FrameWorker(Thread):
 
     def __init__(self, realsense):
         super(FrameWorker,self).__init__()
-        context = zmq.Context()
-        self.socket = context.socket(zmq.SUB)
+        self.context = zmq.Context()
+        self.socket = self.context.socket(zmq.SUB)
         logger.i("Collecting updates from realsense server...")
         self.socket.connect("tcp://localhost:5501")
         self.socket.setsockopt(zmq.SUBSCRIBE, '')
@@ -25,9 +25,14 @@ class FrameWorker(Thread):
         self.frame = None
 
     def run(self):
-        while not self.is_stop:
-            self.frame = recv_array(self.socket)
-        self.dev.stop()
+        try:
+            while not self.is_stop:
+                self.frame = recv_array(self.socket)
+        finally:
+            if self.socket is not None:
+                self.socket.close()
+            if self.context is not None:
+                self.context.term()
     
     def stop(self):
         self.is_stop = True
@@ -46,12 +51,7 @@ class RealsenseManager:
     @classmethod
     def init(cls):
         if cls._instance is None:
-            try:
-                cls._instance = cls()
-                logger.i("initialize realsense is successfull.")
-            except:
-                logger.e("initialize realsense failed.:" + str(sys.exc_info()[0]))
-                logger.e(traceback.format_exc())
+            cls._instance = cls()
 
         return cls._instance
 

@@ -22,14 +22,27 @@ var EFFECTS = {
     effect4:{color:"white",frag:false,filter:"filter-bk-snows"},
 };
 var STAMPS = {
-    stamp0:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/mario.png" },
-    stamp1:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/yoshi.png" },
-    stamp2:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/s_ghost1.png" },
-    stamp3:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/yacht4.png" },
-    stamp4:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/eighth4.png" },
+    stamp0:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/chicken.json" },
+    stamp1:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/chinanago.json" },
+    stamp2:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/clownfish.json" },
+    stamp3:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/dragonfly.json" },
+    stamp4:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/flamingo.json" },
+    stamp5:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/heart.json" },
+    stamp6:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/ladybug.json" },
+    stamp7:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/note.json" },
+    stamp8:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/penguin.json" },
+    stamp9:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/rocket.json" },
 }
 const CELL_WIDTH = 16;
 const CELL_HEIGHT = 16;
+
+const is_mobile_dvice = () => {
+    return  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
+const get_touch_event_key = () => {
+    return is_mobile_dvice() ? "touchstart" : "click";
+}
 
 const setPallet = pallet => {
     g_selected_pallet = pallet;
@@ -47,15 +60,25 @@ const setEffect = effect => {
     }
     postEffect();
 }
-const setStamp = stamp => {
-    var stamp_url;
-    for(let id in STAMPS){
-        if(id == stamp){
-            stamp_url = STAMPS[id].url;
+
+const setJson = filepath =>{
+    var json = $.getJSON(filepath, function(json) {
+
+        led = json["led"]
+        for(let x = 0; x < g_led_req_params.length; ++x){
+            for(let y = 0; y < g_led_req_params[x].length; ++y){
+                pallet = searchPallet("led", led[x][y])
+                setCell(x, y, pallet)
+            }
         }
-    }
+        postCells()
+    });;
+}
+
+const setImage = filepath => {
+
     var img = document.createElement('img');
-    img.src = stamp_url;
+    img.src = filepath;
     var canvas = document.createElement('canvas');
     img.onload = function () {
         canvas.width = img.width;
@@ -81,10 +104,34 @@ const setStamp = stamp => {
         postCells()
     }
 }
+
+const setStamp = stamp => {
+    var stamp_url;
+    for(let id in STAMPS){
+        if(id == stamp){
+            stamp_url = STAMPS[id].url;
+        }
+    }
+    if(stamp_url.endsWith("png")){
+        setImage(stamp_url)
+    }
+    else{
+        setJson(stamp_url)
+    }
+}
 function convertToColorCodeFromRGB ( rgb ) {
 	return rgb.map( function ( value ) {
 		return ( "0" + value.toString( 16 ) ).slice( -2 ) ;
 	} ).join( "" ) ;
+}
+
+const searchPallet = (key, value) => {
+    for(let pallet in PALLETS){
+        if(value === PALLETS[pallet][key]){
+            return pallet;
+        }
+    }
+    return undefined;
 }
 
 const updateWindow = () => {
@@ -110,7 +157,15 @@ const setCellFromColorCode = (x, y, colorCode) =>{
 }
 const updateCellColor = event => {
     const p0 = $("#cells").offset();
-    const p1 = event.changedTouches[0];
+    let p1 = undefined;
+    if(is_mobile_dvice()){
+        p1 = event.changedTouches[0];
+    }
+    else{
+        p1 = event;
+    }
+
+
     const x = Math.floor((p1.pageX - p0.left) / (CELL_WIDTH + 3.6));
     const y = Math.floor((p1.pageY - p0.top) / (CELL_HEIGHT + 3.6));
     setCell(x, y, g_selected_pallet);
@@ -187,8 +242,17 @@ const postSavedPicture = () =>{
     }).done(data => {}).fail(data => {});
 }
 
+function preventDefault(e){
+    e.preventDefault();
+}
+
+function disableScroll(){
+    document.body.addEventListener('touchmove', preventDefault, { passive: false });
+}
 $(document).ready(() => {
-    $("#cells").on("touchstart", event => {
+
+    disableScroll();
+    $("#cells").on(get_touch_event_key(), event => {
         updateCellColor(event);
     }).on("touchmove", event => {
         updateCellColor(event);
@@ -204,7 +268,7 @@ $(document).ready(() => {
     for(let id in PALLETS){
         const obj = $("#" + id);
         const color = PALLETS[id].color;
-        obj.addClass("pallet").on("touchstart", event => setPallet(id)).css("background-color", color)
+        obj.addClass("pallet").on(get_touch_event_key(), event => setPallet(id)).css("background-color", color)
             .on("touchmove", event => setPallet(id)).css("background-color", color);
         if(color === "transparent"){
             const img = $("<img>").attr("border", 0).attr("src", "static/assets/eraser.png").attr("width", "50px").attr("height", "50px");
@@ -214,12 +278,12 @@ $(document).ready(() => {
     for(let id in EFFECTS){
         const obj = $("#" + id);
         const color = EFFECTS[id].color;
-        obj.addClass("effect").on("click", event => setEffect(id)).css("background-color", color);
+        obj.addClass("effect").on(get_touch_event_key(), event => setEffect(id)).css("background-color", color);
     }
     for(let id in STAMPS){
         const obj =$("#" + id);
         const color = STAMPS[id].color;
-        obj.addClass("stamp").on("click",event => setStamp(id)).css("background-color", color);
+        obj.addClass("stamp").on(get_touch_event_key(),event => setStamp(id)).css("background-color", color);
     }
     setPallet("pallet0");
     updateWindow();

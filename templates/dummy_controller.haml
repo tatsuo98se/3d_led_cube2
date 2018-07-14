@@ -1,0 +1,22 @@
+%html lang="ja"
+  %head
+    %meta charset="utf-8"
+    %meta name="viewport" content="width=device-width initial-scale=1 maximum-scale=1 user-scalable=no minimal-ui"
+    %meta name="apple-mobile-web-app-capable"  content="yes"
+    %meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"
+    %link type="text/css"  rel="stylesheet" href="/static/css/index.css"
+    %link type="text/css"  rel="stylesheet" href="/static/css/dummy_controller.css"
+    %link rel="shortcut icon" href="/static/assets/favicon.png"
+    %link rel="apple-touch-icon" href="/static/assets/favicon.png"
+    %script src="/static/js/jquery-3.3.1.min.js" 
+    %script src="/static/js/dummy_controller.js" 
+    %title=title
+  %body ontouchmove="event.preventDefault()" style= "background-image: url(/static/assets/wallpaper.jpg);" 
+    {% for i in range(3): %}
+      %div slidecontainer 
+        %input type="range" min="0" max="100" value="50" class="slider" id="a{{i}}"
+    {% endfor %}
+    %div#button id="d1"
+      %button 1
+
+

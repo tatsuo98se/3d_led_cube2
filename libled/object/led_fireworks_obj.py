@@ -3,6 +3,7 @@ from ..led_cube import *
 from ..util.vectors_util import *
 import math
 import random
+from ..util.sound_player import SoundPlayer as sp
 
 N = 200
 PS = 1000
@@ -33,6 +34,7 @@ class LedFireworksObject(LedObject):
         self.ix = 0
         self.vs = []
         self.poss = []
+        self.wav = 'asset/audio/se_fireworks.wav'
 
     def draw(self, canvas):
         if  self.ix % 20 == 0 :
@@ -43,6 +45,9 @@ class LedFireworksObject(LedObject):
                 sf = sphere_face()
                 self.vs.append(sf)
                 self.poss.append(Xyzc_t(Xyz_t(cx, cy, cz), rgb(sf.len())))
+            
+            # play sound
+            sp.instance().do_play(self.wav)
 
         delete_idx = []
         for i in range(len(self.poss)):

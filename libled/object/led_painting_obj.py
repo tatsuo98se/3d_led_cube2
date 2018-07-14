@@ -11,4 +11,7 @@ class LedPaintingObject(LedObject):
     def draw(self, canvas):
         for x in range(0, LED_WIDTH):
             for y in range(0, LED_HEIGHT):
-                canvas.set_led(x, y, 0, PaintManager.get_instance().get_color(x,y))
+                c = PaintManager.get_instance().get_color(x,y)
+                if c.is_black():
+                    continue
+                canvas.set_led(x, y, 0, c)

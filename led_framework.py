@@ -12,6 +12,8 @@ from libled.util.queue import Queue
 from libled.object.led_fadeinout_obj_filter import LedFadeinoutOjbectFilter
 from libled.util.realsense_manager import RealsenseManager
 from libled.util.hw_controller_manager import HwControllerManager
+from libled.util.sound_player import SoundPlayer
+
 
 class LedFramework(object):
 
@@ -67,13 +69,14 @@ class LedFramework(object):
                 span = time.time()
                 if self.is_abort:
                     canvas.abort()
-                    return
-
+                    canvas.clear()
+                    break
+                    
                 if current_order is None:
                     data = flatten_data.dequeue()
                     if data is None:
                         if canvas.get_object_count() <= 0:
-                            return
+                            break
                         else:
                             pass
                     else:
@@ -102,6 +105,10 @@ class LedFramework(object):
                 #print('span: ' + str(spanx) + ' wait:' + str(wait))
                 led.Wait(wait)
 
+            SoundPlayer.instance().do_stop()
+            led.Clear()
+            led.Show()
+
         except KeyError as err:
             logger.e("error unexpected json : {0}".format(err))
             logger.e(traceback.format_exc())
@@ -110,6 +117,5 @@ class LedFramework(object):
             self.is_abort = False
             self.is_running = False
             canvas.clear()
-            led.Show()
 
 
