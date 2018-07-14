@@ -4,8 +4,21 @@ import codecs
 import sys
 import platform
 import time
+import json
 from Queue import Queue
+from flask import Flask, request
+from libled.util.flask_on_thread import FlaskOnThread
+from libled.util.sound_player import SoundPlayer
+
 q = Queue()
+
+app = Flask(__name__)
+
+@app.route('/api/audio', methods=['POST'])
+def audio():
+    volume = float(json.loads(request.data)['volume'])
+    SoundPlayer.instance().set_volume(volume/100.0)
+    return ""
 
 class LedRawTextClient(LedRunLoop):
 
@@ -33,5 +46,10 @@ class LedRawTextClient(LedRunLoop):
                 return q.get()
 
 q.put('show:{"orders":[{"id":"filter-zanzo"},{"id":"object-realsense", "lifetime":0}]}')
+
+flask = FlaskOnThread(app, port=5402)
+flask.daemon = True
+flask.start()
+
 LedRawTextClient().run()
 
