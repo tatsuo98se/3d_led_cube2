@@ -2,8 +2,8 @@ from led_object import LedObject
 from ..led_cube import *
 from ..util.vectors_util import *
 import math
-import random
 from ..util.sound_player import SoundPlayer as sp
+import numpy as np
 
 N = 200
 PS = 1000
@@ -34,20 +34,23 @@ class LedFireworksObject(LedObject):
         self.ix = 0
         self.vs = []
         self.poss = []
-        self.wav = 'asset/audio/se_fireworks.wav'
+        self.wavs = ['asset/audio/se_fireworks.wav', 
+                     'asset/audio/se_fireworks2.wav',
+                     'asset/audio/se_fireworks3.wav']
 
     def draw(self, canvas):
         if  self.ix % 20 == 0 :
-            cx = LED_WIDTH * random.random()
-            cy = LED_HEIGHT * random.random()
-            cz = LED_DEPTH * random.random()
+            cx = LED_WIDTH * np.random.rand()
+            cy = LED_HEIGHT * np.random.rand()
+            cz = LED_DEPTH * np.random.rand()
             for i in range(PS):
                 sf = sphere_face()
                 self.vs.append(sf)
                 self.poss.append(Xyzc_t(Xyz_t(cx, cy, cz), rgb(sf.len())))
             
             # play sound
-            sp.instance().do_play(self.wav)
+            wav = np.random.choice(self.wavs, 1, p=[0.7, 0.2, 0.1])[0]
+            sp.instance().do_play(wav)
 
         delete_idx = []
         for i in range(len(self.poss)):
