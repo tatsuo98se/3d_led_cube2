@@ -11,20 +11,23 @@
     %script src="/static/js/index.js" 
     %title=title
   %body style= "background-image: url(/static/assets/wallpaper.jpg);" 
+    %nav#header
+      %img src="/static/assets/header.png"
     %table#main
       %tr
         %td
-          %table#stamps
+          %table#stamps_1
+            {% for y in range(5): %}
             %tr
               %td
-                %div#trash.pallet  style="background-color: white" 
-                  %img border=0 src="/static/assets/trash.png" width="40px" height="40px"
-            {% for y in range(7): %}
-              %tr
-              {% for x in range(2): %}
-                %td
-                  %div id="stamp{{y + 8 * x}}"
-              {% endfor %}
+                %div id="stamp{{y + 5 * 0}}"
+            {% endfor %}
+        %td
+          %table#stamps_2
+            {% for y in range(5): %}
+            %tr
+              %td
+                %div id="stamp{{y + 5 * 1}}"
             {% endfor %}
         %td
           %table#cells
@@ -36,13 +39,20 @@
               {% endfor %}
             {% endfor %}
         %td
-          %table#pallets
-            {% for y in range(8): %}
-              %tr
-              {% for x in range(2): %}
-                %td
-                  %div id="pallet{{y + 8 * x}}"
-              {% endfor %}
+          %div class='pen' id="pen_thin"
+          %table#pallets_1
+            {% for y in range(6): %}
+            %tr
+              %td
+                %div id="pallet{{y + 6 * 0}}"
+            {% endfor %}
+        %td
+          %div class='pen' id="pen_bold"
+          %table#pallets_2
+            {% for y in range(6): %}
+            %tr
+              %td
+                %div id="pallet{{y + 6 * 1}}"
             {% endfor %}
     %table#effects
       %tr

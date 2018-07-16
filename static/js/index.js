@@ -2,24 +2,27 @@ var g_selected_pallet;
 var g_led_req_params; // Array [16][32]
 var g_last_update = Date.now();
 var g_saved_stamp_params;
+var g_is_bold_pen_thickness = false;
 const PALLETS = {
-    pallet0: { color: "transparent", off: "black", on: "red", led: "000000" },
-    pallet1: { color: "white", off: "black", on: "red", led: "FFFFFF" },
-    pallet2: { color: "red", off: "black", on: "blue", led: "FF0000" },
-    pallet3: { color: "yellow", off: "black", on: "red", led: "FF8800" },
-    pallet4: { color: "lightgreen", off: "black", on: "red", led: "00FF00" },
-    pallet5: { color: "aqua", off: "black", on: "red", led: "00FFFF" },
-    pallet6: { color: "blue", off: "black", on: "red", led: "0000FF" },
-    pallet9: { color: "pink", off: "black", on: "red", led: "FF0088" },
-    pallet10: { color: "violet", off: "black", on: "red", led: "FF00FF" },
-    pallet11: { color: "orange", off: "black", on: "blue", led: "FF4400" },
+    pallet0: { color: "red", off: "black", on: "blue", led: "FF0000" },
+    pallet1: { color: "orange", off: "black", on: "blue", led: "FF4400" },
+    pallet2: { color: "yellow", off: "black", on: "red", led: "FF8800" },
+    pallet3: { color: "green", off: "black", on: "red", led: "00FF00" },
+    pallet4: { color: "blue", off: "black", on: "red", led: "0000FF" },
+    pallet5: { color: "violet", off: "black", on: "red", led: "FF00FF" },
+    pallet6: { color: "pink", off: "black", on: "red", led: "FF0088" },
+    pallet7: { color: "lightgreen", off: "black", on: "red", led: "55FF00" },
+    pallet8: { color: "aqua", off: "black", on: "red", led: "00FFFF" },
+    pallet9: { color: "white", off: "black", on: "red", led: "FFFFFF" },
+    pallet10: { color: "transparent", off: "black", on: "red", led: "000000" },
+    pallet11: { color: "transparent", off: "black", on: "red", led: "000000" },
 };
 var EFFECTS = {
-    effect0:{color:"white",frag:false,filter:"filter-jump"},
-    effect1:{color:"white",frag:false,filter:"filter-exile"},
-    effect2:{color:"white",frag:false,filter:"filter-rainbow"},
-    effect3:{color:"white",frag:false,filter:"filter-zanzo"},
-    effect4:{color:"white",frag:false,filter:"filter-bk-snows"},
+    effect0:{color:"white",frag:false,filter:"filter-explosion"},
+    effect1:{color:"white",frag:false,filter:"filter-jump"},
+    effect2:{color:"white",frag:false,filter:"filter-exile"},
+    effect3:{color:"white",frag:false,filter:"filter-wave"},
+    effect4:{color:"white",frag:false,filter:"filter-bk-rains"},
 };
 var STAMPS = {
     stamp0:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/chicken.json" },
@@ -33,8 +36,8 @@ var STAMPS = {
     stamp8:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/penguin.json" },
     stamp9:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/rocket.json" },
 }
-const CELL_WIDTH = 16;
-const CELL_HEIGHT = 16;
+const CELL_WIDTH = 18;
+const CELL_HEIGHT = 18;
 
 const is_mobile_dvice = () => {
     return  /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -136,11 +139,11 @@ const searchPallet = (key, value) => {
 
 const updateWindow = () => {
     $(".cell").css("width", CELL_WIDTH).css("height", CELL_HEIGHT);
-    const top = ($(window).height() - $("#main").height()) / 2;
-    const left = ($(window).width() - $("#main").width()) / 2;
-    $("#main").css("margin-top", top).css("margin-left", left);
-    const left_effects = ($(window).width() - $("#effects").width()) / 2;
-    $("#effects").css("margin-left", left_effects);
+    // const top = ($(window).height() - $("#main").height()) / 2;
+    // const left = ($(window).width() - $("#main").width()) / 2;
+    // $("#main").css("margin-top", top).css("margin-left", left);
+    // const left_effects = ($(window).width() - $("#effects").width()) / 2;
+    // $("#effects").css("margin-left", left_effects);
 }
 const setCell = (x, y, pallet) => {
     const id = "#cell_" + x + "_" + y;
@@ -171,10 +174,30 @@ const updateCellColor = event => {
     setCell(x, y, g_selected_pallet);
     postCell(x, y)
 }
+const updateCellColorBold = event => {
+    const p0 = $("#cells").offset();
+    let p1 = undefined;
+    if(is_mobile_dvice()){
+        p1 = event.changedTouches[0];
+    }
+    else{
+        p1 = event;
+    }
+
+
+    const x = Math.floor((p1.pageX - p0.left) / (CELL_WIDTH + 3.6));
+    const y = Math.floor((p1.pageY - p0.top) / (CELL_HEIGHT + 3.6));
+    setCell(x, y, g_selected_pallet);
+    setCell(x-1, y, g_selected_pallet);
+    setCell(x+1, y, g_selected_pallet);
+    setCell(x, y-1, g_selected_pallet);
+    setCell(x, y+1, g_selected_pallet);
+    postCell();
+}
 const clearCells = () => {
     for(let x = 0; x < g_led_req_params.length; ++x){
         for(let y = 0; y < g_led_req_params[x].length; ++y){
-            setCell(x, y, "pallet0");
+            setCell(x, y, "pallet11");
         }
     }
     postCells()
@@ -249,13 +272,27 @@ function preventDefault(e){
 function disableScroll(){
     document.body.addEventListener('touchmove', preventDefault, { passive: false });
 }
+function setPenThickness() {
+    const img_bold = $("<img>").attr("border", 0).attr("src", "static/assets/trash.png").attr("width", "50px").attr("height", "50px");
+    const img_thin = $("<img>").attr("border", 0).attr("src", "static/assets/trash.png").attr("width", "50px").attr("height", "50px");
+    $("#pen_thin").on(get_touch_event_key(),event => g_is_bold_pen_thickness=false).append(img_thin);
+    $("#pen_bold").on(get_touch_event_key(),event => g_is_bold_pen_thickness=true).append(img_bold);
+}
 $(document).ready(() => {
 
     disableScroll();
     $("#cells").on(get_touch_event_key(), event => {
-        updateCellColor(event);
+        if(g_is_bold_pen_thickness){
+            updateCellColorBold(event);
+        } else {
+            updateCellColor(event);
+        }
     }).on("touchmove", event => {
-        updateCellColor(event);
+        if(g_is_bold_pen_thickness){
+            updateCellColorBold(event);
+        } else {
+            updateCellColor(event);
+        }
     });
     g_led_req_params = new Array(16);
     g_saved_stamp_params = new Array(16);
@@ -264,15 +301,20 @@ $(document).ready(() => {
         g_saved_stamp_params[x] = new Array(32).fill(0);
     }
     clearCells();
-    $("#trash").click(() => clearCells());
+    setPenThickness();
+    // $("#pen_thin").on(get_touch_event_key(),event => g_is_bold_pen_thickness=true);
+    // $("#pen_bole").on(get_touch_event_key(),event => g_is_bold_pen_thickness=false);
     for(let id in PALLETS){
         const obj = $("#" + id);
         const color = PALLETS[id].color;
-        obj.addClass("pallet").on(get_touch_event_key(), event => setPallet(id)).css("background-color", color)
-            .on("touchmove", event => setPallet(id)).css("background-color", color);
-        if(color === "transparent"){
+        obj.addClass("pallet");
+        if(id === "pallet11"){
+            const img = $("<img>").attr("border", 0).attr("src", "static/assets/trash.png").attr("width", "50px").attr("height", "50px");
+            obj.on(get_touch_event_key(),event => clearCells()).css("background-color", "lightgray").append(img);
+        } else {
             const img = $("<img>").attr("border", 0).attr("src", "static/assets/eraser.png").attr("width", "50px").attr("height", "50px");
-            obj.css("background-color", "lightgray").append(img);
+            obj.on(get_touch_event_key(), event => setPallet(id)).css("background-color", color)
+            .on("touchmove", event => setPallet(id)).css("background-color", color).append(img);
         }
     }
     for(let id in EFFECTS){
