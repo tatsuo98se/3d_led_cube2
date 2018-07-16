@@ -6,7 +6,7 @@ pip install numpy
 pip install flask  
 pip install opencv-python  
 pip install pyzmq  
-pip pyserial  
+pip install pyserial  
 pip install pyaudio  
 [Optional] pip install pyrealsense  
 
