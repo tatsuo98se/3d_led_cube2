@@ -2,8 +2,8 @@
 body
 {
     margin: 0;
-    background-image: url("assets/wallpaper.jpg");
-
+    background-image: url("/static/assets/bg/bg.png");
+    background-size: cover;
 }
 table
 {
@@ -15,6 +15,7 @@ table
 {
     width: 768px;
     height: 96px;
+    background-size: cover;
 }
 #cells
 {

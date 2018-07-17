@@ -3,38 +3,39 @@ var g_led_req_params; // Array [16][32]
 var g_last_update = Date.now();
 var g_saved_stamp_params;
 var g_is_bold_pen_thickness = false;
+const g_icon_path = "static/assets/icon/";
 const PALLETS = {
-    pallet0: { color: "red", off: "black", on: "blue", led: "FF0000" },
-    pallet1: { color: "orange", off: "black", on: "blue", led: "FF4400" },
-    pallet2: { color: "yellow", off: "black", on: "red", led: "FF8800" },
-    pallet3: { color: "green", off: "black", on: "red", led: "00FF00" },
-    pallet4: { color: "blue", off: "black", on: "red", led: "0000FF" },
-    pallet5: { color: "violet", off: "black", on: "red", led: "FF00FF" },
-    pallet6: { color: "pink", off: "black", on: "red", led: "FF0088" },
-    pallet7: { color: "lightgreen", off: "black", on: "red", led: "55FF00" },
-    pallet8: { color: "aqua", off: "black", on: "red", led: "00FFFF" },
-    pallet9: { color: "white", off: "black", on: "red", led: "FFFFFF" },
-    pallet10: { color: "transparent", off: "black", on: "red", led: "000000" },
-    pallet11: { color: "transparent", off: "black", on: "red", led: "000000" },
+    pallet0: { color: "red", off: g_icon_path+"red_off.png", on: g_icon_path+"red_on.png", led: "FF0000" },
+    pallet1: { color: "orange", off: g_icon_path+"orange_off.png", on: g_icon_path+"orange_on.png", led: "FF4400" },
+    pallet2: { color: "yellow", off: g_icon_path+"yellow_off.png", on: g_icon_path+"yellow_on.png", led: "FF8800" },
+    pallet3: { color: "green", off: g_icon_path+"green_off.png", on: g_icon_path+"green_on.png", led: "00FF00" },
+    pallet4: { color: "blue", off: g_icon_path+"blue_off.png", on: g_icon_path+"blue_on.png", led: "0000FF" },
+    pallet5: { color: "violet", off: g_icon_path+"purple_off.png", on: g_icon_path+"purple_on.png", led: "FF00FF" },
+    pallet6: { color: "pink", off: g_icon_path+"pink_off.png", on: g_icon_path+"pink_on.png", led: "FF0088" },
+    pallet7: { color: "lightgreen", off: g_icon_path+"lightgreen_off.png", on: g_icon_path+"lightgreen_on.png", led: "55FF00" },
+    pallet8: { color: "aqua", off: g_icon_path+"aqua_off.png", on: g_icon_path+"aqua_on.png", led: "00FFFF" },
+    pallet9: { color: "white", off: g_icon_path+"white_off.png", on: g_icon_path+"white_on.png", led: "FFFFFF" },
+    pallet10: { color: "transparent", off: g_icon_path+"eraser_off.png", on: g_icon_path+"eraser_on.png", led: "000000" },
+    pallet11: { color: "transparent", off: g_icon_path+"trash_off.png", on: g_icon_path+"trash_on.png", led: "000000" },
 };
 var EFFECTS = {
-    effect0:{color:"white",frag:false,filter:"filter-explosion"},
-    effect1:{color:"white",frag:false,filter:"filter-jump"},
-    effect2:{color:"white",frag:false,filter:"filter-exile"},
-    effect3:{color:"white",frag:false,filter:"filter-wave"},
-    effect4:{color:"white",frag:false,filter:"filter-bk-rains"},
+    effect0:{frag:false,off: g_icon_path+"perapera_off.png",on: g_icon_path+"perapera_on.png",filter: "filter-wave"},
+    effect1:{frag:false,off: g_icon_path+"jump_off.png",on: g_icon_path+"jump_on.png",filter:"filter-jump"},
+    effect2:{frag:false,off: g_icon_path+"explosion_off.png",on: g_icon_path+"explosion_on.png",filter:"filter-explosion"},
+    effect3:{frag:false,off: g_icon_path+"exile_off.png",on: g_icon_path+"exile_on.png",filter:"filter-exile"},
+    effect4:{frag:false,off: g_icon_path+"rain_off.png",on: g_icon_path+"rain_on.png",filter:"filter-bk-rains"},
 };
 var STAMPS = {
-    stamp0:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/chicken.json" },
-    stamp1:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/chinanago.json" },
-    stamp2:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/clownfish.json" },
-    stamp3:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/dragonfly.json" },
-    stamp4:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/flamingo.json" },
-    stamp5:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/heart.json" },
-    stamp6:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/ladybug.json" },
-    stamp7:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/note.json" },
-    stamp8:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/penguin.json" },
-    stamp9:{ color: "pink", off: "black", on: "red", led: "000000", url:"static/stamps/rocket.json" },
+    stamp0:{ off: g_icon_path+"clownfish_off.png",press: g_icon_path+"clownfish_press.png", url:"static/stamps/clownfish.json" },
+    stamp1:{ off: g_icon_path+"rocket_off.png",press: g_icon_path+"rocket_press.png", url:"static/stamps/rocket.json" },
+    stamp2:{ off: g_icon_path+"chicken_off.png",press: g_icon_path+"chicken_press.png", url:"static/stamps/chicken.json" },
+    stamp3:{ off: g_icon_path+"note_off.png",press: g_icon_path+"note_press.png", url:"static/stamps/note.json" },
+    stamp4:{ off: g_icon_path+"dragonfly_off.png",press: g_icon_path+"dragonfly_press.png", url:"static/stamps/dragonfly.json" },
+    stamp5:{ off: g_icon_path+"ladybug_off.png",press: g_icon_path+"ladybug_press.png", url:"static/stamps/ladybug.json" },
+    stamp6:{ off: g_icon_path+"heart_off.png",press: g_icon_path+"heart_press.png", url:"static/stamps/heart.json" },
+    stamp7:{ off: g_icon_path+"chinanago_off.png",press: g_icon_path+"chinanago_press.png", url:"static/stamps/chinanago.json" },
+    stamp8:{ off: g_icon_path+"flamingo_off.png",press: g_icon_path+"flamingo_press.png", url:"static/stamps/flamingo.json" },
+    stamp9:{ off: g_icon_path+"penguin_off.png",press: g_icon_path+"penguin_press.png", url:"static/stamps/rocket.json" },
 }
 const CELL_WIDTH = 18;
 const CELL_HEIGHT = 18;
@@ -51,7 +52,7 @@ const setPallet = pallet => {
     g_selected_pallet = pallet;
     for(let id in PALLETS){
         const type = id === g_selected_pallet? "on" : "off";
-        $("#" + id).css("border-color", PALLETS[id][type]);
+        $("#" + id).children('img').attr("src",PALLETS[id][type]);
     }
 }
 const setEffect = effect => {
@@ -59,6 +60,8 @@ const setEffect = effect => {
     for(let id in EFFECTS){
         if(id == selected_effect){
             EFFECTS[id].frag = !EFFECTS[id].frag;
+            const type = EFFECTS[id].frag === true? "on" : "off";
+            $("#" + id).children('img').attr("src",EFFECTS[id][type]);
         }
     }
     postEffect();
@@ -139,11 +142,6 @@ const searchPallet = (key, value) => {
 
 const updateWindow = () => {
     $(".cell").css("width", CELL_WIDTH).css("height", CELL_HEIGHT);
-    // const top = ($(window).height() - $("#main").height()) / 2;
-    // const left = ($(window).width() - $("#main").width()) / 2;
-    // $("#main").css("margin-top", top).css("margin-left", left);
-    // const left_effects = ($(window).width() - $("#effects").width()) / 2;
-    // $("#effects").css("margin-left", left_effects);
 }
 const setCell = (x, y, pallet) => {
     const id = "#cell_" + x + "_" + y;
@@ -273,14 +271,19 @@ function disableScroll(){
     document.body.addEventListener('touchmove', preventDefault, { passive: false });
 }
 function setPenThickness() {
-    const img_bold = $("<img>").attr("border", 0).attr("src", "static/assets/trash.png").attr("width", "50px").attr("height", "50px");
-    const img_thin = $("<img>").attr("border", 0).attr("src", "static/assets/trash.png").attr("width", "50px").attr("height", "50px");
+    const img_bold = $("<img>").attr("border", 0).attr("src", g_icon_path+"pen_off.png").attr("width", "50px").attr("height", "50px");
+    const img_thin = $("<img>").attr("border", 0).attr("src", g_icon_path+"pen_red.png").attr("width", "50px").attr("height", "50px");
     $("#pen_thin").on(get_touch_event_key(),event => g_is_bold_pen_thickness=false).append(img_thin);
     $("#pen_bold").on(get_touch_event_key(),event => g_is_bold_pen_thickness=true).append(img_bold);
 }
 $(document).ready(() => {
-
     disableScroll();
+    $("#header").append(
+        $("<img>").attr("border", 0).attr("src","static/assets/header/Draw_to_Like_Header.png")
+        .attr("width", "768px").attr("height", "96px"));
+    // $("#body").append(
+    //     $("<img>").attr("border", 0).attr("src","static/assets/bg/Draw_to_Like_bg.png")
+    //     .attr("width", "768px").attr("height", "1024px"));
     $("#cells").on(get_touch_event_key(), event => {
         if(g_is_bold_pen_thickness){
             updateCellColorBold(event);
@@ -302,35 +305,32 @@ $(document).ready(() => {
     }
     clearCells();
     setPenThickness();
-    // $("#pen_thin").on(get_touch_event_key(),event => g_is_bold_pen_thickness=true);
-    // $("#pen_bole").on(get_touch_event_key(),event => g_is_bold_pen_thickness=false);
     for(let id in PALLETS){
         const obj = $("#" + id);
-        const color = PALLETS[id].color;
         obj.addClass("pallet");
         if(id === "pallet11"){
-            const img = $("<img>").attr("border", 0).attr("src", "static/assets/trash.png").attr("width", "50px").attr("height", "50px");
-            obj.on(get_touch_event_key(),event => clearCells()).css("background-color", "lightgray").append(img);
+            const img = $("<img>").attr("border", 0).attr("src", "static/assets/trash.png").attr("width", "62.5px").attr("height", "62.5px");
+            obj.on(get_touch_event_key(),event => clearCells()).append(img);
         } else {
-            const img = $("<img>").attr("border", 0).attr("src", "static/assets/eraser.png").attr("width", "50px").attr("height", "50px");
-            obj.on(get_touch_event_key(), event => setPallet(id)).css("background-color", color)
-            .on("touchmove", event => setPallet(id)).css("background-color", color).append(img);
+            const img = $("<img>").attr("border", 0).attr("src", "static/assets/eraser.png").attr("width", "62.5px").attr("height", "62.5px");
+            obj.on(get_touch_event_key(), event => setPallet(id)).on("touchmove", event => setPallet(id)).append(img);
         }
     }
     for(let id in EFFECTS){
         const obj = $("#" + id);
-        const color = EFFECTS[id].color;
-        obj.addClass("effect").on(get_touch_event_key(), event => setEffect(id)).css("background-color", color);
+        const off = EFFECTS[id].off;
+        const img = $("<img>").attr("border", 0).attr("src", off).attr("width", "128px").attr("height", "104px");
+        obj.addClass("effect").on(get_touch_event_key(), event => setEffect(id)).append(img);
     }
     for(let id in STAMPS){
         const obj =$("#" + id);
-        const color = STAMPS[id].color;
-        obj.addClass("stamp").on(get_touch_event_key(),event => setStamp(id)).css("background-color", color);
+        const off = STAMPS[id].off;
+        const img = $("<img>").attr("border", 0).attr("src", off).attr("width", "66px").attr("height", "66px");
+        obj.addClass("stamp").on(get_touch_event_key(),event => setStamp(id)).append(img);
     }
     setPallet("pallet0");
     updateWindow();
     $(window).resize(() => {
         updateWindow();
     });
-//    setInterval(postCells, 100);
 });
