@@ -100,7 +100,7 @@ class LedPaintHttpServer(LedRunLoop):
                 return q.get()
 
 
-flask = FlaskOnThread(app, port=5301)
+flask = FlaskOnThread(app, port=5302)
 flask.daemon = True
 flask.start()
 

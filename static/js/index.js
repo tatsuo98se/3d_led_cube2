@@ -325,4 +325,6 @@ $(document).ready(() => {
     $(window).resize(() => {
         updateWindow();
     });
+
+    setInterval(postCells, 10000);
 });
