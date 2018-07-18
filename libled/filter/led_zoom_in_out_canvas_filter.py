@@ -6,8 +6,9 @@ from ..util.color import Color
 import math
 import numpy as np
 import random
-
 import time
+from ..util.sound_player import SoundPlayer as sp
+
 
 class LedZoomInOutCanvasFilter(LedCanvasFilter):
 
@@ -16,9 +17,18 @@ class LedZoomInOutCanvasFilter(LedCanvasFilter):
         self.last_update = time.time()
         self.zoomin = False
         self.scale = 1.0
+        self.pre_scales = [self.scale] *2
         self.src = self.get_new_canvas()
         self.dst = self.get_new_canvas()
         self.t = 0
+
+        # sound
+        self.wav = 'asset/audio/se_zoom.wav'
+        self.wav_extend = 'asset/audio/se_zoom_extend1.wav'
+        self.wav_shrink = 'asset/audio/se_zoom_shrink1.wav'
+        self.enable_loopsound = False
+        if self.enable_loopsound:
+            sp.instance().do_play(self.wav, True)
 
     def get_new_canvas(self):
        return np.array([[[ [[0]*4] * LED_DEPTH] * LED_HEIGHT ] * LED_WIDTH ] , dtype = np.uint8)
@@ -35,6 +45,9 @@ class LedZoomInOutCanvasFilter(LedCanvasFilter):
         self.src = self.get_new_canvas()
         self.dst = self.get_new_canvas()
 
+        if not self.enable_loopsound:
+            self.playsound_updown()
+
     def set_led(self, x, y, z, color):
         ix, iy, iz = rounds(x, y, z)
         if not is_in_cube(ix, iy, iz):
@@ -42,8 +55,6 @@ class LedZoomInOutCanvasFilter(LedCanvasFilter):
 
         self.src[0, ix, iy, iz] = Color.object_to_color(color).to_rgba255()
 
-
- 
     def post_draw(self):
         super(LedZoomInOutCanvasFilter, self).post_draw()
 
@@ -71,4 +82,14 @@ class LedZoomInOutCanvasFilter(LedCanvasFilter):
                 for z in range(LED_DEPTH):
                     if np.count_nonzero(self.dst[0, x, y, z]):
                         self.canvas.set_led(x, y, z, self.dst[0, x, y, z])
+
+    def playsound_updown(self):
+        if np.sign(self.pre_scales[0] - self.pre_scales[1]) != np.sign(self.pre_scales[1] - self.scale):
+            if self.pre_scales[1] < self.scale:
+                sp.instance().do_play(self.wav_extend)
+            else:
+                sp.instance().do_play(self.wav_shrink)
+        # swap
+        self.pre_scales[0] = self.pre_scales[1]
+        self.pre_scales[1] = self.scale
 
