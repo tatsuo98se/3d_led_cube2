@@ -157,40 +157,35 @@ const setCellFromColorCode = (x, y, colorCode) =>{
     $(id).css("background-color", colorCode);
 }
 const updateCellColor = event => {
-    const p0 = $("#cells").offset();
-    let p1 = undefined;
-    if(is_mobile_dvice()){
-        p1 = event.changedTouches[0];
-    }
-    else{
-        p1 = event;
-    }
-
-
-    const x = Math.floor((p1.pageX - p0.left) / (CELL_WIDTH + 3.6));
-    const y = Math.floor((p1.pageY - p0.top) / (CELL_HEIGHT + 3.6));
+    var coordinate = getCellCoordinate(event);
+    const x = coordinate.x;
+    const y = coordinate.y;
     setCell(x, y, g_selected_pallet);
     postCell(x, y)
 }
 const updateCellColorBold = event => {
-    const p0 = $("#cells").offset();
-    let p1 = undefined;
-    if(is_mobile_dvice()){
-        p1 = event.changedTouches[0];
-    }
-    else{
-        p1 = event;
-    }
-
-
-    const x = Math.floor((p1.pageX - p0.left) / (CELL_WIDTH + 3.6));
-    const y = Math.floor((p1.pageY - p0.top) / (CELL_HEIGHT + 3.6));
+    var coordinate = getCellCoordinate(event);
+    const x = coordinate.x;
+    const y = coordinate.y;
     setCell(x, y, g_selected_pallet);
     setCell(x-1, y, g_selected_pallet);
     setCell(x+1, y, g_selected_pallet);
     setCell(x, y-1, g_selected_pallet);
     setCell(x, y+1, g_selected_pallet);
-    postCell();
+    postCells();
+}
+const getCellCoordinate = event => {
+    const p0 = $("#cells").offset();
+    let p1 = undefined;
+    if(is_mobile_dvice()){
+        p1 = event.changedTouches[0];
+    } else {
+        p1 = event;
+    }
+    const x = Math.floor((p1.pageX - p0.left) / (CELL_WIDTH + 3.6));
+    const y = Math.floor((p1.pageY - p0.top) / (CELL_HEIGHT + 3.6));
+    var coordinate = {x: x,y: y};
+    return coordinate;
 }
 const clearCells = () => {
     for(let x = 0; x < g_led_req_params.length; ++x){
@@ -281,9 +276,6 @@ $(document).ready(() => {
     $("#header").append(
         $("<img>").attr("border", 0).attr("src","static/assets/header/Draw_to_Like_Header.png")
         .attr("width", "768px").attr("height", "96px"));
-    // $("#body").append(
-    //     $("<img>").attr("border", 0).attr("src","static/assets/bg/Draw_to_Like_bg.png")
-    //     .attr("width", "768px").attr("height", "1024px"));
     $("#cells").on(get_touch_event_key(), event => {
         if(g_is_bold_pen_thickness){
             updateCellColorBold(event);
