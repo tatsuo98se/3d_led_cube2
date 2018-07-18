@@ -4,9 +4,11 @@ import colorsys
 from ..util.color import Color
 import json
 import time
+from ..util.sound_player import SoundPlayer as sp
 
 SPEED = 8 # speed of moving color gradient
 GRAD = 5.0 # small -> steep, large -> low  color gradient
+
 
 class LedRainbowCanvasFilter(LedCanvasFilter):
 
@@ -14,6 +16,8 @@ class LedRainbowCanvasFilter(LedCanvasFilter):
         super(LedRainbowCanvasFilter, self).__init__(canvas, enable_controller)
         self.c = 0
         self.born_at = time.time()
+        self.wav = 'asset/audio/se_rainbow.wav'
+        sp.instance().do_play(self.wav)
 
     def get_color_from_serial(self):
         color = self.get_param_from_controller(defaults={'a0':0.6, 'a1':0.0, 'a2':0.0})
