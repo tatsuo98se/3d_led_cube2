@@ -10,6 +10,7 @@ import socket
 import json
 import sys
 import util.logger as logger
+from libled.util.sound_player import SoundPlayer
 
 class LedRunLoop(object):
 
@@ -122,6 +123,7 @@ class LedRunLoop(object):
                 raise
             finally:
                 self.run_loop_finished = True
+                SoundPlayer.instance().do_stop()
                 logger.i('finish led order loop')
 
 
