@@ -52,6 +52,8 @@ def get_scled_image(src , wscale, hscale):
     image = Image.fromarray(src, 'RGBA')
     nw = int(round(image.width * wscale))
     nh = int(round(image.height * hscale))
+    if nw <= 0 or nh <= 0:
+        logger.e("nw:{0}, nh:{1}".format(nw, nh))
     scaled = image.resize((nw, nh))
     scaled = scaled.rotate(Image.ROTATE_90)
     return np.asarray(scaled)

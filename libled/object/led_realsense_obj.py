@@ -15,16 +15,11 @@ class LedRealsenseObject(LedObject):
         d = RealsenseManager.get_data()
         if d is None:
             return
-        td = d[:,:,0]
         ranges = [16, 32, 48, 64, 80, 96, 112, 128]
-        for z in range(LED_DEPTH):
-            target = np.where( (1 < td) & (td < ranges[z]), Color(1,1,1), None)
-            for x in range(LED_WIDTH):
-                for y in range(LED_HEIGHT):
-
-#                    color = Color.rgbtapple_to_color(colorsys.hsv_to_rgb(np.average(d[x][y]), 1.0, 1.0))
-#                    color = Color.rgbtapple255_to_color(d[x][y])
-#                    canvas.set_led(x, y, 0, color)
-                    if target[x][y] is not None:
-                        canvas.set_led(x, y, z, target[x][y])
+        for x in range(LED_WIDTH):
+            for y in range(LED_HEIGHT):
+                for z in range(LED_DEPTH):
+                    color = d[x,y]
+                    if (1 < color[3]) & (color[3] < ranges[z]):
+                        canvas.set_led(x, y, z, Color.rgbtapple255_to_color((color[0],color[1],color[2])))
 

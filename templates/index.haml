@@ -1,20 +1,33 @@
 %html lang="ja"
   %head
     %meta charset="utf-8"
-    %meta name="viewport" content="width=device-width initial-scale=1 maximum-scale=1 user-scalable=no minimal-ui"
+    %meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no minimal-ui"
     %meta name="apple-mobile-web-app-capable"  content="yes"
     %meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"
-    %link type="text/css"  rel="stylesheet" href="/static/css/index.css"
+    %link type="text/css" rel="stylesheet" href="/static/css/index.css"
     %link rel="shortcut icon" href="/static/assets/favicon.png"
     %link rel="apple-touch-icon" href="/static/assets/favicon.png"
     %script src="/static/js/jquery-3.3.1.min.js" 
     %script src="/static/js/index.js" 
     %title=title
-  %body ontouchmove="event.preventDefault()" style= "background-image: url(/static/assets/wallpaper.jpg);" 
-    %div#trash.pallet  style="background-color: white" 
-      %img border=0 src="/static/assets/trash.png" width="40px" height="40px"
+  %body style= "background-image: url(/static/assets/bg/Draw_to_Like_bg.png);" 
+    %nav#header
     %table#main
       %tr
+        %td
+          %table#stamps_1
+            {% for y in range(5): %}
+            %tr
+              %td
+                %div id="stamp{{y + 5 * 0}}"
+            {% endfor %}
+        %td
+          %table#stamps_2
+            {% for y in range(5): %}
+            %tr
+              %td
+                %div id="stamp{{y + 5 * 1}}"
+            {% endfor %}
         %td
           %table#cells
             {% for y in range(32): %}
@@ -25,11 +38,24 @@
               {% endfor %}
             {% endfor %}
         %td
-          %table#pallets
-            {% for y in range(8): %}
-              %tr
-              {% for x in range(2): %}
-                %td
-                  %div id="pallet{{y + 8 * x}}"
-              {% endfor %}
+          %div class='pen' id="pen_thin"
+          %table#pallets_1
+            {% for y in range(6): %}
+            %tr
+              %td
+                %div id="pallet{{y + 6 * 0}}"
             {% endfor %}
+        %td
+          %div class='pen' id="pen_bold"
+          %table#pallets_2
+            {% for y in range(6): %}
+            %tr
+              %td
+                %div id="pallet{{y + 6 * 1}}"
+            {% endfor %}
+    %table#effects
+      %tr
+      {% for x in range(5): %}
+        %td
+          %div id="effect{{x}}"
+      {% endfor %}

@@ -14,6 +14,7 @@ CHUNK = 1024
 class SoundPlayer(object):
     __instance = None
     __lock = threading.Lock()
+    __pa_lock = threading.Lock()
 
     def __new__(cls):
         raise NotImplementedError('Cant call this Constructor.')
@@ -27,29 +28,29 @@ class SoundPlayer(object):
         if not cls.__instance:
             with cls.__lock:
                 if not cls.__instance:
-                    print('call SoundPlayer.instance(cls)')
                     cls.__instance = cls.__internal_new__()
                     cls.__instance.__internal_init__()
         return cls.__instance
 
     def __internal_init__(self):
         # flags
-        # self.loop = False
+        # self._loop = False
 
         # event flags
         self._event_pause = threading.Event()
         self._event_stop = threading.Event()
-        self.event_init()
+        self.__event_init()
 
         # effect params
         self._mod_samplingrate = 1.0
         # 0 < volume < 1
         self._mod_volume = 0.5
 
-    def event_init(self):
+    def __event_init(self):
         self._event_pause.clear()
         self._event_stop.clear()
 
+    @classmethod
     def show_wavinfo(self, wfinfo):
         logger.d(wfinfo)
         logger.d('wave file info')
@@ -59,7 +60,7 @@ class SoundPlayer(object):
         logger.d('frame count = {}'.format(wfinfo[3]))
         logger.d('sound time = {} s'.format((int)(wfinfo[3] / wfinfo[2])))
 
-    def playsound(self, wavfile):
+    def __playsound(self, wavfile, loop=False):
         if (wavfile == ""):
             logger.d('empty sound file.')
             return
@@ -70,30 +71,36 @@ class SoundPlayer(object):
         self.wfinfo = wf.getparams()
         self.show_wavinfo(self.wfinfo)
         try:
-            p = pyaudio.PyAudio()
-            s = p.open(format=p.get_format_from_width(self.wfinfo[1]),
-                       channels=self.wfinfo[0],
-                       rate=self.wfinfo[2],
-                       output=True)
+            with SoundPlayer.__pa_lock:
+                p = pyaudio.PyAudio()
+                s = p.open(format=p.get_format_from_width(self.wfinfo[1]),
+                        channels=self.wfinfo[0],
+                        rate=self.wfinfo[2],
+                        output=True)
 
             # play stream
             input_data = wf.readframes(CHUNK)
             logger.d('started blocking sound play.')
             while len(input_data) > 0:
-                if self.ctrl_sound():
+                if self.__ctrl_sound():
                     break
-                s.write(self.mod_sound(input_data))
+                s.write(self.__mod_sound(input_data))
                 input_data = wf.readframes(CHUNK)
+                # loop
+                if loop and len(input_data) == 0:
+                    wf.rewind()
+                    input_data = wf.readframes(CHUNK)
 
         finally:
             # close stream
-            s.stop_stream()
-            s.close()
-            wf.close()
-            p.terminate()
+            with SoundPlayer.__pa_lock:
+                s.stop_stream()
+                s.close()
+                wf.close()
+                p.terminate()
             logger.d('finished sound play.')
 
-    def ctrl_sound(self):
+    def __ctrl_sound(self):
         is_brake = False
 
         # stop action
@@ -112,7 +119,7 @@ class SoundPlayer(object):
 
         return is_brake
 
-    def mod_sound(self, input_data):
+    def __mod_sound(self, input_data):
         data = fx.get_buffer(input_data, self.wfinfo[1])
 
         # mod
@@ -125,12 +132,12 @@ class SoundPlayer(object):
             data = fx.gain(data, self._mod_volume)
         return fx.set_buffer(data)
 
-    def do_play(self, wavfile):
+    def do_play(self, wavfile, loop=False):
         # clear event flags
-        self.event_init()
+        self.__event_init()
         # threading
         self.thread = threading.Thread(
-            target=self.playsound, args=(wavfile,))
+            target=self.__playsound, args=(wavfile, loop,))
         self.thread.start()
 
     def do_pause(self):
@@ -155,6 +162,9 @@ class SoundPlayer(object):
         self._mod_volume = val
         logger.d('set volume = {}'.format(val))
 
+    # def set_loop(self, val, id):
+    #     self._loop = val
+    #     logger.d('set loop play = {}'.format(val))
 
 '''
 def myhelp():

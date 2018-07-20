@@ -1,14 +1,46 @@
+
 body
 {
-    background-image: url("assets/wallpaper.png");
+    margin: 0;
+    background-image: url("/static/assets/bg/bg.png");
+    background-size: cover;
+}
+table
+{
+    border-collapse: collapse;
+    border-spacing: 0;
+    text-align: top;
+}
+#header
+{
+    width: 768px;
+    height: 96px;
+    background-size: cover;
 }
 #cells
 {
-    border-spacing: 0px;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 0;
 }
 #trash
 {
-    position: absolute;
+    text-align: center;
+}
+.pen
+{
+    margin-top: 53px;
+    height: 74px;
+    width: 68px;
+}
+#pen_thin
+{
+    margin-left: 30px;
+    text-align: center;
+}
+#pen_bold
+{
+    margin-left: 9px;
     text-align: center;
 }
 #trash img
@@ -17,26 +49,81 @@ body
 }
 .cell
 {
-    border-radius: 30%;
+    border-radius: 0%;
     padding: 0px;
+    margin: 0;
     border: solid 1px gray;
 }
-#pallets
+#pallets_1
 {
-    margin-left: 20px;
+    margin-top: 25px;
+    margin-left: 30px;
+    margin-bottom: 71px;
+}
+#pallets_2
+{
+    margin-top: 69px;
+    margin-left: 9px;
+    margin-bottom: 27px;
 }
 .pallet
 {
     border-radius: 50%;
-    height: 60px;
-    width: 60px;
+    height: 62.5px;
+    width: 62.5px;
     display: block;
-    margin: 10px;
+    margin-top: 13px;
+    margin-bottom: 13px;
     border-style: solid;
-    border-width: 5px;
+    border-width: 0px;
     text-align: center;
 }
 .pallet img
 {
     margin-top: 3px;
+}
+#effects
+{
+    margin-left: 39px;
+    margin-right: 39px;
+    margin-top: 37px;
+    margin-bottom: 19px;
+}
+.effect
+{
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-radius: 5%;
+    height: 104px;
+    width: 128px;
+    display: block;
+    margin-left: 4px;
+    margin-right: 4px;
+    border-style: solid;
+    border-width: 0px;
+    text-align: center;
+}
+#stamps_1
+{
+    margin-left: 25px;
+    margin-top: 113px;
+    margin-bottom: 200px;
+}
+#stamps_2
+{
+    margin-left: 10px;
+    margin-right: 24px;
+    margin-top: 68px;
+    margin-bottom: 245px;
+}
+.stamp
+{
+    border-radius: 20%;
+    height: 66.5px;
+    width: 66.5px;
+    display: block;
+    margin-bottom: 22px;
+    border-style: solid;
+    border-width: 0px;
+    text-align: center;
 }

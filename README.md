@@ -6,7 +6,7 @@ pip install numpy
 pip install flask  
 pip install opencv-python  
 pip install pyzmq  
-pip pyserial  
+pip install pyserial  
 pip install pyaudio  
 [Optional] pip install pyrealsense  
 
@@ -23,10 +23,39 @@ macOS
 
 ## 各ファイルの役割
 
-### main_block_server.py
+### ファイル名の命名規則
 
-受け取ったブロックの組み合わせを表すのJson命令をLED CUBEとシミュレータに表示する。
+#### "main_"から始まるもの
+
+呼び出しのエントリーポイントとなるファイル
+
+### "main_*_service.py"
+
+このファイルの呼び出しで、一つのLEDのアトラクションを提供するもの
+
+### "main_*_module.py"
+
+"_service.py"を補助するために必要なサービス  
+利用するには、このファイルも実行する必要がある
+
+### "main_*_test.py", "main_*_sample"
+
+テストを実行するためのエントリーポイント
+
+### main_block_service.py
+
+受け取ったブロックの組み合わせを表すのJson命令をLED CUBEとシミュレータに表示する。   
 表示に成功した命令は、./log/order_history以下にログとして保存する
+
+### main_paint_service.py
+
+お絵かきコンテンツを実行する  
+ポート5301にお絵かきのWebUIを表示する
+
+### main_realsense_service.py
+
+人影のコンテンツを実行する  
+main_realsense_module.pyの実行も必要  
 
 
 ### main_block_test.py - 標準入力からブロックの組み合わせを表すのJson命令を受信して表示するスクリプト

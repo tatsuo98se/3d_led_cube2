@@ -3,6 +3,8 @@ from ..led_cube import *
 from ..util.color import Color
 import math
 import time
+from ..util.sound_player import SoundPlayer as sp
+
 
 class LedSwayingCanvasFilter(LedCanvasFilter):
 
@@ -12,6 +14,8 @@ class LedSwayingCanvasFilter(LedCanvasFilter):
         self.dx = dx
         self.dy = dy
         self.swaying = swaying
+        self.wav = 'asset/audio/se_wind.wav'
+        sp.instance().do_play(self.wav)
 
 
     def set_led(self, x0, y0, z, color):

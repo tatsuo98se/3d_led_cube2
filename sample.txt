@@ -88,7 +88,7 @@ show:{"orders":[{"id":"filter-rolling-ctrl"},{"id":"object-yacht", "lifetime":12
 show:{"orders":[{"id":"filter-rainbow-ctrl"},{"id":"filter-skewed-ctrl"},{"id":"filter-jump-ctrl"},{"id":"object-stickman", "lifetime":3000}]}
 
 show:{"orders":[{"id":"filter-zoom-ctrl"},{"id":"filter-rainbow-ctrl"},{"id":"object-star", "lifetime":120}]}
-show:{"orders":[{"id":"filter-jump-button"},{"id":"filter-rainbow-ctrl"},{"id":"object-star", "lifetime":120}]}
+show:{"orders":[{"id":"filter-jump-button-ctrl"},{"id":"filter-rainbow-ctrl"},{"id":"object-star", "lifetime":120}]}
 
 
 show:{"orders":[{"id":"filter-wakame"},{"id":"filter-spiral2"},{"id":"filter-swaying"},{"id":"object-stickman", "lifetime":120}]}
@@ -105,5 +105,10 @@ show:{"orders":[{"id":"filter-zanzo"},{"id":"object-realsense", "lifetime":0}]}
 show:{"orders":[{"id":"filter-3d-zanzo"},{"id":"filter-skewed"},{"id":"object-star", "lifetime":0}]}
 show:{"orders":[{"id":"filter-3d-zanzo"},{"id":"filter-skewed"},{"id":"filter-z-skewed-ctrl"},{"id":"object-stickman", "lifetime":0}]}
 show:{"orders":[{"id":"filter-explosion"},{"id":"object-stickman", "lifetime":0}]}
-show:{"orders":[{"id":"filter-explosion"},{"id":"object-makey", "lifetime":0}]}
 show:{"orders":[{"id":"filter-3d-explosion"},{"id":"object-3d-makey", "lifetime":0}]}
+show:{"orders":[{"id":"filter-bk-rains"},{"id":"filter-jump"},{"id":"filter-skewed-ctrl"},{"id":"object-3d-makey", "lifetime":0}]}
+show:{"orders":[{"id":"filter-skewed-ctrl"},{"id":"object-saboten", "lifetime":0}]}
+show:{"orders":[{"id":"filter-skewed-ctrl"},{"id":"object-tulip", "lifetime":0}]}
+show:{"orders":[{"id":"filter-skewed-ctrl"},{"id":"object-penguin", "lifetime":0}]}
+show:{"orders":[{"id":"filter-jump"},{"id":"filter-zy-skewed-ctrl"},{"id":"object-color-cube", "lifetime":0}]}
+show:{"orders":[{"id":"filter-jump"},{"id":"filter-skewed"},{"id":"object-rocket", "lifetime":0}]}

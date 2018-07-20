@@ -11,7 +11,7 @@ import colorsys
 class Led3DZanzoCanvasFilter(LedCanvasFilter):
 
     def __init__(self, canvas):
-        super(Led3DZanzoCanvasFilter, self).__init__(canvas)
+        super(Led3DZanzoCanvasFilter, self).__init__(canvas, enable_controller=False)
         self.t = 0
         self.buffer = None
         self.q = []
@@ -23,11 +23,8 @@ class Led3DZanzoCanvasFilter(LedCanvasFilter):
 
     def pre_draw(self):
         super(Led3DZanzoCanvasFilter, self).pre_draw()
-        self.buffer = create_nested_dict(3)
-
-    def show(self, canvas = None):
         self.t += 0.3
-        super(Led3DZanzoCanvasFilter, self).show(canvas)
+        self.buffer = create_nested_dict(3)
 
     def set_led(self, xx, yy, zz, color):
 

@@ -13,23 +13,48 @@ import zmq
 
 class ReadLineWorker(Thread):
 
-    def __init__(self, event, initial_data):
+    def __init__(self, event):
         super(ReadLineWorker,self).__init__()
 
-        context = zmq.Context()
-        self.socket = context.socket(zmq.SUB)
+        self.context = zmq.Context()
+        self.socket = self.context.socket(zmq.SUB)
         logger.i("Collecting updates from gamepad server...")
         self.socket.connect("tcp://localhost:5602")
         self.socket.setsockopt(zmq.SUBSCRIBE, '')
 
         self.is_stop = False
-        self.line = initial_data
         self.event = event
+        self.line = None
+        try:
+            self.line = self.get_initial_data()
+            logger.i("initialize gamepad is successfull.")
+        except:
+            logger.w("initialize gamepad failed. trying to connect..:" + str(sys.exc_info()[0]))
+            
+
+    def get_initial_data(self):
+        return json.loads(urllib2.urlopen('http://localhost:5601/api/gamepad').read())
 
     def run(self):
-        while not self.is_stop:
-            self.event()
-            self.line = self.socket.recv_json()
+        try:
+            while not self.is_stop:
+                try:
+                    if self.line is None:
+                        self.line = self.get_initial_data()
+                    self.event()
+                    self.line = self.socket.recv_json()
+                except ValueError:
+                    logger.w("HwController recive unexpected data format.")
+                    continue
+                except urllib2.URLError:
+                    sleep(3)
+                    continue
+
+        finally:
+            if self.socket is not None:
+                self.socket.close()
+            if self.context is not None:
+                self.context.term()
 
     def stop(self):
         self.is_stop = True
@@ -43,15 +68,9 @@ class HwControllerManager:
     _observers = []
 
     def __init__(self):
-        initial_data = None
         self.worker = None
-        try:
-            initial_data = urllib2.urlopen('http://localhost:5601/api/gamepad').read()
-            self.worker = ReadLineWorker(lambda: HwControllerManager.event(), json.loads(initial_data))
-            self.worker.start()
-        except:
-            logger.e("Unexpected error:" + str(sys.exc_info()[0]))
-            logger.e(traceback.format_exc())
+        self.worker = ReadLineWorker(lambda: HwControllerManager.event())
+        self.worker.start()
 
     @classmethod
     def event(cls):
@@ -69,12 +88,7 @@ class HwControllerManager:
     @classmethod
     def init(cls):
         if cls._instance is None:
-            try:
-                cls._instance = cls()
-                logger.i("initialize gamepad is successfull.")
-            except:
-                logger.e("initialize gamepad failed.:" + str(sys.exc_info()[0]))
-                logger.e(traceback.format_exc())
+            cls._instance = cls()
         return cls._instance
 
     @classmethod

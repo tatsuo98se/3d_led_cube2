@@ -24,6 +24,19 @@ else:
 
 logger.i('LoadLibrary: '+ ledlib)
 
+def local_split_url_and_port(url):
+    result = url.split(":")
+    if len(result) > 2:
+        raise ArgumentError('invalid url format.')
+    else:
+        try:
+            if len(result) == 2:
+                return result[0], int(result[1])
+            else:
+                return url, None
+        except ValueError:
+            raise ArgumentError('invalid port number')
+
 
 class LedCube(object):
     def __init__(self, led):
@@ -34,8 +47,13 @@ class LedCube(object):
         self.led.Show()
 
     def SetUrl(self, dest):
-        #print("led.SetUrl()")
-        self.led.SetUrl(dest)
+        print("led.SetUrl():" + dest)
+        url, port = local_split_url_and_port(dest)
+
+        self.led.SetUrl(url)
+        if port is not None:
+            print("led.SetPort():" + str(port))
+            self.led.SetPort(port)
 
     def Clear(self):
         #print("led.Clear()")

@@ -7,6 +7,8 @@ import math
 import time
 import numpy as np
 import colorsys
+from ..util.sound_player import SoundPlayer as sp
+
 
 class LedExileCanvasFilter(LedCanvasFilter):
 
@@ -14,6 +16,8 @@ class LedExileCanvasFilter(LedCanvasFilter):
         super(LedExileCanvasFilter, self).__init__(canvas)
         self.t = 0
         self.src = self.get_new_canvas()
+        self.wav = 'asset/audio/se_space.wav'
+        sp.instance().do_play(self.wav, True)
 
     def get_new_canvas(self):
         return create_nested_dict(2)
@@ -40,7 +44,7 @@ class LedExileCanvasFilter(LedCanvasFilter):
 
     def post_draw(self):
         super(LedExileCanvasFilter, self).post_draw()
-        step = 2
+        step = 3
         for x in range(LED_WIDTH):
             for y in range(LED_HEIGHT):
                 for z in range(LED_DEPTH):
@@ -49,7 +53,7 @@ class LedExileCanvasFilter(LedCanvasFilter):
                     p = (self.t - z/step) # layer 4
                     sx = math.sin(p) * 3
                     sy = math.cos(p) * 3
-                    if z == 0 or z == 1:
+                    if z == 0 or z == 1 or z == 2:
                         self.canvas.set_led(x+sx, y+sy, z, self.src[x][y])
                     else:
                         h = (math.sin(self.t+z/step) + 1) /2
