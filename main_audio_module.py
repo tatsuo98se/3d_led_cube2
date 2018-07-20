@@ -48,11 +48,11 @@ class SoundPlayingServer(SimpleRunLoop):
     def __init__(self):
         super(SoundPlayingServer, self).__init__()
         # player tuple layout: id, player
-        self.players = []
+        self.players = {}
 
     def on_exception_at_runloop(self, exception):
         self.all_stop()
-        return SimpleRunLoop.EXIT
+        return SimpleRunLoop.CONTINUE
 
     def on_start_runloop(self):
         logger.d('start runloop')
@@ -60,10 +60,14 @@ class SoundPlayingServer(SimpleRunLoop):
 
     def on_do_function(self):
         if not q.empty():
-            message = q.get()
-            logger.d(message)
+            print('2')
+            req = q.get()
+            cmd = req[0]
+            args = req[1:]
+            logger.d('cmd({}), args({})={}'.format(
+                type(cmd), type(args), args))
 
-        time.sleep(0.01)
+        time.sleep(0.1)
 
     def on_finish_runloop(self):
         self.all_stop()
@@ -73,10 +77,40 @@ class SoundPlayingServer(SimpleRunLoop):
         map(lambda t: t.player.do_stop(), self.players)
 
     def play(self, args):
-        pass
+        # get player
+        content_id = args[0]
+        if content_id is None:
+            logger.w('null argument content id.')
+            return
+        if content_id in self.players:
+            player = self.players[content_id]
+        else:
+            player = sp.instance()
+            self.players[content_id] = player
+
+        # do play
+        # wav = '{}.wav'.format(args[1])
+        wav = args[1]
+        if wav is None:
+            logger.w('null argument wavefile = ')
+            return
+        loop = args[2]
+
+        and_stop = args[3]
+        if and_stop:
+            player.do_pause()
+
+        logger.i('play {}, loop({})'.format(wav, loop))
+        player.do_play(wav, loop)
 
     def stop(self, args):
-        pass
+        # get player
+        content_id = args[0]
+        if content_id is None:
+            logger.w('null argument content id.')
+            return
+        if content_id in self.players:
+            player = self.players[content_id]
 
     def volume(self, args):
         pass
@@ -135,7 +169,7 @@ def stop():
 def vol():
     logger.d('call volume rest-api audio module.\n' + str(request.data))
     req = get_request()
-    q.put(s.stop,
+    q.put(s.volume,
           (req.get('content_id'), req.get('val', 0.5)))
     return ""
 
