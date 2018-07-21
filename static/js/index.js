@@ -1,3 +1,4 @@
+var g_drawing_buffer = [];
 var g_selected_pallet;
 var g_led_req_params; // Array [16][32]
 var g_last_update = Date.now();
@@ -77,7 +78,6 @@ const setJson = filepath =>{
                 setCell(x, y, pallet)
             }
         }
-        postCells()
     });;
 }
 
@@ -107,7 +107,6 @@ const setImage = filepath => {
                 setCellFromColorCode(x, y, colorCode);
             }
         }
-        postCells()
     }
 }
 
@@ -143,13 +142,33 @@ const searchPallet = (key, value) => {
 const updateWindow = () => {
     $(".cell").css("width", CELL_WIDTH).css("height", CELL_HEIGHT);
 }
+
+const isInRangeOfCanvas = (x, y) =>{
+    if(x<0 || x>=16){
+        return false;
+    }
+    if(y<0 || y>=32){
+        return false;
+    }
+    return true;
+}
+
 const setCell = (x, y, pallet) => {
+    if(!isInRangeOfCanvas(x, y)){
+        return
+    }
     const id = "#cell_" + x + "_" + y;
     $(id).css("background-color", PALLETS[pallet].color);
+    g_drawing_buffer.push({ 'x' : x, 'y': y, 'color': PALLETS[pallet].led })
     g_led_req_params[x][y] = PALLETS[pallet].led;
 }
+
 const setCellFromColorCode = (x, y, colorCode) =>{
+    if(!isInRangeOfCanvas(x, y)){
+        return
+    }
     g_led_req_params[x][y] = colorCode;
+    g_drawing_buffer.push({ 'x' : x, 'y': y, 'color': g_led_req_params[x][y] })
     const id = "#cell_" + x + "_" + y;
     if(colorCode == "000000"){
         colorCode = "transparent";
@@ -161,7 +180,6 @@ const updateCellColor = event => {
     const x = coordinate.x;
     const y = coordinate.y;
     setCell(x, y, g_selected_pallet);
-    postCell(x, y)
 }
 const updateCellColorBold = event => {
     var coordinate = getCellCoordinate(event);
@@ -172,7 +190,6 @@ const updateCellColorBold = event => {
     setCell(x+1, y, g_selected_pallet);
     setCell(x, y-1, g_selected_pallet);
     setCell(x, y+1, g_selected_pallet);
-    postCells();
 }
 const getCellCoordinate = event => {
     const p0 = $("#cells").offset();
@@ -193,16 +210,28 @@ const clearCells = () => {
             setCell(x, y, "pallet11");
         }
     }
-    postCells()
+//    postCells()
 }
 
-const postCell = (x, y) =>{
+const postCell = () =>{
+
+    if (g_drawing_buffer.length == 0){
+        return;
+    }
+
+    var buffer = []
+    for(var i = 0; i<g_drawing_buffer.length; i++){
+        buffer.push(g_drawing_buffer[i])
+    }
+    g_drawing_buffer = []
     $.ajax({
         url:'./api/led',
         type:'POST',
-        data:{ 'x' : x, 'y': y, 'color': g_led_req_params[x][y] }
+        contentType:'application/json',
+        data:JSON.stringify({ points : buffer})
     }).done(data => {}).fail(data => {});
 }
+
 const postEffect = () =>{
     var obj = [];
     for(let id in EFFECTS){
@@ -231,7 +260,8 @@ const postCells = () => {
     $.ajax({
         url:'./api/led',
         type:'POST',
-        data:{ 'led' : g_led_req_params }
+        contentType:'application/json',
+        data:JSON.stringify({ 'led' : g_led_req_params })
     }).done(data => {}).fail(data => {});
 }
 const savePicture = () =>{
@@ -326,5 +356,6 @@ $(document).ready(() => {
         updateWindow();
     });
 
-    setInterval(postCells, 10000);
+    setInterval(postCells, 10000); // update all
+    setInterval(postCell, 100); // send pixels if updates exists.
 });

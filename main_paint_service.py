@@ -55,17 +55,21 @@ def api_stamp():
 
 @app.route('/api/led', methods=['POST'])
 def api_led():
-    x = request.form.get('x')
-    if x is None:
-        for x in range(16):
-            datalist_id = "led[{0}][]".format(x)
-            datalist = request.form.getlist(datalist_id)
-            for y in range(32):
-                PaintManager.get_instance().set_color(x, y, Color.int_to_color(int(datalist[y], 16)))
+    data = json.loads(request.data)
+    if 'points' in data:
+        points = data['points']
+        for point in points:
+            color = int(str(point['color']), 16)
+            logger.d("x:{0}, y:{1}, color:{2}".format(point['x'], point['y'], color))
+            PaintManager.get_instance().set_color( \
+                                                int(point['x']), 
+                                                int(point['y']), 
+                                                Color.int_to_color(color))
+
     else:
-        y = request.form.get('y')
-        color = request.form.get('color')
-        PaintManager.get_instance().set_color(int(x), int(y), Color.int_to_color(int(color, 16)))
+        for x in range(16):
+            for y in range(32):
+                PaintManager.get_instance().set_color(x, y, Color.int_to_color(int(str(data['led'][x][y]), 16)))
     return ""
 
 
