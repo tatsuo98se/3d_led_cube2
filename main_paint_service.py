@@ -19,6 +19,16 @@ from libled.util.color import Color
 from libled.util.paint_manager import PaintManager
 from libled.util.flask_on_thread import FlaskOnThread
 from libled.util.sound_player import SoundPlayer
+from PIL import Image as pimg
+
+def save_image(data, filename):
+    image = pimg.new('RGB', (LED_WIDTH, LED_HEIGHT))
+    pixels = image.load()
+    for x in range(LED_WIDTH):
+        for y in range(LED_HEIGHT):
+            color = Color.int_to_color(int(str(data[x][y]), 16))
+            pixels[x, y] = color.to_rgb255()
+    image.save(filename, 'PNG')
 
 class FlaskWithHamlish(Flask):
     jinja_options = ImmutableDict(
@@ -67,8 +77,12 @@ def api_led():
                                                 Color.int_to_color(color))
 
     else:
-        for x in range(16):
-            for y in range(32):
+        # save order
+        logorder = datetime.now().strftime('%Y%m%d-%H-%M-%S-%f')[:-3]
+        filename = 'log/painting_history/' + logorder + '.png'
+        save_image(data['led'], filename)
+        for x in range(LED_WIDTH):
+            for y in range(LED_HEIGHT):
                 PaintManager.get_instance().set_color(x, y, Color.int_to_color(int(str(data['led'][x][y]), 16)))
     return ""
 
