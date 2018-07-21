@@ -7,4 +7,4 @@ opencv-python==3.4.1.15
 pyzmq==17.0.0
 pyserial==3.4
 pyaudio==0.2.11
-pyrealsense==2.0
+#pyrealsense==2.0 # please uncommented out if you would like to use realsense.
