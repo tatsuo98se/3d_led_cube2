@@ -1,8 +1,11 @@
 import unittest
 import block_dictionary as bd
 from libled.util.led_order_util import *
+from libled.util.sound_player import SoundPlayer
 
 class TestBlockDictionary(unittest.TestCase):
+    def tearDown(self):
+        SoundPlayer.instance().do_stop()
 
     def test_order_in_order_all_is_exist_in_led_order_util(self):
         for order in bd.order_all:
