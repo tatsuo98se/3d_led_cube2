@@ -19,7 +19,7 @@ elif sys.platform == 'win32':
         ledlib = dirname + '/ledLib32.dll'
 elif 'linux' in sys.platform and platform.machine() == 'armv7l':
     ledlib = dirname + '/ledLibarmv7l.so' # for Raspberry PI3
-elif 'OS.linux2' in sys.platform: # for travis.ci
+elif 'linux2' == sys.platform: # for travis.ci
     ledlib = None
 else:
     raise NotImplementedError('Unsupported OS.' + sys.platform)
