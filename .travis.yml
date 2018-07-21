@@ -1,8 +1,13 @@
 language: python
+os:
+  - osx
 python:
   - "2.7"
 before_install:
-  - sudo apt-get install portaudio19-dev
+  - brew update  
+  - brew install opencv  
+  - brew install boost  
+  - brew install portaudio  
 install:
   - pip install -r requirements.txt
 script:
