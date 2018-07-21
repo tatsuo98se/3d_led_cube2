@@ -1,3 +1,6 @@
+[![Build Status](https://travis-ci.org/tatsuo98se/3d_led_cube2.svg?branch=master)](https://travis-ci.org/tatsuo98se/3d_led_cube2)  
+
+
 ## Requirements
 
 Python 2.7  
@@ -8,6 +11,8 @@ pip install opencv-python
 pip install pyzmq  
 pip install pyserial  
 pip install pyaudio  
+pip install hamlish-jinja
+[Optional] pip install cython  
 [Optional] pip install pyrealsense  
 
 ### for macOS
