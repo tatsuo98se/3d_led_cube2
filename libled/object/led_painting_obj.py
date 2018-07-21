@@ -15,3 +15,4 @@ class LedPaintingObject(LedObject):
                 if c.is_black():
                     continue
                 canvas.set_led(x, y, 0, c)
+                canvas.set_led(x, y, 1, c)
