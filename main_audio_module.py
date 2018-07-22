@@ -85,7 +85,7 @@ class SoundPlayingServer(SimpleRunLoop):
     def get_player(self, player_id, creatable=False):
         if player_id is None:
             return None
-        elif player_id in self._players:
+        elif player_id in self._players.keys():
             return self._players[player_id]
         elif creatable:
             player = sp.instance()
@@ -112,8 +112,8 @@ class SoundPlayingServer(SimpleRunLoop):
         if and_stop:
             player.do_pause()
 
-        logger.i('[{}]play {}, loop({})'.format(args[0], wav, loop))
         player.do_play(wav, loop)
+        logger.i('[{}]play {}, loop({})'.format(args[0], wav, loop))
 
     def stop(self, args):
         # get player
@@ -121,18 +121,40 @@ class SoundPlayingServer(SimpleRunLoop):
         if player is None:
             logger.w('not founded content id({}).'.format(args[0]))
             return
-        
-        logger.i('[{}]stop'.format(args[0]))
+
         player.do_stop()
+        logger.i('[{}]stop'.format(args[0]))
 
     def volume(self, args):
-        pass
+        # get player
+        player = self.get_player(args[0], True)
+        if player is None:
+            logger.w('not founded content id({}).'.format(args[0]))
+            return
+
+        player.set_volume(args[1])
+        logger.i('[{}]volume = {}'.format(args[0], args[1]))
 
     def pause(self, args):
-        pass
+        # get player
+        logger.i(type(args))
+        player = self.get_player(args[0], True)
+        if player is None:
+            logger.w('not founded content id({}).'.format(args[0]))
+            return
+
+        player.do_pause()
+        logger.i('[{}]pause'.format(args[0]))
 
     def resume(self, args):
-        pass
+        # get player
+        player = self.get_player(args[0])
+        if player is None:
+            logger.w('not founded content id({}).'.format(args[0]))
+            return
+
+        player.do_resume()
+        logger.i('[{}]resume'.format(args[0]))
 
 # server
 # リクエストデータ(json)をパースしてobjectとしてキューに格納するまでを行う。
@@ -159,43 +181,55 @@ def hello_world():
 
 @app.route('/api/play', methods=['POST'])
 def play():
-    logger.d('call play rest-api audio module.\n' + str(request.data))
+    logger.i('call play rest-api audio module.\n' + str(request.data))
     req = get_request()
-    args = (req.get('content_id'),
+    args = [req.get('content_id'),
             req.get('wav'),
             req.get('loop', False),
-            req.get('and_stop', False))
+            req.get('and_stop', False)
+           ]
     q.put({'cmd': s.play, 'args': args})
     return ""
 
 
 @app.route('/api/stop', methods=['POST'])
 def stop():
-    logger.d('call stop rest-api audio module.\n' + str(request.data))
+    logger.i('call stop rest-api audio module.\n' + str(request.data))
     req = get_request()
-    arg = req.get('content_id')
-    q.put({'cmd': s.stop, 'args': arg})
+    q.put({'cmd': s.stop,
+           'args': [req.get('content_id')]
+           })
     return ""
 
 
 @app.route('/api/volume', methods=['POST'])
 def vol():
-    logger.d('call volume rest-api audio module.\n' + str(request.data))
+    logger.i('call volume rest-api audio module.\n' + str(request.data))
     req = get_request()
-    q.put(s.volume,
-          (req.get('content_id'), req.get('val', 0.5)))
+    q.put({'cmd': s.volume,
+           'args': [req.get('content_id'),
+                    req.get('val', 0.5)]
+           })
     return ""
 
 
 @app.route('/api/pause', methods=['POST'])
 def pause():
-    logger.d('call pause rest-api audio module.\n' + str(request.data))
+    logger.i('call pause rest-api audio module.\n' + str(request.data))
+    req = get_request()
+    q.put({'cmd': s.pause,
+           'args': [req.get('content_id')]
+           })
     return ""
 
 
 @app.route('/api/resume', methods=['POST'])
 def resume():
-    logger.d('call resume rest-api audio module.\n' + str(request.data))
+    logger.i('call resume rest-api audio module.\n' + str(request.data))
+    req = get_request()
+    q.put({'cmd': s.resume,
+           'args': [req.get('content_id')]
+           })
     return ""
 
 

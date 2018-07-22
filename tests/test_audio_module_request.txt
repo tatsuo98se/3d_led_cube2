@@ -16,7 +16,7 @@ content-type: application/json
 
 {
     "content_id": "block",
-    "val": 0
+    "val": 0.2
 }
 
 ###
@@ -29,12 +29,19 @@ content-type: application/json
 }
 
 ###
-POST http://localhost:5701/api/play
+POST http://localhost:5701/api/pause
 content-type: application/json
 
 {
-    "content_id": "block",
-    "wav": "asset/audio/se_obake2.wav"
+    "content_id": "block"
+}
+
+###
+POST http://localhost:5701/api/resume
+content-type: application/json
+
+{
+    "content_id": "block"
 }
 
 ###

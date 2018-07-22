@@ -1,5 +1,6 @@
 # -*- coding:utf-8 -*-
 import sys
+import time
 import traceback
 import threading
 import libled.util.logger as logger
@@ -22,6 +23,7 @@ class SimpleRunLoop(object):
             while True:
                 if self.aborted:
                     break
+                time.sleep(0.5)
 
         except KeyboardInterrupt:
             logger.d('keyboard Ctrl+C')

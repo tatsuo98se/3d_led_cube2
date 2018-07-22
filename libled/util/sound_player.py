@@ -140,9 +140,10 @@ class SoundPlayer(object):
 
     def do_play(self, wavfile, loop=False):
         # clear event flags
-        # self.__event_init()
+        self.__event_init()
         # threading
-        threading.Thread(target=self.__playsound, args=(wavfile, loop,)) \
+        threading.Thread(target=self.__playsound,
+                         args=(wavfile, loop,)) \
                  .start()
 
     def do_pause(self):
