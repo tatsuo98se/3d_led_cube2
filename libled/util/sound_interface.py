@@ -23,10 +23,10 @@ class SoundInterface(object):
             'and_stop': stop
         }
         res = SoundInterface.post(uri_, data_=data_)
-        logger.d('[{}]post play {} = {}'.format(id_, wav, res.status_code))
+        # logger.d('[{}]post play {} = {}'.format(id_, wav, res.status_code))
 
     @classmethod
-    def pause(cls, id_):
+    def pause(cls, id_=None):
         uri_ = SoundInterface.domain + 'pause'
         data_ = {
             'content_id': id_
@@ -35,7 +35,7 @@ class SoundInterface(object):
         logger.d('post pause = {}'.format(res.status_code))
 
     @classmethod
-    def resume(cls, id_):
+    def resume(cls, id_=None):
         uri_ = SoundInterface.domain + 'resume'
         data_ = {
             'content_id': id_
@@ -44,7 +44,7 @@ class SoundInterface(object):
         logger.d('post resume = {}'.format(res.status_code))
 
     @classmethod
-    def stop(cls, id_):
+    def stop(cls, id_=None):
         uri_ = SoundInterface.domain + 'stop'
         data_ = {
             'content_id': id_
@@ -53,7 +53,7 @@ class SoundInterface(object):
         logger.d('post stop = {}'.format(res.status_code))
 
     @classmethod
-    def volume(cls, id_, val):
+    def volume(cls, id_=None, val=0.5):
         uri_ = SoundInterface.domain + 'volume'
         data_ = {
             'content_id': id_,
@@ -65,7 +65,7 @@ class SoundInterface(object):
     @classmethod
     def post(cls, uri_, data_):
         res = requests.post(
-            uri_, 
+            uri_,
             json.dumps(data_),
             headers={'Content-Type': 'application/json'})
         return res

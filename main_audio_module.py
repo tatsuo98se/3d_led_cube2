@@ -63,11 +63,8 @@ class SoundPlayingServer(SimpleRunLoop):
         if not q.empty():
             try:
                 req = q.get()
-                logger.d(type(req))
                 cmd = req.get('cmd')
                 args = req.get('args')
-                logger.d('cmd({}), args({})={}'.format(
-                    type(cmd), type(args), args))
                 cmd(args)
             except Exception:
                 logger.e('Unexpected do function on message loop.')
@@ -116,6 +113,10 @@ class SoundPlayingServer(SimpleRunLoop):
         logger.i('[{}]play {}, loop({})'.format(args[0], wav, loop))
 
     def stop(self, args):
+        if args[0] is None:
+            self.all_stop()
+            return
+
         # get player
         player = self.get_player(args[0])
         if player is None:
@@ -225,7 +226,7 @@ def pause():
 
 @app.route('/api/resume', methods=['POST'])
 def resume():
-    logger.i('call resume rest-api audio module.\n' + str(request.data)
+    logger.i('call resume rest-api audio module.\n' + str(request.data))
     req = get_request()
     q.put({'cmd': s.resume,
            'args': [req.get('content_id')]
