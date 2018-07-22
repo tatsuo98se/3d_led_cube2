@@ -3,7 +3,6 @@
 GET http://localhost:5701
 
 ###
-
 POST http://localhost:5701/api/stop
 content-type: application/json
 
@@ -12,17 +11,15 @@ content-type: application/json
 }
 
 ###
-
 POST http://localhost:5701/api/volume
 content-type: application/json
 
 {
     "content_id": "block",
-    "val": 0
+    "val": 0.2
 }
 
 ###
-
 POST http://localhost:5701/api/volume
 content-type: application/json
 
@@ -32,28 +29,41 @@ content-type: application/json
 }
 
 ###
+POST http://localhost:5701/api/pause
+content-type: application/json
 
+{
+    "content_id": "block"
+}
+
+###
+POST http://localhost:5701/api/resume
+content-type: application/json
+
+{
+    "content_id": "block"
+}
+
+###
 POST http://localhost:5701/api/play
 content-type: application/json
 
 {
     "content_id": "block",
-    "wav": "asset/audio/se_jump.wav"
+    "wav": "asset/audio/se_obake.wav"
 }
 
 ###
-
 POST http://localhost:5701/api/play
 content-type: application/json
 
 {
     "content_id": "block",
-    "wav": "asset/audio/se_jump.wav",
-    "loop": True
+    "wav": "asset/audio/se_obake2.wav",
+    "loop": true
 }
 
 ###
-
 POST http://localhost:5701/api/play
 content-type: application/json
 

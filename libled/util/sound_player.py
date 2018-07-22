@@ -5,6 +5,8 @@ import threading
 import time
 import sound_effects as fx
 
+from pyaudio import Stream
+
 import logger
 
 # defines
@@ -14,6 +16,7 @@ CHUNK = 1024
 class SoundPlayer(object):
     # __instance = None
     # __lock = threading.Lock()
+    __pa_lock = threading.Lock()
 
     def __new__(cls):
         raise NotImplementedError('Cant call this Constructor.')
@@ -62,8 +65,6 @@ class SoundPlayer(object):
         self._event_pause.clear()
         self._event_stop.clear()
 
-    __pa_lock = threading.Lock()
-
     def __playsound(self, wavfile, loop=False):
         if (wavfile == ""):
             logger.d('empty sound file.')
@@ -76,11 +77,11 @@ class SoundPlayer(object):
         self.show_wavinfo(self.wfinfo)
         try:
             with SoundPlayer.__pa_lock:
-                p = pyaudio.PyAudio()
-                s = p.open(format=p.get_format_from_width(self.wfinfo[1]),
-                           channels=self.wfinfo[0],
-                           rate=self.wfinfo[2],
-                           output=True)
+                p_ = pyaudio.PyAudio()
+                s_ = p_.open(format=p_.get_format_from_width(self.wfinfo[1]),
+                             channels=self.wfinfo[0],
+                             rate=self.wfinfo[2],
+                             output=True)
 
             # play stream
             input_data = wf.readframes(CHUNK)
@@ -88,7 +89,7 @@ class SoundPlayer(object):
             while len(input_data) > 0:
                 if self.__ctrl_sound():
                     break
-                s.write(self.__mod_sound(input_data))
+                s_.write(self.__mod_sound(input_data))
                 input_data = wf.readframes(CHUNK)
                 # loop
                 if loop and len(input_data) == 0:
@@ -98,10 +99,10 @@ class SoundPlayer(object):
         finally:
             # close stream
             with SoundPlayer.__pa_lock:
-                s.stop_stream()
-                s.close()
+                s_.stop_stream()
+                s_.close()
                 wf.close()
-                p.terminate()
+                p_.terminate()
             logger.d('finished sound play.')
 
     def __ctrl_sound(self):
@@ -139,9 +140,10 @@ class SoundPlayer(object):
 
     def do_play(self, wavfile, loop=False):
         # clear event flags
-        # self.__event_init()
+        self.__event_init()
         # threading
-        threading.Thread(target=self.__playsound, args=(wavfile, loop,)) \
+        threading.Thread(target=self.__playsound,
+                         args=(wavfile, loop,)) \
                  .start()
 
     def do_pause(self):
