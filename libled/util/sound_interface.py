@@ -23,7 +23,7 @@ class SoundInterface(object):
             'and_stop': stop
         }
         res = SoundInterface.post(uri_, data_=data_)
-        # logger.d('[{}]post play {} = {}'.format(id_, wav, res.status_code))
+        logger.d('[{}]post play {} = {}'.format(id_, wav, res.status_code))
 
     @classmethod
     def pause(cls, id_=None):

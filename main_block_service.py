@@ -15,6 +15,7 @@ from libled.util.sound_interface import SoundInterface
 
 app = Flask(__name__)
 q = Queue()
+SoundInterface.content_id = 'block'
 
 
 def get_logfiles(content_id):
