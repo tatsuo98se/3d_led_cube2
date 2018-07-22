@@ -29,6 +29,14 @@ content-type: application/json
 }
 
 ###
+POST http://localhost:5701/api/volume
+content-type: application/json
+
+{
+    "content_id": "block"
+}
+
+###
 POST http://localhost:5701/api/pause
 content-type: application/json
 
@@ -70,7 +78,7 @@ content-type: application/json
 {
     "content_id": "block",
     "wav": "asset/audio/se_jump.wav",
-    "and_stop": True
+    "and_stop": true
 }
 
 ###

@@ -3,6 +3,7 @@ from libled.led_run_loop import LedRunLoop
 import codecs
 import sys
 import platform
+from libled.util.sound_interface import SoundInterface
 
 class LedRawTextClient(LedRunLoop):
 
@@ -10,6 +11,7 @@ class LedRawTextClient(LedRunLoop):
         super(LedRawTextClient, self).__init__()
         if sys.platform == 'win32':
             sys.stdin = codecs.getreader('shift_jis')(sys.stdin) # set input codec
+        SoundInterface.content_id = 'block_test'
 
     def on_finish(self):
         pass

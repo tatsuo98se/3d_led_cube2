@@ -225,7 +225,7 @@ def pause():
 
 @app.route('/api/resume', methods=['POST'])
 def resume():
-    logger.i('call resume rest-api audio module.\n' + str(request.data))
+    logger.i('call resume rest-api audio module.\n' + str(request.data)
     req = get_request()
     q.put({'cmd': s.resume,
            'args': [req.get('content_id')]
