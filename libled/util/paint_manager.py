@@ -7,9 +7,11 @@ import traceback
 import color
 from led_draw_util import *
 import logger
+import sync
 
 class PaintManager:
     _instance = None
+    _lock = sync.create_lock()
 
     def __init__(self):
         self._canvas = [[Color(0,0,0,0) for _ in range(LED_HEIGHT)] for _ in range(LED_WIDTH)]
@@ -26,12 +28,15 @@ class PaintManager:
 
         return cls._instance
 
+    @sync.synchronized(_lock)
     def get_data(self):
         return self._canvas
 
+    @sync.synchronized(_lock)
     def get_color(self, x, y):
         return self._canvas[x][y]
 
+    @sync.synchronized(_lock)
     def set_color(self, x, y, color):
         self._canvas[x][y] = color
 

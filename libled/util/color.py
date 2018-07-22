@@ -124,3 +124,8 @@ class Color:
                 int(round(self.g * 255)),
                 int(round(self.b * 255)),
                 int(round(self.a * 255)))
+
+    def to_rgb255(self):
+        return (int(round(self.r * 255)),
+                int(round(self.g * 255)),
+                int(round(self.b * 255)))

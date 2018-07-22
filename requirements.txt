@@ -1,0 +1,10 @@
+cython==0.28.3
+hamlish-jinja==0.3.3
+pillow==5.1.0
+numpy==1.12.1
+flask==1.0.2
+opencv-python==3.4.1.15
+pyzmq==17.0.0
+pyserial==3.4
+pyaudio==0.2.11
+#pyrealsense==2.0 # please uncommented out if you would like to use realsense.

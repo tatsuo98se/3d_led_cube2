@@ -19,10 +19,12 @@ elif sys.platform == 'win32':
         ledlib = dirname + '/ledLib32.dll'
 elif 'linux' in sys.platform and platform.machine() == 'armv7l':
     ledlib = dirname + '/ledLibarmv7l.so' # for Raspberry PI3
+elif 'linux2' == sys.platform: # for travis.ci
+    ledlib = None
 else:
     raise NotImplementedError('Unsupported OS.' + sys.platform)
 
-logger.i('LoadLibrary: '+ ledlib)
+logger.i('LoadLibrary: '+ str(ledlib))
 
 def local_split_url_and_port(url):
     result = url.split(":")
@@ -69,4 +71,32 @@ class LedCube(object):
     def EnableSimulator(self, is_enable):
         self.led.EnableSimulator(is_enable)
 
-led = LedCube(cdll.LoadLibrary(ledlib))
+class LedCubeDummy(object):
+    def __init__(self):
+        pass
+
+    def Show(self):
+        pass
+
+    def SetUrl(self, dest):
+        pass
+
+    def Clear(self):
+        pass
+    
+    def SetLed(self, x, y, z, color):
+        pass
+    
+    def Wait(self, msec):
+        pass
+
+    def EnableSimulator(self, is_enable):
+        pass
+
+def create_led_cube(ledlib):
+    if ledlib is None:
+        return LedCubeDummy()
+    else:
+        return LedCube(cdll.LoadLibrary(ledlib))
+
+led = create_led_cube(ledlib)

@@ -1,0 +1,6 @@
+pid = spawn("python ./main_hw_controller_module.py")
+#pid = spawn("python ./main_hw_controller_module_dummy.py")
+pid = spawn("python ./main_realsense_module.py")
+pid = spawn("python ./main_paint_service.py")
+pid = spawn("python ./main_realsense_service.py")
+pid = spawn("python ./main_block_service.py")

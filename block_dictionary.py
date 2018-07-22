@@ -13,14 +13,14 @@ order_2017_12_gadget_fes = {
 
 # 2018.08 Maker Faire Tokyo
 order_2018_08_maker_faire_tokyo = {
-'blue' : {2: 'object-ghost', 3:'filter-swaying', 4:'filter-bk-wave'},
-'green' : {2: 'object-tree', 3:'filter-zoom-ctrl', 4:'filter-bk-mountain'},
-'orange' : {2: 'object-note', 3:'filter-rainbow-ctrl', 4:'filter-bk-fireworks'},
-'white' : {2: 'object-snowman', 3:'filter-rolling-ctrl', 4:'filter-bk-snows'},
-'red' : {2: 'object-heart', 3:'filter-jump-ctrl', 4:'filter-bk-sakura'},
-'brown' : {2: 'object-socks', 3:'filter-spiral2', 4:'filter-bk-cloud'},
+'blue' : {2: 'object-rocket', 3:'filter-swaying', 4:'filter-bk-wave'},
+'white' : {2: 'object-ghost', 3:'filter-rolling-ctrl', 4:'filter-bk-snows'},
+'green' : {2: 'object-saboten', 3:'filter-jump-ctrl', 4:'filter-bk-mountain'},
 'yellowgreen' : {2: 'object-yacht', 3:'filter-wakame-ctrl', 4:'filter-bk-grass'},
-'yellow' : {2: 'object-star', 3:'filter-skewed-ctrl', 4:'filter-bk-stars'},
+'yellow' : {2: 'object-star', 3:'filter-zy-skewed-ctrl', 4:'filter-bk-stars'},
+'orange' : {2: 'object-note', 3:'filter-rainbow-ctrl', 4:'filter-bk-rains'},
+'brown' : {2: 'object-stickman', 3:'filter-zoom-ctrl', 4:'filter-bk-cloud'},
+'red' : {2: 'object-tulip', 3:'filter-3d-explosion', 4:'filter-bk-fireworks'},
 }
 
 # this array is used for test to check whether all tables are correct.
