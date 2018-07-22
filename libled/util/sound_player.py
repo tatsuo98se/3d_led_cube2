@@ -77,7 +77,7 @@ class SoundPlayer(object):
         try:
             with SoundPlayer.__pa_lock:
                 p = pyaudio.PyAudio()
-                s = p.open(format=p.get_format_from_width(self.wfinfo[1]),
+                stm = p.open(format=p.get_format_from_width(self.wfinfo[1]),
                            channels=self.wfinfo[0],
                            rate=self.wfinfo[2],
                            output=True)
@@ -88,7 +88,7 @@ class SoundPlayer(object):
             while len(input_data) > 0:
                 if self.__ctrl_sound():
                     break
-                s.write(self.__mod_sound(input_data))
+                stm.write(self.__mod_sound(input_data))
                 input_data = wf.readframes(CHUNK)
                 # loop
                 if loop and len(input_data) == 0:
@@ -98,8 +98,8 @@ class SoundPlayer(object):
         finally:
             # close stream
             with SoundPlayer.__pa_lock:
-                s.stop_stream()
-                s.close()
+                stm.stop_stream()
+                stm.close()
                 wf.close()
                 p.terminate()
             logger.d('finished sound play.')

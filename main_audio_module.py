@@ -31,6 +31,7 @@ localhost:5701/apiに対して次のRESTをPOSTする。
 
 import time
 import json
+import traceback
 from flask import Flask, request
 from Queue import Queue
 from libled.simple_run_loop import SimpleRunLoop
@@ -48,7 +49,7 @@ class SoundPlayingServer(SimpleRunLoop):
     def __init__(self):
         super(SoundPlayingServer, self).__init__()
         # player tuple layout: id, player
-        self.players = {}
+        self._players = {}
 
     def on_exception_at_runloop(self, exception):
         self.all_stop()
@@ -60,12 +61,17 @@ class SoundPlayingServer(SimpleRunLoop):
 
     def on_do_function(self):
         if not q.empty():
-            print('2')
-            req = q.get()
-            cmd = req[0]
-            args = req[1:]
-            logger.d('cmd({}), args({})={}'.format(
-                type(cmd), type(args), args))
+            try:
+                req = q.get()
+                logger.d(type(req))
+                cmd = req.get('cmd')
+                args = req.get('args')
+                logger.d('cmd({}), args({})={}'.format(
+                    type(cmd), type(args), args))
+                cmd(args)
+            except Exception:
+                logger.e('Unexpected do function on message loop.')
+                logger.e(traceback.format_exc())
 
         time.sleep(0.1)
 
@@ -74,22 +80,28 @@ class SoundPlayingServer(SimpleRunLoop):
         logger.d('finish runloop')
 
     def all_stop(self):
-        map(lambda t: t.player.do_stop(), self.players)
+        map(lambda t: t.do_stop(), self._players.values())
+
+    def get_player(self, player_id, creatable=False):
+        if player_id is None:
+            return None
+        elif player_id in self._players:
+            return self._players[player_id]
+        elif creatable:
+            player = sp.instance()
+            self._players[player_id] = player
+            return player
+        else:
+            return None
 
     def play(self, args):
         # get player
-        content_id = args[0]
-        if content_id is None:
+        player = self.get_player(args[0], True)
+        if player is None:
             logger.w('null argument content id.')
             return
-        if content_id in self.players:
-            player = self.players[content_id]
-        else:
-            player = sp.instance()
-            self.players[content_id] = player
 
         # do play
-        # wav = '{}.wav'.format(args[1])
         wav = args[1]
         if wav is None:
             logger.w('null argument wavefile = ')
@@ -100,17 +112,18 @@ class SoundPlayingServer(SimpleRunLoop):
         if and_stop:
             player.do_pause()
 
-        logger.i('play {}, loop({})'.format(wav, loop))
+        logger.i('[{}]play {}, loop({})'.format(args[0], wav, loop))
         player.do_play(wav, loop)
 
     def stop(self, args):
         # get player
-        content_id = args[0]
-        if content_id is None:
-            logger.w('null argument content id.')
+        player = self.get_player(args[0])
+        if player is None:
+            logger.w('not founded content id({}).'.format(args[0]))
             return
-        if content_id in self.players:
-            player = self.players[content_id]
+        
+        logger.i('[{}]stop'.format(args[0]))
+        player.do_stop()
 
     def volume(self, args):
         pass
@@ -152,7 +165,7 @@ def play():
             req.get('wav'),
             req.get('loop', False),
             req.get('and_stop', False))
-    q.put(s.play, args)
+    q.put({'cmd': s.play, 'args': args})
     return ""
 
 
@@ -160,8 +173,8 @@ def play():
 def stop():
     logger.d('call stop rest-api audio module.\n' + str(request.data))
     req = get_request()
-    msg = req.get('content_id')
-    q.put(s.stop, msg)
+    arg = req.get('content_id')
+    q.put({'cmd': s.stop, 'args': arg})
     return ""
 
 
