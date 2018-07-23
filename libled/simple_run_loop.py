@@ -28,6 +28,7 @@ class SimpleRunLoop(object):
         except KeyboardInterrupt:
             logger.d('keyboard Ctrl+C')
             self.on_keyboard_interrupt()
+            raise
         except:
             logger.e('Unexpected error: {}'.format(str(sys.exc_info()[0])))
             logger.e(traceback.format_exc())

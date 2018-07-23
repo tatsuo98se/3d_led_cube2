@@ -95,9 +95,11 @@ class SoundInterface(object):
             'http': '',
             'https': '',
         }
+        timeout = 0.005
         res = requests.post(
             uri_,
             json.dumps(data_),
             headers={'Content-Type': 'application/json'},
-            proxies=proxies)
+            proxies=proxies,
+            timeout=timeout)
         on_complated(res)
