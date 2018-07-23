@@ -27,13 +27,8 @@ class FlaskWithHamlish(Flask):
 app = FlaskWithHamlish(__name__)
 tcp_port = 5601
 zmq_port = tcp_port + 1
-gamepad_state = ''
+gamepad_state = {"a0":0.5, "a1":0.5, "a2":0.5, "d1":0}
 q = Queue()
-
-a0 = 0.5
-a1 = 0.5
-a2 = 0.5
-d1 = 0
 
 @app.route('/')
 def index():
@@ -41,26 +36,15 @@ def index():
 
 @app.route('/api/gamepad', methods=['POST'])
 def set_gamepad():
-    global a0, a1, a2, d1
-    data = json.loads(request.data)
-    if 'a0' in data:
-        a0 = data['a0']
-    if 'a1' in data:
-        a1 = data['a1']
-    if 'a2' in data:
-        a2 = data['a2']
-    if 'd1' in data:
-        d1 = data['d1']
-
-    state = {"a0":a0, "a1":a1, "a2":a2, "d1":d1}
-    q.put(json.dumps(state))
+    global gamepad_state
+    gamepad_state.update(json.loads(request.data))
+    q.put(json.dumps(gamepad_state))
     return ''
 
 @app.route('/api/gamepad')
 def gamepad():
-    global a0, a1, a2, d1
-    state = {"a0":a0, "a1":a1, "a2":a2, "d1":d1}
-    return json.dumps(state)
+    global gamepad_state
+    return json.dumps(gamepad_state)
 
 flask = FlaskOnThread(app, port=tcp_port)
 flask.daemon = True
