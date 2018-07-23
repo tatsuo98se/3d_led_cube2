@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 import requests
+import threading
 import json
 import logger
+
+# debug
+# import logging
+# logging.basicConfig(level=logging.DEBUG)
 
 
 class SoundInterface(object):
@@ -22,8 +27,12 @@ class SoundInterface(object):
             'loop': loop,
             'and_stop': stop
         }
-        res = SoundInterface.post(uri_, data_=data_)
-        logger.d('[{}]post play {} = {}'.format(id_, wav, res.status_code))
+        SoundInterface.post(uri_,
+                            data_=data_,
+                            on_complated=lambda res:
+                            logger.d('[{}]post play {} = {}'.format(id_,
+                                                                    wav,
+                                                                    res.status_code)))
 
     @classmethod
     def pause(cls, id_=None):
@@ -31,8 +40,10 @@ class SoundInterface(object):
         data_ = {
             'content_id': id_
         }
-        res = SoundInterface.post(uri_, data_=data_)
-        logger.d('post pause = {}'.format(res.status_code))
+        SoundInterface.post(uri_,
+                            data_=data_,
+                            on_complated=lambda res:
+                            logger.d('post pause = {}'.format(res.status_code)))
 
     @classmethod
     def resume(cls, id_=None):
@@ -40,8 +51,10 @@ class SoundInterface(object):
         data_ = {
             'content_id': id_
         }
-        res = SoundInterface.post(uri_, data_=data_)
-        logger.d('post resume = {}'.format(res.status_code))
+        SoundInterface.post(uri_,
+                            data_=data_,
+                            on_complated=lambda res:
+                            logger.d('post resume = {}'.format(res.status_code)))
 
     @classmethod
     def stop(cls, id_=None):
@@ -49,8 +62,10 @@ class SoundInterface(object):
         data_ = {
             'content_id': id_
         }
-        res = SoundInterface.post(uri_, data_=data_)
-        logger.d('post stop = {}'.format(res.status_code))
+        SoundInterface.post(uri_,
+                            data_=data_,
+                            on_complated=lambda res:
+                            logger.d('post stop = {}'.format(res.status_code)))
 
     @classmethod
     def volume(cls, id_=None, val=0.5):
@@ -59,13 +74,30 @@ class SoundInterface(object):
             'content_id': id_,
             'val': val
         }
-        res = SoundInterface.post(uri_, data_=data_)
-        logger.d('post stop = {}'.format(res.status_code))
+        SoundInterface.post(uri_,
+                            data_=data_,
+                            on_complated=lambda res:
+                            logger.d('post stop = {}'.format(res.status_code)))
 
     @classmethod
-    def post(cls, uri_, data_):
+    def post(cls, uri_, data_, on_complated):
+        th = threading.Thread(target=SoundInterface.__post,
+                              args=(
+                                  uri_,
+                                  data_,
+                                  on_complated,
+                              ))
+        th.start()
+
+    @classmethod
+    def __post(cls, uri_, data_, on_complated):
+        proxies = {
+            'http': '',
+            'https': '',
+        }
         res = requests.post(
             uri_,
             json.dumps(data_),
-            headers={'Content-Type': 'application/json'})
-        return res
+            headers={'Content-Type': 'application/json'},
+            proxies=proxies)
+        on_complated(res)
