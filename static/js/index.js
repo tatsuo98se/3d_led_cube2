@@ -13,7 +13,7 @@ const PALLETS = {
     pallet4: { color: "blue", off: g_icon_path+"blue_off.png", on: g_icon_path+"blue_on.png", led: "0000FF" },
     pallet5: { color: "violet", off: g_icon_path+"purple_off.png", on: g_icon_path+"purple_on.png", led: "FF00FF" },
     pallet6: { color: "pink", off: g_icon_path+"pink_off.png", on: g_icon_path+"pink_on.png", led: "FF0088" },
-    pallet7: { color: "lightgreen", off: g_icon_path+"lightgreen_off.png", on: g_icon_path+"lightgreen_on.png", led: "55FF00" },
+    pallet7: { color: "lightgreen", off: g_icon_path+"lightgreen_off.png", on: g_icon_path+"lightgreen_on.png", led: "FFFF00" },
     pallet8: { color: "aqua", off: g_icon_path+"aqua_off.png", on: g_icon_path+"aqua_on.png", led: "00FFFF" },
     pallet9: { color: "white", off: g_icon_path+"white_off.png", on: g_icon_path+"white_on.png", led: "FFFFFF" },
     pallet10: { color: "transparent", off: g_icon_path+"eraser_off.png", on: g_icon_path+"eraser_on.png", led: "000000" },
