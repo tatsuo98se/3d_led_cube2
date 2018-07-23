@@ -3,7 +3,8 @@ from ..led_cube import *
 from ..util.color import Color
 import math
 import time
-from ..util.sound_player import SoundPlayer as sp
+from ..util.sound_interface import SoundInterface
+
 
 class LedWakameCanvasFilter(LedCanvasFilter):
 
@@ -11,7 +12,7 @@ class LedWakameCanvasFilter(LedCanvasFilter):
         super(LedWakameCanvasFilter, self).__init__(canvas, enable_controller)
         self.t = 0
         self.wav = 'asset/audio/bgm_wave.wav'
-        sp.instance().do_play(self.wav, True)
+        SoundInterface.play(wav=self.wav, loop=True)
 
     def pre_draw(self):
         super(LedWakameCanvasFilter, self).pre_draw()

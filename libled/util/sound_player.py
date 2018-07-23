@@ -5,6 +5,8 @@ import threading
 import time
 import sound_effects as fx
 
+from pyaudio import Stream
+
 import logger
 
 # defines
@@ -12,8 +14,8 @@ CHUNK = 1024
 
 
 class SoundPlayer(object):
-    __instance = None
-    __lock = threading.Lock()
+    # __instance = None
+    # __lock = threading.Lock()
     __pa_lock = threading.Lock()
 
     def __new__(cls):
@@ -25,12 +27,25 @@ class SoundPlayer(object):
 
     @classmethod
     def instance(cls):
-        if not cls.__instance:
-            with cls.__lock:
-                if not cls.__instance:
-                    cls.__instance = cls.__internal_new__()
-                    cls.__instance.__internal_init__()
-        return cls.__instance
+        inst = cls.__internal_new__()
+        inst.__internal_init__()
+        return inst
+        # if not cls.__instance:
+        #     with cls.__lock:
+        #         if not cls.__instance:
+        #             cls.__instance = cls.__internal_new__()
+        #             cls.__instance.__internal_init__()
+        # return cls.__instance
+
+    @classmethod
+    def show_wavinfo(self, wfinfo):
+        logger.d(wfinfo)
+        logger.d('wave file info')
+        logger.d('channels = {}'.format(wfinfo[0]))
+        logger.d('sampling width = {} byte'.format(wfinfo[1]))
+        logger.d('frame rate = {} Hz'.format(wfinfo[2]))
+        logger.d('frame count = {}'.format(wfinfo[3]))
+        logger.d('sound time = {} s'.format((int)(wfinfo[3] / wfinfo[2])))
 
     def __internal_init__(self):
         # flags
@@ -42,23 +57,13 @@ class SoundPlayer(object):
         self.__event_init()
 
         # effect params
-        self._mod_samplingrate = 1.0
+        # self._mod_samplingrate = 1.0
         # 0 < volume < 1
         self._mod_volume = 0.5
 
     def __event_init(self):
         self._event_pause.clear()
         self._event_stop.clear()
-
-    @classmethod
-    def show_wavinfo(self, wfinfo):
-        logger.d(wfinfo)
-        logger.d('wave file info')
-        logger.d('channels = {}'.format(wfinfo[0]))
-        logger.d('sampling width = {} byte'.format(wfinfo[1]))
-        logger.d('frame rate = {} Hz'.format(wfinfo[2]))
-        logger.d('frame count = {}'.format(wfinfo[3]))
-        logger.d('sound time = {} s'.format((int)(wfinfo[3] / wfinfo[2])))
 
     def __playsound(self, wavfile, loop=False):
         if (wavfile == ""):
@@ -72,11 +77,11 @@ class SoundPlayer(object):
         self.show_wavinfo(self.wfinfo)
         try:
             with SoundPlayer.__pa_lock:
-                p = pyaudio.PyAudio()
-                s = p.open(format=p.get_format_from_width(self.wfinfo[1]),
-                        channels=self.wfinfo[0],
-                        rate=self.wfinfo[2],
-                        output=True)
+                p_ = pyaudio.PyAudio()
+                s_ = p_.open(format=p_.get_format_from_width(self.wfinfo[1]),
+                             channels=self.wfinfo[0],
+                             rate=self.wfinfo[2],
+                             output=True)
 
             # play stream
             input_data = wf.readframes(CHUNK)
@@ -84,7 +89,7 @@ class SoundPlayer(object):
             while len(input_data) > 0:
                 if self.__ctrl_sound():
                     break
-                s.write(self.__mod_sound(input_data))
+                s_.write(self.__mod_sound(input_data))
                 input_data = wf.readframes(CHUNK)
                 # loop
                 if loop and len(input_data) == 0:
@@ -94,10 +99,10 @@ class SoundPlayer(object):
         finally:
             # close stream
             with SoundPlayer.__pa_lock:
-                s.stop_stream()
-                s.close()
+                s_.stop_stream()
+                s_.close()
                 wf.close()
-                p.terminate()
+                p_.terminate()
             logger.d('finished sound play.')
 
     def __ctrl_sound(self):
@@ -122,23 +127,24 @@ class SoundPlayer(object):
     def __mod_sound(self, input_data):
         data = fx.get_buffer(input_data, self.wfinfo[1])
 
-        # mod
-        if self._mod_samplingrate != 1.0:
-            data = fx.resamplingrate(data,
-                                     self.wfinfo[2],
-                                     self.wfinfo[2] * self._mod_samplingrate)
+        # mod sampling
+        # if self._mod_samplingrate != 1.0:
+        #     data = fx.resamplingrate(data,
+        #                              self.wfinfo[2],
+        #                              self.wfinfo[2] * self._mod_samplingrate)
 
+        # mod volume
         if self._mod_volume != 0.5:
             data = fx.gain(data, self._mod_volume)
         return fx.set_buffer(data)
 
     def do_play(self, wavfile, loop=False):
         # clear event flags
-        self.__event_init()
+        self._event_stop.clear()
         # threading
-        self.thread = threading.Thread(
-            target=self.__playsound, args=(wavfile, loop,))
-        self.thread.start()
+        threading.Thread(target=self.__playsound,
+                         args=(wavfile, loop,)) \
+                 .start()
 
     def do_pause(self):
         self._event_pause.set()
@@ -148,11 +154,12 @@ class SoundPlayer(object):
 
     def do_stop(self):
         self._event_stop.set()
+        self._event_pause.clear()
 
-    def set_samplingrate(self, rate):
-        if rate > 0:
-            self._mod_samplingrate = rate
-        logger.d('set sampling rate = {}'.format(rate))
+    # def set_samplingrate(self, rate):
+    #     if rate > 0:
+    #         self._mod_samplingrate = rate
+    #     logger.d('set sampling rate = {}'.format(rate))
 
     def set_volume(self, val):
         if val < 0:
@@ -165,6 +172,7 @@ class SoundPlayer(object):
     # def set_loop(self, val, id):
     #     self._loop = val
     #     logger.d('set loop play = {}'.format(val))
+
 
 '''
 def myhelp():

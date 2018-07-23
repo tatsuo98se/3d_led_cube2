@@ -11,7 +11,8 @@ pip install opencv-python
 pip install pyzmq  
 pip install pyserial  
 pip install pyaudio  
-pip install hamlish-jinja
+pip install hamlish-jinja  
+pip install requests  
 [Optional] pip install cython  
 [Optional] pip install pyrealsense  
 
@@ -84,6 +85,12 @@ from led_framework import LedFramework
 LedFramework().show({"orders":[{"id":"object-fill"},{"id":"object-cube"}]})
 
 ```
+
+### main_audio_module.py
+
+音楽を再生するREST APIサービスを立ち上げる  
+3D LED CUBEフレームワーク内からはSoundInterfaceクラス経由でアクセスも可能  
+
 
 # for led_coloring
 

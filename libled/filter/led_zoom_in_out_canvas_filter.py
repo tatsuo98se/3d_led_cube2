@@ -7,7 +7,7 @@ import math
 import numpy as np
 import random
 import time
-from ..util.sound_player import SoundPlayer as sp
+from ..util.sound_interface import SoundInterface
 
 
 class LedZoomInOutCanvasFilter(LedCanvasFilter):
@@ -28,7 +28,7 @@ class LedZoomInOutCanvasFilter(LedCanvasFilter):
         self.wav_shrink = 'asset/audio/se_zoom_shrink1.wav'
         self.enable_loopsound = False
         if self.enable_loopsound:
-            sp.instance().do_play(self.wav, True)
+            SoundInterface.play(wav=self.wav, loop=True)
 
     def get_new_canvas(self):
        return np.array([[[ [[0]*4] * LED_DEPTH] * LED_HEIGHT ] * LED_WIDTH ] , dtype = np.uint8)
@@ -86,9 +86,9 @@ class LedZoomInOutCanvasFilter(LedCanvasFilter):
     def playsound_updown(self):
         if np.sign(self.pre_scales[0] - self.pre_scales[1]) != np.sign(self.pre_scales[1] - self.scale):
             if self.pre_scales[1] < self.scale:
-                sp.instance().do_play(self.wav_extend)
+                SoundInterface.play(wav=self.wav_extend)
             else:
-                sp.instance().do_play(self.wav_shrink)
+                SoundInterface.play(wav=self.wav_shrink)
         # swap
         self.pre_scales[0] = self.pre_scales[1]
         self.pre_scales[1] = self.scale

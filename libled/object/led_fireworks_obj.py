@@ -2,7 +2,7 @@ from led_object import LedObject
 from ..led_cube import *
 from ..util.vectors_util import *
 import math
-from ..util.sound_player import SoundPlayer as sp
+from ..util.sound_interface import SoundInterface
 import numpy as np
 
 N = 200
@@ -50,7 +50,7 @@ class LedFireworksObject(LedObject):
             
             # play sound
             wav = np.random.choice(self.wavs, 1, p=[0.7, 0.2, 0.1])[0]
-            sp.instance().do_play(wav)
+            SoundInterface.play(wav=wav)
 
         delete_idx = []
         for i in range(len(self.poss)):

@@ -2,7 +2,7 @@ from led_canvs_filter import LedCanvasFilter
 from ..led_cube import *
 import time
 import math
-from ..util.sound_player import SoundPlayer as sp
+from ..util.sound_interface import SoundInterface
 
 
 class LedWaveCanvasFilter(LedCanvasFilter):
@@ -11,7 +11,7 @@ class LedWaveCanvasFilter(LedCanvasFilter):
         super(LedWaveCanvasFilter, self).__init__(canvas)
         self.born_at = time.time()
         self.wav = 'asset/audio/bgm_wave.wav'
-        sp.instance().do_play(self.wav, True)
+        SoundInterface.play(wav=self.wav, loop=True)
 
     def set_led(self, x, y, z, color):
         offset = self.born_at - time.time()
