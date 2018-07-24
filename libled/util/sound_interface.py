@@ -24,7 +24,7 @@ class SoundInterface(object):
     def close(cls):
         SoundInterface.stop()
         SoundInterface.pool.abort = True
-        SoundInterface.pub.close()
+        SoundInterface.push.close()
 
     @classmethod
     def play(cls, id_=None, wav='', loop=False, stop=False):
@@ -106,22 +106,22 @@ class SoundInterface(object):
         return res
 
     @classmethod
-    def __post_pub(cls, arg):
-        SoundInterface.pub.send_json(arg)
+    def __post_push(cls, arg):
+        SoundInterface.push.send_json(arg)
 
     @classmethod
     def _init_pool(cls):
-        SoundInterface.pool.set_work(SoundInterface.__post_pub)
+        SoundInterface.pool.set_work(SoundInterface.__post_push)
         SoundInterface.pool.set_complated(
             lambda x: logger.d('post result = {}'.format(x)))
 
     @classmethod
-    def _init_pub(cls):
+    def _init_push(cls):
         ctx = zmq.Context()
-        SoundInterface.pub = ctx.socket(zmq.PUB)
-        SoundInterface.pub.bind('tcp://*:5751')
+        SoundInterface.push = ctx.socket(zmq.PUSH)
+        SoundInterface.push.connect('tcp://localhost:5751')
 
 
 SoundInterface.pool.run_async()
 SoundInterface._init_pool()
-SoundInterface._init_pub()
+SoundInterface._init_push()

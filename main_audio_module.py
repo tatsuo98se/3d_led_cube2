@@ -163,24 +163,23 @@ class SoundPlayingServer(SimpleRunLoop):
 
 app = Flask(__name__)
 tcp_port = 5701
-sub_port = 5751
+pull_port = 5751
 q = Queue()
 s = SoundPlayingServer()
 ctx = zmq.Context()
-sub = ctx.socket(zmq.SUB)
+pull = ctx.socket(zmq.PULL)
 logger.i("Collecting updates from audio server...")
 abort = False
 
 
 def run():
     # run_flask()
-    run_sub()
+    run_pull()
 
 
-def run_sub():
-    logger.d('connecting tcp://localhost:{}'.format(sub_port))
-    sub.connect('tcp://localhost:{}'.format(sub_port))
-    sub.setsockopt(zmq.SUBSCRIBE, '')
+def run_pull():
+    logger.d('connecting tcp://localhost:{}'.format(pull_port))
+    pull.bind('tcp://*:{}'.format(pull_port))
     pool = Pool(1)
     pool.apply_async(parse)
     s.run()  # block
@@ -188,7 +187,7 @@ def run_sub():
     pool.close()
     pool.terminate()
     pool.join()
-    sub.close()
+    pull.close()
 
 
 def parse():
@@ -196,8 +195,8 @@ def parse():
         if abort:
             return
         try:
-            msg = sub.recv_json()
-            logger.d('sub received message = {}'.format(msg))
+            msg = pull.recv_json()
+            logger.d('pull received message = {}'.format(msg))
 
             func = msg.get('func')
             if func == 'play':
