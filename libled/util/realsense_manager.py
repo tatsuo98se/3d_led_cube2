@@ -13,12 +13,12 @@ from zmq_util import *
 
 class FrameWorker(Thread):
 
-    def __init__(self, realsense):
+    def __init__(self, realsense, host):
         super(FrameWorker,self).__init__()
         self.context = zmq.Context()
         self.socket = self.context.socket(zmq.SUB)
-        logger.i("Collecting updates from realsense server...")
-        self.socket.connect("tcp://localhost:5501")
+        logger.i("Collecting updates from realsense server...:{0}".format(host))
+        self.socket.connect("tcp://{0}:5501".format(host))
         self.socket.setsockopt(zmq.SUBSCRIBE, '')
 
         self.is_stop = False
@@ -44,20 +44,20 @@ class FrameWorker(Thread):
 class RealsenseManager:
     _instance = None
 
-    def __init__(self):
-        self.worker = FrameWorker(self)
+    def __init__(self, host):
+        self.worker = FrameWorker(self, host)
         self.worker.start()
         
     @classmethod
-    def init(cls):
+    def init(cls, host):
         if cls._instance is None:
-            cls._instance = cls()
+            cls._instance = cls(host)
 
         return cls._instance
 
     @classmethod
     def get_instance(cls):
-        return RealsenseManager.init()
+        return cls._instance
 
     @classmethod
     def get_data(cls):
