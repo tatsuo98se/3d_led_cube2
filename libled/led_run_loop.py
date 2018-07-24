@@ -131,7 +131,7 @@ class LedRunLoop(object):
                 raise
             finally:
                 self.run_loop_finished = True
-                SoundInterface.stop()
+                SoundInterface.close()
                 logger.i('finish led order loop')
 
 
