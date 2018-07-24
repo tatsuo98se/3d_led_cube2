@@ -11,10 +11,11 @@ from os import listdir
 from os.path import isfile, join
 from libled.util.common_util import *
 from libled.util.flask_on_thread import FlaskOnThread
-from libled.util.sound_player import SoundPlayer
+from libled.util.sound_interface import SoundInterface
 
 app = Flask(__name__)
 q = Queue()
+SoundInterface.content_id = 'block'
 
 
 def get_logfiles(content_id):
@@ -53,7 +54,7 @@ def abort():
 @app.route('/api/audio', methods=['POST'])
 def audio():
     volume = float(json.loads(request.data)['volume'])
-    SoundPlayer.instance().set_volume(volume/100.0)
+    SoundInterface.volume(val=volume/100.0)
     return ""
 
 

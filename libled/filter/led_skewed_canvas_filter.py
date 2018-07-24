@@ -4,7 +4,7 @@ from ..util.color import Color
 import math
 import time
 import numpy as np
-from ..util.sound_player import SoundPlayer as sp
+from ..util.sound_interface import SoundInterface
 
 T = 4
 
@@ -31,7 +31,7 @@ class LedSkewedCanvasFilter(LedCanvasFilter):
         sign = np.sign(self.s)
         # play sound
         if self._pre_sign != sign:
-            sp.instance().do_play(self.wav)
+            SoundInterface.play(wav=self.wav)
         self._pre_sign = sign
 
 

@@ -2,7 +2,7 @@ from led_canvs_filter import LedCanvasFilter
 from ..led_cube import *
 from ..util.cube_util import *
 import time
-from ..util.sound_player import SoundPlayer as sp
+from ..util.sound_interface import SoundInterface
 
 class LedRollingCanvasFilter(LedCanvasFilter):
 
@@ -29,10 +29,10 @@ class LedRollingCanvasFilter(LedCanvasFilter):
         count = int(self.offset) // LED_HEIGHT
         if count > self.last_count:
             self.last_count = count
-            if param['a0']  > 0.5:
-                sp.instance().do_play(self.wav_d)
+            if param['a0'] > 0.5:
+                SoundInterface.play(wav=self.wav_d)
             else:
-                sp.instance().do_play(self.wav_u)
+                SoundInterface.play(wav=self.wav_u)
         
     def set_led(self, x, y, z, color):
         new_y = (y + self.offset) % LED_HEIGHT

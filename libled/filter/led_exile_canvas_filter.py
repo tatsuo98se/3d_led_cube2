@@ -7,7 +7,7 @@ import math
 import time
 import numpy as np
 import colorsys
-from ..util.sound_player import SoundPlayer as sp
+from ..util.sound_interface import SoundInterface
 
 
 class LedExileCanvasFilter(LedCanvasFilter):
@@ -17,7 +17,7 @@ class LedExileCanvasFilter(LedCanvasFilter):
         self.t = 0
         self.src = self.get_new_canvas()
         self.wav = 'asset/audio/se_space.wav'
-        sp.instance().do_play(self.wav, True)
+        SoundInterface.play(wav=self.wav, loop=True, stop=False)
 
     def get_new_canvas(self):
         return create_nested_dict(2)

@@ -10,7 +10,7 @@ import colorsys
 import random
 import time
 from ..util.hw_controller_util import get_data_as_json
-from ..util.sound_player import SoundPlayer as sp
+from ..util.sound_interface import SoundInterface
 
 
 def red(ix):
@@ -70,7 +70,7 @@ class LedExplosionCanvasFilter(LedCanvasFilter):
         sign = np.sign(math.sin(self.t))
         # play sound
         if self._pre_sign < 0 and sign > 0:
-            sp.instance().do_play(self.wav)
+            SoundInterface.play(wav=self.wav)
         self._pre_sign = sign
 
     def set_led(self, xx, yy, zz, color):

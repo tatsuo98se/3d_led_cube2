@@ -8,7 +8,7 @@ import json
 from Queue import Queue
 from flask import Flask, request
 from libled.util.flask_on_thread import FlaskOnThread
-from libled.util.sound_player import SoundPlayer
+from libled.util.sound_interface import SoundInterface
 
 q = Queue()
 
@@ -17,7 +17,7 @@ app = Flask(__name__)
 @app.route('/api/audio', methods=['POST'])
 def audio():
     volume = float(json.loads(request.data)['volume'])
-    SoundPlayer.instance().set_volume(volume/100.0)
+    SoundInterface.volume(val=volume/100.0)
     return ""
 
 class LedRawTextClient(LedRunLoop):
@@ -26,6 +26,7 @@ class LedRawTextClient(LedRunLoop):
         super(LedRawTextClient, self).__init__()
         if sys.platform == 'win32':
             sys.stdin = codecs.getreader('shift_jis')(sys.stdin) # set input codec
+        SoundInterface.content_id = 'realsense'
 
     def on_keyboard_interrupt(self):
         q.put('abort')
