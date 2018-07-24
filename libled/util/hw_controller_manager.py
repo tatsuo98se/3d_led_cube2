@@ -13,18 +13,21 @@ import zmq
 
 class ReadLineWorker(Thread):
 
-    def __init__(self, event):
+    def __init__(self, event, host):
         super(ReadLineWorker,self).__init__()
 
+        self.host = host
         self.context = zmq.Context()
         self.socket = self.context.socket(zmq.SUB)
-        logger.i("Collecting updates from gamepad server...")
-        self.socket.connect("tcp://localhost:5602")
+        logger.i("Collecting updates from gamepad server...:{0}".format(host))
+        self.socket.connect("tcp://{0}:5602".format(self.host))
         self.socket.setsockopt(zmq.SUBSCRIBE, '')
 
         self.is_stop = False
         self.event = event
+        
         self.line = None
+
         try:
             self.line = self.get_initial_data()
             logger.i("initialize gamepad is successfull.")
@@ -33,7 +36,7 @@ class ReadLineWorker(Thread):
             
 
     def get_initial_data(self):
-        return json.loads(urllib2.urlopen('http://localhost:5601/api/gamepad').read())
+        return json.loads(urllib2.urlopen("http://{0}:5601/api/gamepad".format(self.host)).read())
 
     def run(self):
         try:
@@ -67,9 +70,9 @@ class HwControllerManager:
     _port = None
     _observers = []
 
-    def __init__(self):
+    def __init__(self, host):
         self.worker = None
-        self.worker = ReadLineWorker(lambda: HwControllerManager.event())
+        self.worker = ReadLineWorker(lambda: HwControllerManager.event(), host)
         self.worker.start()
 
     @classmethod
@@ -86,9 +89,9 @@ class HwControllerManager:
         cls._observers.remove(observer)
 
     @classmethod
-    def init(cls):
+    def init(cls, host):
         if cls._instance is None:
-            cls._instance = cls()
+            cls._instance = cls(host)
         return cls._instance
 
     @classmethod
