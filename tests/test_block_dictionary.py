@@ -6,7 +6,7 @@ from libled.util.sound_interface import SoundInterface
 
 class TestBlockDictionary(unittest.TestCase):
     def tearDown(self):
-        SoundInterface.stop()
+        SoundInterface.close()
 
     def test_order_in_order_all_is_exist_in_led_order_util(self):
         for order in bd.order_all:

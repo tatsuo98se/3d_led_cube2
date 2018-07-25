@@ -15,9 +15,7 @@ class SimpleRunLoop(object):
         self.run_loop_finished = False
 
     def run(self):
-        th = threading.Thread(name='message_loop',
-                              target=self.__message_loop)
-        th.start()
+        self.run_async()
 
         try:
             while True:
@@ -26,16 +24,21 @@ class SimpleRunLoop(object):
                 time.sleep(0.5)
 
         except KeyboardInterrupt:
-            logger.d('keyboard Ctrl+C')
+            logger.d('keyboard Ctrl+C in simple_run_loop.run()')
             self.on_keyboard_interrupt()
-        except:
+            raise
+        except Exception:
             logger.e('Unexpected error: {}'.format(str(sys.exc_info()[0])))
             logger.e(traceback.format_exc())
             raise
         finally:
             self.aborted = True
-            th.join()
             logger.i('finish run')
+
+    def run_async(self):
+        th = threading.Thread(name='message_loop',
+                              target=self.__message_loop)
+        th.start()
 
     def __message_loop(self):
         try:
@@ -79,5 +82,3 @@ class SimpleRunLoop(object):
 
     def on_do_function(self):
         pass
-
-
