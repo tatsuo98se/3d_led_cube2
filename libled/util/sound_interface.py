@@ -65,6 +65,8 @@ class SoundInterface(object):
 
     @classmethod
     def volume(cls, id_=None, val=0.5):
+        if id_ is None:
+            id_ = SoundInterface.content_id
         func = 'volume'
         data_ = {
             'content_id': id_,
