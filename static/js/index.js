@@ -296,7 +296,7 @@ function disableScroll(){
     document.body.addEventListener('touchmove', preventDefault, { passive: false });
 }
 function setPenThickness() {
-    const img_bold = $("<img>").attr("border", 0).attr("src", g_icon_path+"pen_off.png").attr("width", "50px").attr("height", "50px");
+    const img_bold = $("<img>").attr("border", 0).attr("src", g_icon_path+"pen_off_L.png").attr("width", "50px").attr("height", "50px");
     const img_thin = $("<img>").attr("border", 0).attr("src", g_icon_path+"pen_red.png").attr("width", "50px").attr("height", "50px");
     $("#pen_thin").on(get_touch_event_key(),event => g_is_bold_pen_thickness=false).append(img_thin);
     $("#pen_bold").on(get_touch_event_key(),event => g_is_bold_pen_thickness=true).append(img_bold);
