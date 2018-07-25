@@ -4,6 +4,19 @@ import codecs
 import sys
 import platform
 from libled.util.sound_interface import SoundInterface
+from flask import Flask
+from flask import request
+from libled.util.flask_on_thread import FlaskOnThread
+import json
+
+app = Flask(__name__)
+SoundInterface.content_id = 'block_test'
+
+@app.route('/api/audio', methods=['POST'])
+def audio():
+    volume = float(json.loads(request.data)['volume'])
+    SoundInterface.volume(val=volume/100.0)
+    return ""
 
 class LedRawTextClient(LedRunLoop):
 
@@ -31,5 +44,9 @@ class LedRawTextClient(LedRunLoop):
 
     def on_post_exec_runloop(self):
         pass
+
+flask = FlaskOnThread(app, port=5802)
+flask.daemon = True
+flask.start()
 
 LedRawTextClient().run()
