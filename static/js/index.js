@@ -301,6 +301,25 @@ function setPenThickness() {
     $("#pen_thin").on(get_touch_event_key(),event => g_is_bold_pen_thickness=false).append(img_thin);
     $("#pen_bold").on(get_touch_event_key(),event => g_is_bold_pen_thickness=true).append(img_bold);
 }
+function clearEffects() {
+    for(let id in EFFECTS){
+        EFFECTS[id].frag = false;
+        $("#" + id).children('img').attr("src",EFFECTS[id].off);
+    }
+    postEffect();
+}
+function pressStamp(id) {
+    $("#" + id).children('img').attr("src",STAMPS[id].press);
+}
+function endPressStamp(id){
+    $("#" + id).children('img').attr("src",STAMPS[id].off);
+}
+function pressTrush(id){
+    $("#" + id).children('img').attr("src",PALLETS[id].on);
+}
+function endPressTrush(id){
+    $("#" + id).children('img').attr("src",PALLETS[id].off);
+}
 $(document).ready(() => {
     disableScroll();
     $("#header").append(
@@ -332,7 +351,8 @@ $(document).ready(() => {
         obj.addClass("pallet");
         if(id === "pallet11"){
             const img = $("<img>").attr("border", 0).attr("src", "static/assets/trash.png").attr("width", "62.5px").attr("height", "62.5px");
-            obj.on(get_touch_event_key(),event => clearCells()).append(img);
+            obj.on(get_touch_event_key(),event => {clearCells(),clearEffects(),pressTrush(id)}).
+            on("touchend",event => endPressTrush(id)).append(img);
         } else {
             const img = $("<img>").attr("border", 0).attr("src", "static/assets/eraser.png").attr("width", "62.5px").attr("height", "62.5px");
             obj.on(get_touch_event_key(), event => setPallet(id)).on("touchmove", event => setPallet(id)).append(img);
@@ -348,7 +368,8 @@ $(document).ready(() => {
         const obj =$("#" + id);
         const off = STAMPS[id].off;
         const img = $("<img>").attr("border", 0).attr("src", off).attr("width", "66px").attr("height", "66px");
-        obj.addClass("stamp").on(get_touch_event_key(),event => setStamp(id)).append(img);
+        obj.addClass("stamp").on(get_touch_event_key(),event => {setStamp(id),pressStamp(id)}).
+        on("touchend",event => endPressStamp(id)).append(img);
     }
     setPallet("pallet0");
     updateWindow();
