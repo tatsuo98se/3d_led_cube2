@@ -13,7 +13,7 @@ const PALLETS = {
     pallet4: { color: "blue", off: g_icon_path+"blue_off.png", on: g_icon_path+"blue_on.png", led: "0000FF" },
     pallet5: { color: "violet", off: g_icon_path+"purple_off.png", on: g_icon_path+"purple_on.png", led: "FF00FF" },
     pallet6: { color: "pink", off: g_icon_path+"pink_off.png", on: g_icon_path+"pink_on.png", led: "FF0088" },
-    pallet7: { color: "lightgreen", off: g_icon_path+"lightgreen_off.png", on: g_icon_path+"lightgreen_on.png", led: "55FF00" },
+    pallet7: { color: "lightgreen", off: g_icon_path+"lightgreen_off.png", on: g_icon_path+"lightgreen_on.png", led: "FFFF00" },
     pallet8: { color: "aqua", off: g_icon_path+"aqua_off.png", on: g_icon_path+"aqua_on.png", led: "00FFFF" },
     pallet9: { color: "white", off: g_icon_path+"white_off.png", on: g_icon_path+"white_on.png", led: "FFFFFF" },
     pallet10: { color: "transparent", off: g_icon_path+"eraser_off.png", on: g_icon_path+"eraser_on.png", led: "000000" },
@@ -36,7 +36,7 @@ var STAMPS = {
     stamp6:{ off: g_icon_path+"heart_off.png",press: g_icon_path+"heart_press.png", url:"static/stamps/heart.json" },
     stamp7:{ off: g_icon_path+"chinanago_off.png",press: g_icon_path+"chinanago_press.png", url:"static/stamps/chinanago.json" },
     stamp8:{ off: g_icon_path+"flamingo_off.png",press: g_icon_path+"flamingo_press.png", url:"static/stamps/flamingo.json" },
-    stamp9:{ off: g_icon_path+"penguin_off.png",press: g_icon_path+"penguin_press.png", url:"static/stamps/rocket.json" },
+    stamp9:{ off: g_icon_path+"penguin_off.png",press: g_icon_path+"penguin_press.png", url:"static/stamps/penguin.json" },
 }
 const CELL_WIDTH = 18;
 const CELL_HEIGHT = 18;
