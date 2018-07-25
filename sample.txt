@@ -112,3 +112,8 @@ show:{"orders":[{"id":"filter-skewed-ctrl"},{"id":"object-tulip", "lifetime":0}]
 show:{"orders":[{"id":"filter-skewed-ctrl"},{"id":"object-penguin", "lifetime":0}]}
 show:{"orders":[{"id":"filter-jump"},{"id":"filter-zy-skewed-ctrl"},{"id":"object-color-cube", "lifetime":0}]}
 show:{"orders":[{"id":"filter-jump"},{"id":"filter-skewed"},{"id":"object-rocket", "lifetime":0}]}
+
+show:{"orders":[{"id":"filter-color-ctrl"},{"id":"object-fill-red", "lifetime":0}]}
+show:{"orders":[{"id":"object-fill-red", "lifetime":0}]}
+show:{"orders":[{"id":"object-fill-green", "lifetime":0}]}
+show:{"orders":[{"id":"object-fill-blue", "lifetime":0}]}
