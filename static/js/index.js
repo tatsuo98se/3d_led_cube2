@@ -36,7 +36,7 @@ var STAMPS = {
     stamp6:{ off: g_icon_path+"heart_off.png",press: g_icon_path+"heart_press.png", url:"static/stamps/heart.json" },
     stamp7:{ off: g_icon_path+"chinanago_off.png",press: g_icon_path+"chinanago_press.png", url:"static/stamps/chinanago.json" },
     stamp8:{ off: g_icon_path+"flamingo_off.png",press: g_icon_path+"flamingo_press.png", url:"static/stamps/flamingo.json" },
-    stamp9:{ off: g_icon_path+"penguin_off.png",press: g_icon_path+"penguin_press.png", url:"static/stamps/rocket.json" },
+    stamp9:{ off: g_icon_path+"penguin_off.png",press: g_icon_path+"penguin_press.png", url:"static/stamps/penguin.json" },
 }
 const CELL_WIDTH = 18;
 const CELL_HEIGHT = 18;
