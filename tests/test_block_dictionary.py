@@ -50,5 +50,13 @@ class TestBlockDictionary(unittest.TestCase):
             for _, count in result.iteritems():
                 self.assertEqual(1, count)
 
+    def test_unknown_block(self):
+        target = create_order({'color': 'white', 'width':999}, None)
+        self.assertIsNotNone(target)
+
+        target = create_order({'color': 'aaaaa', 'width':1}, None)
+        self.assertIsNotNone(target)
+
+
 
             
