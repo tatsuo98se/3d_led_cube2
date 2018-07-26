@@ -16,8 +16,8 @@ const PALLETS = {
     pallet7: { id:"lightgreen", color: "lightgreen", led: "FFFF00" },
     pallet8: { id:"aqua", color: "aqua", led: "00FFFF" },
     pallet9: { id:"white", color: "white", led: "FFFFFF" },
-    pallet10: { id:"eraser", color: "transparent", led: "000000" },
-    pallet11: { id:"trash", color: "transparent", led: "000000" },
+    pallet10: { id:"eraser", color: "#88888855", led: "000000" },
+    pallet11: { id:"trash", color: "#88888855", led: "000000" },
 };
 var EFFECTS = {
     effect0:{frag:false,off: g_icon_path+"perapera_off.png",on: g_icon_path+"perapera_on.png",filter: "filter-wave"},
