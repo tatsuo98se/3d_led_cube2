@@ -38,5 +38,5 @@ def convert_json(input_orders, order_table=order_default):
         return order_table[color][width]
     else:
         print("unexcepted block type has spacified. color={0} width={1}".format(color, width) )
-        return 'object-filter-rainbow'
+        return 'filter-vibe'
 

@@ -2,3 +2,4 @@
 .idea
 *.log
 log/painting_history/*.png
+.DS_Store

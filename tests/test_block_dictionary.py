@@ -6,7 +6,7 @@ from libled.util.sound_interface import SoundInterface
 
 class TestBlockDictionary(unittest.TestCase):
     def tearDown(self):
-        SoundInterface.stop()
+        SoundInterface.close()
 
     def test_order_in_order_all_is_exist_in_led_order_util(self):
         for order in bd.order_all:
@@ -49,6 +49,14 @@ class TestBlockDictionary(unittest.TestCase):
             # check
             for _, count in result.iteritems():
                 self.assertEqual(1, count)
+
+    def test_unknown_block(self):
+        target = create_order({'color': 'white', 'width':999}, None)
+        self.assertIsNotNone(target)
+
+        target = create_order({'color': 'aaaaa', 'width':1}, None)
+        self.assertIsNotNone(target)
+
 
 
             

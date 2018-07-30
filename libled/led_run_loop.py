@@ -26,7 +26,15 @@ class LedRunLoop(object):
         self.opt_parser.add_option("-d", "--dest",
                         action="store", type="string", dest="dest", 
                         help="(optional) ip address of destination device which connect to real 3d cube.")
-                        
+
+        self.opt_parser.add_option("-r", "--rs",
+                        action="store", type="string", dest="rs", default="localhost",
+                        help="(optional) ip address of realsense module.")
+
+        self.opt_parser.add_option("-c", "--ctrl",
+                        action="store", type="string", dest="ctrl", default="localhost",
+                        help="(optional) ip address of hw controller module.")
+
         self.opt_parser.add_option("-m", "--hide-simulator",
                         action="store_true", dest="hide_simulator", default=False,
                         help="(optional) hide simulator window")
@@ -39,7 +47,7 @@ class LedRunLoop(object):
         
         led.EnableSimulator(not options.hide_simulator)
 
-        th = threading.Thread(name="message_receive_loop", target=self.message_receive_loop, args=(self.message,))
+        th = threading.Thread(name="message_receive_loop", target=self.message_receive_loop, args=(self.message, options))
         th.setDaemon(True)
         th.start()
 
@@ -68,9 +76,9 @@ class LedRunLoop(object):
             th.join()
             logger.i('finish main loop')
 
-    def message_receive_loop(self, q):
+    def message_receive_loop(self, q, options):
 #        led_framework = LedFramework()
-        with LedFramework() as led_framework:
+        with LedFramework(rs_host=options.rs, hwctrl_host=options.ctrl) as led_framework:
             try:
                 while True:
                     try:
@@ -123,7 +131,7 @@ class LedRunLoop(object):
                 raise
             finally:
                 self.run_loop_finished = True
-                SoundInterface.stop()
+                SoundInterface.close()
                 logger.i('finish led order loop')
 
 

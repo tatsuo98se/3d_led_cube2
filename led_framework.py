@@ -17,14 +17,16 @@ from libled.util.sound_interface import SoundInterface
 
 class LedFramework(object):
 
-    def __init__(self):
+    def __init__(self, rs_host, hwctrl_host):
         self.is_running = False
         self.is_abort = False
+        self.rs_host = rs_host
+        self.hwctrl_host = hwctrl_host
         self.base_canvas = LedCanvas()
 
     def start(self):
-        RealsenseManager.init()
-        HwControllerManager.init()
+        RealsenseManager.init(self.rs_host)
+        HwControllerManager.init(self.hwctrl_host)
 
     def stop(self):
         RealsenseManager.stop()

@@ -6,18 +6,18 @@ var g_saved_stamp_params;
 var g_is_bold_pen_thickness = false;
 const g_icon_path = "static/assets/icon/";
 const PALLETS = {
-    pallet0: { color: "red", off: g_icon_path+"red_off.png", on: g_icon_path+"red_on.png", led: "FF0000" },
-    pallet1: { color: "orange", off: g_icon_path+"orange_off.png", on: g_icon_path+"orange_on.png", led: "FF4400" },
-    pallet2: { color: "yellow", off: g_icon_path+"yellow_off.png", on: g_icon_path+"yellow_on.png", led: "FF8800" },
-    pallet3: { color: "green", off: g_icon_path+"green_off.png", on: g_icon_path+"green_on.png", led: "00FF00" },
-    pallet4: { color: "blue", off: g_icon_path+"blue_off.png", on: g_icon_path+"blue_on.png", led: "0000FF" },
-    pallet5: { color: "violet", off: g_icon_path+"purple_off.png", on: g_icon_path+"purple_on.png", led: "FF00FF" },
-    pallet6: { color: "pink", off: g_icon_path+"pink_off.png", on: g_icon_path+"pink_on.png", led: "FF0088" },
-    pallet7: { color: "lightgreen", off: g_icon_path+"lightgreen_off.png", on: g_icon_path+"lightgreen_on.png", led: "FFFF00" },
-    pallet8: { color: "aqua", off: g_icon_path+"aqua_off.png", on: g_icon_path+"aqua_on.png", led: "00FFFF" },
-    pallet9: { color: "white", off: g_icon_path+"white_off.png", on: g_icon_path+"white_on.png", led: "FFFFFF" },
-    pallet10: { color: "transparent", off: g_icon_path+"eraser_off.png", on: g_icon_path+"eraser_on.png", led: "000000" },
-    pallet11: { color: "transparent", off: g_icon_path+"trash_off.png", on: g_icon_path+"trash_on.png", led: "000000" },
+    pallet0: { id:"red", color: "red", led: "FF0000" },
+    pallet1: { id:"orange", color: "orange", led: "FF4400" },
+    pallet2: { id:"yellow", color: "yellow", led: "FF8800" },
+    pallet3: { id:"green", color: "green", led: "00FF00" },
+    pallet4: { id:"blue", color: "blue", led: "0000FF" },
+    pallet5: { id:"violet", color: "violet", led: "FF00FF" },
+    pallet6: { id:"pink", color: "pink", led: "FF0088" },
+    pallet7: { id:"lightgreen", color: "lightgreen", led: "FFFF00" },
+    pallet8: { id:"aqua", color: "aqua", led: "00FFFF" },
+    pallet9: { id:"white", color: "white", led: "FFFFFF" },
+    pallet10: { id:"eraser", color: "#88888855", led: "000000" },
+    pallet11: { id:"trash", color: "#88888855", led: "000000" },
 };
 var EFFECTS = {
     effect0:{frag:false,off: g_icon_path+"perapera_off.png",on: g_icon_path+"perapera_on.png",filter: "filter-wave"},
@@ -48,13 +48,43 @@ const is_mobile_dvice = () => {
 const get_touch_event_key = () => {
     return is_mobile_dvice() ? "touchstart" : "click";
 }
+const updatePallet = () =>{
+
+    for(let id in PALLETS){
+        const type = id === g_selected_pallet? "on" : "off";
+        const color_path = g_icon_path + PALLETS[id]['id'] + '_' + type + '.png';
+        $("#" + id).children('img').attr("src", color_path);
+        if(type === "on"){
+            const pen_type = g_is_bold_pen_thickness? "_L" : "";
+            const pen_opposite_type = g_is_bold_pen_thickness? "" : "_L";
+            var pen_path = g_icon_path + 'pen' + '_' + PALLETS[id]['id'] + pen_type +'.png';
+            var pen_opposite_path = ''
+
+            if(PALLETS[id]['id'] === 'eraser'){
+                pen_path = g_icon_path + 'eraser_on.png';
+                pen_opposite_path = g_icon_path + 'eraser_off.png';
+            }
+            else{
+                pen_opposite_path = g_icon_path + 'pen' + '_off' + pen_opposite_type + '.png';
+            }
+
+            // change pen color
+            if(g_is_bold_pen_thickness === false){
+                $("#pen_thin").children('img').attr('src', pen_path);
+                $("#pen_bold").children('img').attr('src', pen_opposite_path);
+            }
+            else{
+                $("#pen_bold").children('img').attr('src',  pen_path);
+                $("#pen_thin").children('img').attr('src', pen_opposite_path);
+
+            }
+        }
+    }
+}
 
 const setPallet = pallet => {
     g_selected_pallet = pallet;
-    for(let id in PALLETS){
-        const type = id === g_selected_pallet? "on" : "off";
-        $("#" + id).children('img').attr("src",PALLETS[id][type]);
-    }
+    updatePallet();
 }
 const setEffect = effect => {
     let selected_effect = effect;
@@ -298,8 +328,15 @@ function disableScroll(){
 function setPenThickness() {
     const img_bold = $("<img>").attr("border", 0).attr("src", g_icon_path+"pen_off_L.png").attr("width", "50px").attr("height", "50px");
     const img_thin = $("<img>").attr("border", 0).attr("src", g_icon_path+"pen_red.png").attr("width", "50px").attr("height", "50px");
-    $("#pen_thin").on(get_touch_event_key(),event => g_is_bold_pen_thickness=false).append(img_thin);
-    $("#pen_bold").on(get_touch_event_key(),event => g_is_bold_pen_thickness=true).append(img_bold);
+    $("#pen_thin").on(get_touch_event_key(),event =>{ 
+        g_is_bold_pen_thickness=false;
+        updatePallet();
+    }).append(img_thin);
+    
+    $("#pen_bold").on(get_touch_event_key(),event => {
+        g_is_bold_pen_thickness=true;
+        updatePallet();
+    }).append(img_bold);
 }
 function clearEffects() {
     for(let id in EFFECTS){
