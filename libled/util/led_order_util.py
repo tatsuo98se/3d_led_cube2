@@ -285,6 +285,8 @@ def create_filter(order, canvas):
         return LedSpiralCanvasFilter2(canvas)
     elif oid == 'filter-swaying':
         return LedSwayingCanvasFilter(canvas)
+    elif oid == 'filter-swaying-ctrl':
+        return LedSwayingCanvasFilter(canvas, enable_controller=True)
     elif oid == 'filter-color-ctrl':
         return LedColorCtrlCanvasFilter(canvas)
     elif oid == 'filter-rainbow-ctrl':
@@ -320,7 +322,7 @@ def create_filter(order, canvas):
     elif oid == 'filter-explosion-ctrl':
         return LedExplosionCanvasFilter(canvas, 2, True)
     elif oid == 'filter-3d-explosion-ctrl':
-        return LedExplosionCanvasFilter(canvas, True)
+        return LedExplosionCanvasFilter(canvas, enable_controller=True)
     elif oid == 'filter-bk-mountain':
         return LedObjectCanvasFilter(canvas, \
                 LedScrolledMountainObject())

@@ -18,8 +18,8 @@ class LedRollingCanvasFilter(LedCanvasFilter):
     def pre_draw(self):
         super(LedRollingCanvasFilter, self).pre_draw()
         param = self.get_param_from_controller(defaults={'a0':self.direction_value, 'a1':0.5})
-        direction = (param['a0'] - 0.5) * 2
-        speed = param['a1'] * 200
+        direction = (param['a0'] - 0.5)
+        speed = param['a1'] * 80 + 30
 
         now = time.time()
         add = now - self.last_update

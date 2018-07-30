@@ -82,7 +82,7 @@ class LedExplosionCanvasFilter(LedCanvasFilter):
         if self.sin > 0:
             for speed in self.get_speeds(x, y, z):
                 pt = np.array([xx - center[0], yy - center[1], zz - center[2]])
-                pt *= self.sin * 3 * speed + 1
+                pt *= self.sin * 6 * speed * self.param['a1'] + 1
                 self.canvas.set_led(pt[0] + center[0], pt[1] + center[1], pt[2] + center[2], color)
         else:
             self.canvas.set_led(xx, yy, zz, color)
