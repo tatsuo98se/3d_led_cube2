@@ -88,6 +88,7 @@ class LedFramework(object):
                         canvas = current_order
                         current_order = None
                     elif isinstance(current_order, LedFilterClearCtrl):
+                        SoundInterface.stop()
                         canvas = self.base_canvas
                         current_order = None
                     elif isinstance(current_order, LedObject):
