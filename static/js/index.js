@@ -55,16 +55,17 @@ const updatePallet = () =>{
         const color_path = g_icon_path + PALLETS[id]['id'] + '_' + type + '.png';
         $("#" + id).children('img').attr("src", color_path);
         if(type === "on"){
-            const pen_type = g_is_bold_pen_thickness? "02" : "";
-            const pen_opposite_type = g_is_bold_pen_thickness? "" : "02";
-            const pen_path = g_icon_path + 'Draw_to_like_pen' + pen_type + '_' + PALLETS[id]['id'] + '.png';
+            const pen_type = g_is_bold_pen_thickness? "_L" : "";
+            const pen_opposite_type = g_is_bold_pen_thickness? "" : "_L";
+            var pen_path = g_icon_path + 'pen' + '_' + PALLETS[id]['id'] + pen_type +'.png';
             var pen_opposite_path = ''
 
             if(PALLETS[id]['id'] === 'eraser'){
-                pen_opposite_path = g_icon_path + 'Draw_to_like_pen_eraser_off.png';
+                pen_path = g_icon_path + 'eraser_on.png';
+                pen_opposite_path = g_icon_path + 'eraser_off.png';
             }
             else{
-                pen_opposite_path = g_icon_path + 'Draw_to_like_pen' + pen_opposite_type + '_off.png';
+                pen_opposite_path = g_icon_path + 'pen' + '_off' + pen_opposite_type + '.png';
             }
 
             // change pen color
@@ -325,7 +326,7 @@ function disableScroll(){
     document.body.addEventListener('touchmove', preventDefault, { passive: false });
 }
 function setPenThickness() {
-    const img_bold = $("<img>").attr("border", 0).attr("src", g_icon_path+"pen_off.png").attr("width", "50px").attr("height", "50px");
+    const img_bold = $("<img>").attr("border", 0).attr("src", g_icon_path+"pen_off_L.png").attr("width", "50px").attr("height", "50px");
     const img_thin = $("<img>").attr("border", 0).attr("src", g_icon_path+"pen_red.png").attr("width", "50px").attr("height", "50px");
     $("#pen_thin").on(get_touch_event_key(),event =>{ 
         g_is_bold_pen_thickness=false;
@@ -336,6 +337,25 @@ function setPenThickness() {
         g_is_bold_pen_thickness=true;
         updatePallet();
     }).append(img_bold);
+}
+function clearEffects() {
+    for(let id in EFFECTS){
+        EFFECTS[id].frag = false;
+        $("#" + id).children('img').attr("src",EFFECTS[id].off);
+    }
+    postEffect();
+}
+function pressStamp(id) {
+    $("#" + id).children('img').attr("src",STAMPS[id].press);
+}
+function endPressStamp(id){
+    $("#" + id).children('img').attr("src",STAMPS[id].off);
+}
+function pressTrash(id){
+    $("#" + id).children('img').attr("src",g_icon_path + 'trash_on.png');
+}
+function endPressTrash(id){
+    $("#" + id).children('img').attr("src",g_icon_path + 'trash_off.png');
 }
 $(document).ready(() => {
     disableScroll();
@@ -368,7 +388,8 @@ $(document).ready(() => {
         obj.addClass("pallet");
         if(id === "pallet11"){
             const img = $("<img>").attr("border", 0).attr("src", "static/assets/trash.png").attr("width", "62.5px").attr("height", "62.5px");
-            obj.on(get_touch_event_key(),event => clearCells()).append(img);
+            obj.on(get_touch_event_key(),event => {clearCells(),clearEffects(),pressTrash(id)}).
+            on("touchend",event => endPressTrash(id)).append(img);
         } else {
             const img = $("<img>").attr("border", 0).attr("src", "static/assets/eraser.png").attr("width", "62.5px").attr("height", "62.5px");
             obj.on(get_touch_event_key(), event => setPallet(id)).on("touchmove", event => setPallet(id)).append(img);
@@ -384,7 +405,8 @@ $(document).ready(() => {
         const obj =$("#" + id);
         const off = STAMPS[id].off;
         const img = $("<img>").attr("border", 0).attr("src", off).attr("width", "66px").attr("height", "66px");
-        obj.addClass("stamp").on(get_touch_event_key(),event => setStamp(id)).append(img);
+        obj.addClass("stamp").on(get_touch_event_key(),event => {setStamp(id),pressStamp(id)}).
+        on("touchend",event => endPressStamp(id)).append(img);
     }
     setPallet("pallet0");
     updateWindow();
