@@ -351,11 +351,11 @@ function pressStamp(id) {
 function endPressStamp(id){
     $("#" + id).children('img').attr("src",STAMPS[id].off);
 }
-function pressTrush(id){
-    $("#" + id).children('img').attr("src",PALLETS[id].on);
+function pressTrash(id){
+    $("#" + id).children('img').attr("src",g_icon_path + 'trash_on.png');
 }
-function endPressTrush(id){
-    $("#" + id).children('img').attr("src",PALLETS[id].off);
+function endPressTrash(id){
+    $("#" + id).children('img').attr("src",g_icon_path + 'trash_off.png');
 }
 $(document).ready(() => {
     disableScroll();
@@ -388,8 +388,8 @@ $(document).ready(() => {
         obj.addClass("pallet");
         if(id === "pallet11"){
             const img = $("<img>").attr("border", 0).attr("src", "static/assets/trash.png").attr("width", "62.5px").attr("height", "62.5px");
-            obj.on(get_touch_event_key(),event => {clearCells(),clearEffects(),pressTrush(id)}).
-            on("touchend",event => endPressTrush(id)).append(img);
+            obj.on(get_touch_event_key(),event => {clearCells(),clearEffects(),pressTrash(id)}).
+            on("touchend",event => endPressTrash(id)).append(img);
         } else {
             const img = $("<img>").attr("border", 0).attr("src", "static/assets/eraser.png").attr("width", "62.5px").attr("height", "62.5px");
             obj.on(get_touch_event_key(), event => setPallet(id)).on("touchmove", event => setPallet(id)).append(img);
