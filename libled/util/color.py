@@ -9,6 +9,16 @@ class Color:
         self.normalize()
 
     @staticmethod
+    def int_to_rgbtapple255(rgb):
+        return (((rgb&0xff0000) >> 16 ),
+                      ((rgb&0x00ff00) >> 8 ) ,
+                      (rgb&0x0000ff) )
+
+    @staticmethod
+    def rgbtapple255_to_int(rgb):
+        return (rgb[0] << 16) + (rgb[1] << 8) + rgb[2]
+
+    @staticmethod
     def int_to_color(rgb):
         return Color( ((rgb&0xff0000) >> 16 ) / 255.0,
                       ((rgb&0x00ff00) >> 8 ) / 255.0,

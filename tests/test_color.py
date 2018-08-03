@@ -42,3 +42,10 @@ class TestColor(unittest.TestCase):
         self.assertEqual(1.0, target.b)
         self.assertEqual(1.0, target.a)
 
+    def test_int_to_rgbtapple255(self):
+        target = Color.int_to_rgbtapple255(0x010203)
+        self.assertEqual((1, 2, 3), target)
+
+    def test_rgbtapple255_to_int(self):
+        target = Color.rgbtapple255_to_int((1, 2, 3))
+        self.assertEqual(0x010203, target)
