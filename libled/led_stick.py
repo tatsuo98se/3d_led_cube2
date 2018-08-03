@@ -97,10 +97,11 @@ class LedStickCube(object):
         if zhistory < z:
             return
         self.canvas_history[x,y] = z
-        self.image[x,y] = Color.rgbint_to_bgrint(color)
+        self.image[x,y] = color
     
     def Wait(self, msec):
-        time.sleep(msec/1000.0)
+#        time.sleep(msec/1000.0)
+        pass
 
     def EnableSimulator(self, is_enable):
         pass
