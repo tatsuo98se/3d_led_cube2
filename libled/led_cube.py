@@ -3,6 +3,10 @@ from ctypes import *
 import sys
 import platform
 import util.logger as logger
+from PIL import Image
+from datetime import datetime
+from libled.util.color import Color
+import numpy as np
 
 LED_HEIGHT = 32
 LED_WIDTH = 16
@@ -43,10 +47,25 @@ def local_split_url_and_port(url):
 class LedCube(object):
     def __init__(self, led):
         self.led = led
+        self.__init_image()
+
+    def __init_image(self):
+        self.canvas_history = np.ndarray((LED_WIDTH, LED_HEIGHT))
+        self.__clear_history()
+        self.image = Image.new('RGB',(LED_WIDTH, LED_HEIGHT), 'black')
+        self.pixels = self.image.load
+
+    def __clear_history(self):
+        self.canvas_history.fill(LED_DEPTH)
+
 
     def Show(self):
         #print("led.Show()")
         self.led.Show()
+        logorder = datetime.now().strftime('%Y%m%d-%H-%M-%S-%f')[:-3]
+        filename = 'log/cube_history/' + logorder + '.png'
+        self.image.save(filename, 'PNG')
+        self.__clear_history()
 
     def SetUrl(self, dest):
         print("led.SetUrl():" + dest)
@@ -59,11 +78,18 @@ class LedCube(object):
 
     def Clear(self):
         #print("led.Clear()")
+        self.__init_image()
         self.led.Clear()
     
     def SetLed(self, x, y, z, color):
         # print("led.SetLed()") comment out for performance
         self.led.SetLed(x, y, z, color)
+
+        zhistory = self.canvas_history[x,y]
+        if zhistory < z:
+            return
+        self.canvas_history[x,y] = z
+        self.image.putpixel((x,y), Color.int_to_rgbtapple255(color))
     
     def Wait(self, msec):
         self.led.Wait(int(msec))
