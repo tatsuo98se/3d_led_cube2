@@ -9,8 +9,6 @@ from datetime import datetime
 dirname = os.path.dirname(__file__)
 lib = os.path.abspath(os.path.join(dirname, 'libsticksdk.so'))
 
-#logger.i('LoadLibrary: '+ str(ledlib))
-
 class LedStick(object):
 
     def __init__(self, stick):
@@ -87,8 +85,12 @@ class LedStickDummy(LedStick):
 
 def create_led_stick(lib):
     try:
-        return LedStick(cdll.LoadLibrary(lib))
+        logger.i('Loading ledstick library.')
+        obj = LedStick(cdll.LoadLibrary(lib))
+        logger.i('Successful loading ledstick library.')
+        return obj
     except OSError:
+        logger.e('Failed loading ledstick library. Dummy Object will be used.')
         return LedStickDummy()
 
 STICK = create_led_stick(lib)

@@ -17,40 +17,6 @@ LED_HEIGHT = 32
 LED_WIDTH = 16
 LED_DEPTH = 8
 
-'''
-loop do
-  image_no = (((Time.now.to_f * 1000) / 50) % image_count ).to_i
-#  puts image_no.to_s
-  g0 = STICK.get_accel().map { |a| a * 8.0 / 0x8000 }
-  line = image_no * 16 + g0[1].to_i + 8
-  STICK.show_line(line)
-  puts"image No.:#{image_no}, line:#{g0[1].to_i+8}"
-end
-'''
-
-class ShowWorker(Thread):
-
-    def __init__(self, stick):
-        super(ShowWorker,self).__init__()
-        self.is_stop = False
-        self.stick = stick
-
-    def run(self):
-        try:
-            while not self._is_stop():
-                g0 = self.stick.get_accel()
-                line = int(g0[1] * 8.0 / 0x8000) + 8
-                self.stick.show_line(line)
-        except Exception as e:
-            logger.e("Unexpected error:" + str(sys.exc_info()[0]))
-            logger.e(traceback.format_exc())
-    
-    def _is_stop(self):
-        return self.is_stop
-
-    def stop(self):
-        self.is_stop = True
-
 
 class LedStickCube(object):
     _instance = None
@@ -66,8 +32,6 @@ class LedStickCube(object):
         self.stick = STICK
         self.stick.init_sdk()
         self.__init_image()
-        self.worker = ShowWorker(self.stick)
-        self.worker.start()
 
     def __init_image(self):
         self.canvas_history = np.ndarray((LED_WIDTH, LED_HEIGHT), dtype='int16')
@@ -106,4 +70,4 @@ class LedStickCube(object):
         pass
 
     def Stop(self):
-        self.worker.stop()
+        pass
