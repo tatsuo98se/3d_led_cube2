@@ -7,6 +7,7 @@ from PIL import Image
 from datetime import datetime
 from libled.util.color import Color
 import numpy as np
+import glob
 
 LED_HEIGHT = 32
 LED_WIDTH = 16
@@ -66,6 +67,7 @@ class LedCube(object):
         filename = 'log/cube_history/' + logorder + '.png'
         self.image.save(filename, 'PNG')
         self.__clear_history()
+        self.__clean_logs()
 
     def SetUrl(self, dest):
         print("led.SetUrl():" + dest)
@@ -96,6 +98,20 @@ class LedCube(object):
 
     def EnableSimulator(self, is_enable):
         self.led.EnableSimulator(is_enable)
+
+    def __clean_logs(self):
+        files = glob.glob('log/cube_history/*')
+        if len(files) <= 200:
+            return
+
+        files.sort()
+        removecount = len(files) - 200
+        targets = files[:removecount]
+
+        for target in targets:
+            os.remove(target)
+
+
 
 class LedCubeDummy(object):
     def __init__(self):
