@@ -22,7 +22,7 @@ from watchdog.observers import Observer
 
 import cv2
 from led_framework import LedFramework
-from libled.led_cube import led
+from libled.led_cube import LedCubeFactory
 
 GRID_COLUMNS = 16
 GRID_ROWS = 32
@@ -407,7 +407,7 @@ def show_led(checked, destip):
             dic["orders"].append({"id": "object-bitmap", "lifetime": 1, "z": 0, "thick": 3, "bitmap": base64.b64encode(f.read())})
 
     if destip is not None:
-        led.SetUrl(destip)
+        LedCubeFactory.get_instance().SetUrl(destip)
     ledfw = LedFramework()
     ledfw.show(dic)
 

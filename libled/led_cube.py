@@ -7,6 +7,7 @@ from PIL import Image
 from datetime import datetime
 from libled.util.color import Color
 import numpy as np
+from led_stick import LedStickCube
 
 LED_HEIGHT = 32
 LED_WIDTH = 16
@@ -97,6 +98,9 @@ class LedCube(object):
     def EnableSimulator(self, is_enable):
         self.led.EnableSimulator(is_enable)
 
+    def Stop(self):
+        pass
+
 class LedCubeDummy(object):
     def __init__(self):
         pass
@@ -119,10 +123,25 @@ class LedCubeDummy(object):
     def EnableSimulator(self, is_enable):
         pass
 
-def create_led_cube(ledlib):
-    if ledlib is None:
-        return LedCubeDummy()
-    else:
-        return LedCube(cdll.LoadLibrary(ledlib))
+    def Stop(self):
+        pass
 
-led = create_led_cube(ledlib)
+
+class LedCubeFactory(object):
+    _instance = None
+
+    @classmethod
+    def get_instance(cls):
+        if cls._instance is None:
+            cls._instance = cls.__create_led_cube()
+        return cls._instance
+
+    @classmethod
+    def __create_led_cube(cls):
+        return LedStickCube.get_instance()
+'''
+        if ledlib is None:
+            return LedCubeDummy()
+        else:
+            return LedCube(cdll.LoadLibrary(ledlib))
+'''

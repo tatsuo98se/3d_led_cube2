@@ -83,6 +83,7 @@ parser.add_option("-d", "--dest",
                         help="(optional) ip address of destination device which connect to real 3d cube.")
 
 options, _ = parser.parse_args()
+led = LedCubeFactory.get_instance()
 
 if options.dest != None:
     print("External Connect To: " + (options.dest))

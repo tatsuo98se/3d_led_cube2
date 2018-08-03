@@ -23,6 +23,7 @@ class LedFramework(object):
         self.rs_host = rs_host
         self.hwctrl_host = hwctrl_host
         self.base_canvas = LedCanvas()
+        self.led = LedCubeFactory.get_instance()
 
     def start(self):
         RealsenseManager.init(self.rs_host)
@@ -30,6 +31,7 @@ class LedFramework(object):
 
     def stop(self):
         RealsenseManager.stop()
+        self.led.Stop()
 
     def get_new_canvas(self, oldcanvas):
         oldcanvas.destructer()
@@ -106,11 +108,11 @@ class LedFramework(object):
                 spanx = (time.time() - span) * 1000
                 wait = max(0, 70 - spanx)
                 #print('span: ' + str(spanx) + ' wait:' + str(wait))
-                led.Wait(wait)
+                self.led.Wait(wait)
 
             SoundInterface.stop()
-            led.Clear()
-            led.Show()
+            self.led.Clear()
+            self.led.Show()
 
         except KeyError as err:
             logger.e("error unexpected json : {0}".format(err))

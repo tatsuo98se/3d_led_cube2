@@ -23,6 +23,7 @@ class LedRunLoop(object):
         self.opt_parser = parser
  
     def run(self):
+        led = LedCubeFactory.get_instance()
         self.opt_parser.add_option("-d", "--dest",
                         action="store", type="string", dest="dest", 
                         help="(optional) ip address of destination device which connect to real 3d cube.")

@@ -9,6 +9,7 @@ class LedCanvas(ILedCanvas):
         self.is_abort = False
         self.objects = []
         self.led_cube = self.get_new_canvas()
+        self.led = LedCubeFactory.get_instance()
 
     def destructor(self):
         pass
@@ -47,10 +48,10 @@ class LedCanvas(ILedCanvas):
         if new_color.is_black():
             return
         self.led_cube[ix][iy][iz] = new_color
-        led.SetLed(ix, iy, iz, int(new_color))
+        self.led.SetLed(ix, iy, iz, int(new_color))
 
     def show(self, canvas=None):
-        led.Clear()
+        self.led.Clear()
         self.led_cube = self.get_new_canvas()
         for obj in self.objects[:]:
             obj.will_draw()
@@ -66,7 +67,7 @@ class LedCanvas(ILedCanvas):
             if obj.is_expired() or obj.is_cancel():
                 self.remove_object(obj)
 
-        led.Show()
+        self.led.Show()
 
     def pre_draw(self):
         pass

@@ -9,6 +9,13 @@ class Color:
         self.normalize()
 
     @staticmethod
+    def rgbint_to_bgrint(rgb):
+        r = (rgb&0xff0000) >> 16
+        g = (rgb&0x00ff00)
+        b = (rgb&0x0000ff) << 16
+        return r | g | b
+
+    @staticmethod
     def int_to_rgbtapple255(rgb):
         return (((rgb&0xff0000) >> 16 ),
                       ((rgb&0x00ff00) >> 8 ) ,
